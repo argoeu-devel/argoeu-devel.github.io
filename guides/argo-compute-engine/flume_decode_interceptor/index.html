@@ -100,12 +100,12 @@
           
             <a class="list-group-item" href="/guides/consumer/"><em class="fa fa-send-o"></em> Consumer</a>
           
-          	
-            <a class="list-group-item active " href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em> Compute Engine</a>
+            
+            <a class="list-group-item " href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em> Compute Engine</a>
           
   	  <div id='caret-data1'>
   	      
-              <a class="list-group-item-level2 active"  href="/guides/argo-compute-engine/installation/">
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/installation/">
             
             <em class="fa fa-cog"></em> Installation </a>
             
@@ -147,98 +147,82 @@
             
               <i class='fa fa-cog'></i> 
             
-            Compute - Installation</h1>
+            Compute Engine Ingestion - Flume Decode Interceptor</h1>
           
-          <p class="lead"> This document describes the installation procedure of the ARGO compute engine</p>
+          <p class="lead"> Using a custom flume interceptor while ingesting data from kafka to hdfs</p>
           
-<h2 id="prerequisites">Prerequisites</h2>
+<h2 id="description">Description</h2>
+
+<p>When using the ARGO Messaging API for ingestion in-front of the compute engine, a broker network is needed for the relay of messages and an ingestion mechanism for storing the data on HDFS. The ingestion mechanism used is the flume service.</p>
+
+<p>ARGO Messaging API produces JSON messages in the following schema:</p>
+
+<p><code>
+json
+{
+   "messageId": "12",
+   "attributes": [
+      {
+         "key": "foo",
+         "value": "bar"
+      }
+   ],
+   "data": "dGhpcyBpcyB0aGUgcGF5bG9hZA==",
+   "publishTime": "2016-03-09T13:02:21.139873825Z"
+}
+</code></p>
+
+<p>Notice that the payload is included in the “data” field and is encoded in base64. Usually in the compute engine the
+encoded payload when decoded will result in a binary AVRO file.</p>
+
+<p>Flume is configured to listen to a KAFKA source (broker network) and transfer though a memory channel each event to an HDFS sink (destination).</p>
+
+<h2 id="the-need-for-the-interceptor">The need for the interceptor</h2>
+
+<p>In order to keep only the integral part of the payload and transfer it decoded to it’s final destination we need to define a flume
+interceptor on the KAFKA source. Interceptors give the ability to flume to drop or modify events. Interceptors are actually JAVA classes that implement the Interceptor Interface. Flume comes with a bunch of build in interceptors but gives also the ability to define custom ones.</p>
+
+<p>For the ingestion part of the Compute Engine a custom flume Decode Interceptor was developed as a small maven project.</p>
+
+<h2 id="how-to-test-the-decode-interceptor">How to test the Decode Interceptor</h2>
+
+<p>The Decode Interceptor project is hosted in the directory <code>/flume/decode_interceptor</code> of the argo-compute-engine repo.</p>
+
+<p>To build the jar file use the following commands:</p>
 
 <ul>
-  <li>You will need a RHEL 6.x or similar OS (base installation) to proceed. Note that the following instructions have been tested against CentOS 6.x OSes.</li>
-  <li>Make sure that on your host an ntp client service is configured properly.</li>
+  <li><code>cd /flume/decode_interceptor</code></li>
+  <li><code>mvn clean</code></li>
+  <li><code>mvn package</code></li>
 </ul>
 
-<p>The first step is to install (as root user) the EPEL release package repository configuration via yum:</p>
+<p>The build process produces the following file:
+<code>
+/flume/decode_interceptor/target/decode-interceptor-x.y.z-SNAPSHOT.jar
+</code>
+<em>(where x,y,z are integers used for versioning)</em></p>
 
-<pre><code># yum install epel-release
-</code></pre>
+<p>To only test the interceptor, just issue
+- <code>cd /flume/decode_interceptor</code>
+- <code>mvn test</code></p>
 
-<p>Create a new file with filename <code>/etc/yum.repos.d/argo.repo</code> and place within it the following contents:</p>
+<h2 id="how-to-deploy-the-decode-interceptor-at-flume-node">How to deploy the Decode Interceptor at flume node</h2>
 
-<pre><code>[argo-prod]
-name=ARGO Product Repository
-baseurl=http://rpm.hellasgrid.gr/mash/centos6-arstats/$basearch
-enabled=0
-gpgcheck=0
+<p>This file must be deployed to the node that flume-agent runs
+At flume-agent node, deploy the JAR file to the following path (please create if doesn’t exist)</p>
 
-[argo-devel]
-name=ARstats Development Repository
-baseurl=http://rpm.hellasgrid.gr/mash/centos6-arstats-devel/$basearch
-enabled=0
-gpgcheck=0
-</code></pre>
+<p><code>
+/usr/lib/flume-ng/plugins.d/decode_interceptor/lib/
+</code></p>
 
-<p>You will also need to install the cloudera repository for Hadoop components to be retrieved (although you will not install any Hadoop cluster, some libraries from the Hadoop ecosystem are needed). Under a file named <code>/etc/yum.repos.d/cloudera-cdh5.repo</code> place the following contents:</p>
+<p>Then on the flume configuration file the interceptor must be added to the relevant source
+for e.g.</p>
 
-<pre><code>[cloudera-cdh5]
-# Packages for Cloudera's Distribution for Hadoop, Version 5, on RedHat or CentOS 6 x86_64
-name=Cloudera's Distribution for Hadoop, Version 5
-baseurl=http://archive.cloudera.com/cdh5/redhat/$releasever/$basearch/cdh/5/
-gpgkey = http://archive.cloudera.com/cdh5/redhat/$releasever/$basearch/cdh/RPM-GPG-KEY-cloudera
-gpgcheck = 1
-enabled = 1
-</code></pre>
-
-<p>You will also need to install the EGI trustanchors repository (this is required on the host for communicating with topology providing services). Under a file named <code>/etc/yum.repos.d/EGI-trustanchors.repo</code> place the following contents:</p>
-
-<pre><code>[EGI-trustanchors]
-name=EGI-trustanchors
-baseurl=http://repository.egi.eu/sw/production/cas/1/current/
-enabled=1
-gpgcheck=1
-gpgkey=http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
-</code></pre>
-
-<h2 id="installation">Installation</h2>
-
-<p>Install (via <code>pip</code>) the latest version of the pymongo library:</p>
-
-<pre><code># yum install python-pip
-# pip install --upgrade pymongo
-</code></pre>
-
-<p>Install the component:</p>
-
-<pre><code># yum install ar-compute --enablerepo=argo-prod
-</code></pre>
-
-<h2 id="configuration">Configuration</h2>
-
-<p>Edit the <code>/etc/ar-compute-engine.conf</code> configuration file and</p>
-
-<pre><code>- set the values of the `mongo_host` and `mongo_port` variables to point to a running mongo service
-- set the value of the `mode` variable to `local` or `cluster`
-- set the values of the `prefilter_clean` and `sync_clean` variables to either `true` of `false`
-</code></pre>
-
-<p>Under the folder <code>/etc/cron.d/</code> place two cronjobs that will handle hourly and daily calculations.</p>
-
-<p>For the daily caclulations edit <code>/etc/cron.d/ar_job_cycle_daily</code> and place the following contents.</p>
-
-<pre><code>0 0 * * * root /usr/libexec/ar-compute/standalone/job_cycle.py -d $(/bin/date --utc --date '-1 day' +\%Y-\%m-\%d)
-</code></pre>
-
-<p>Optionally - for the hourly caclulations edit <code>/etc/cron.d/ar_job_cycle_hourly</code> and place the following contents:</p>
-
-<pre><code>55 * * * * root /usr/libexec/ar-compute/standalone/job_cycle.py -d $(/bin/date --utc  +\%Y-\%m-\%d)
-</code></pre>
-
-<p>More details on configuring A/R jobs (reports) can be found <a href="/guides/argo-compute-engine/report-configuration/">here</a>.</p>
-
-<h2 id="log-files">Log files</h2>
-
-<p>The compute engine uses by default the system syslog to log any messages. You may change this behaviour by editing the configucation file <code>/etc/ar-compute-engine.conf</code>. You may also wish to change the logging level by setting the <code>log_level</code> value to your preference.</p>
-
+<p><em>Contents of flume configuration file:</em>
+<code>
+flume1.sources.kafka-source-1.interceptors = DecodeInterceptor
+flume1.sources.kafka-source-1.interceptors.DecodeInterceptor.type=argo.DecodeInterceptor$Builder
+</code></p>
 
         </div><!--col-md-8-->
         <div class="col-md-2">&nbsp;</div>
