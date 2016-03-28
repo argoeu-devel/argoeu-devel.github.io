@@ -161,63 +161,61 @@
 <p>This document will guide you through the installation process. The ARGO components covered include the following items:</p>
 
 <ul>
-  <li>Sync Components</li>
   <li>Consumer service</li>
+  <li>Connectors</li>
   <li>Compute Engine</li>
-  <li>API service</li>
+  <li>Web API service</li>
   <li>Web UI service</li>
 </ul>
 
-<p>For a production scale environment we propose two VMs and a Hadoop cluster (distributed version). The proposed setup in this case is the following:</p>
+<p>For a production scale environment we propose three VMs and a Hadoop cluster (distributed version). The proposed setup in this case is the following:</p>
 
-<p><strong>Node 1 (Sync components, Consumer service and Hadoop client)</strong></p>
+<p><strong>Node 1 (Consumer service, Connectors and Compute Engine/Hadoop client)</strong></p>
 
 <ul>
-  <li>2 CPUs</li>
-  <li>4GB RAM</li>
+  <li>CentOS 6.x</li>
+  <li>1 CPU</li>
+  <li>2GB RAM</li>
   <li>100 GB Disk</li>
 </ul>
 
-<p><strong>Node 2 (API and Web UI services)</strong></p>
+<p><strong>Node 2 (Datastore and Web API services)</strong></p>
 
 <ul>
-  <li>2 CPUs</li>
+  <li>CentOS 6.x</li>
+  <li>4 CPUs</li>
+  <li>8GB RAM</li>
+  <li>60 GB Disk</li>
+</ul>
+
+<p><strong>Node 3 (Web UI service)</strong></p>
+
+<ul>
+  <li>CentOS 7.x</li>
+  <li>4 CPUs</li>
   <li>4GB RAM</li>
-  <li>100 GB Disk</li>
+  <li>40 GB Disk</li>
 </ul>
 
-<h2 id="cluster-mode">Cluster mode</h2>
+<p>For this configuration of resources one is stronly encouraged to use the Ansible based deployment roles available on <a href="https://github.com/ARGOeu/argo-ansible">github</a>. The documentation steps provided therein are sufficient in case you choose to use the provided Ansible roles for deployment.</p>
 
-<h3 id="prerequisites">Prerequisites</h3>
+<p>If you are not familiar with Ansible or would rather follow the step-by-step guide continue reading. </p>
+
+<h1 id="prerequisites">Prerequisites</h1>
 
 <ul>
-  <li>You will need RHEL 6.x or similar OS (base installation) to proceed. Note that the following instructions have been tested against CentOS 6.x OSes. </li>
-  <li>Make sure that on each host an ntp client service is configured properly. </li>
-  <li>Configure the OS firewall on Node 2 (API and Web UI services) to accept incoming <code>tcp</code> connections to ports <code>443</code> (https) and <code>27017</code> (mongod).</li>
-  <li>For both nodes you will need an x509 key/certificate pair in order to proceed. </li>
+  <li>You will need RHEL 6.x or similar OS (base installation) to proceed. Note that the following instructions have been tested against CentOS 6.x OSes. For the Web UI service (Node 3) an RHEL 7.x or similar OS (base installation) is required. </li>
+  <li>Make sure that on all hosts an ntp client service is configured properly. </li>
+  <li>Configure the OS firewall on Node 2 (Datastore and Web API services) to accept incoming <code>tcp</code> connections to ports <code>443</code> (https) and <code>27017</code> (mongod).</li>
+  <li>Configure the OS firewall on Node 3 (Web UI service) to accept incoming <code>tcp</code> connections to ports <code>80</code> (http) and <code>443</code> (https).</li>
+  <li>For all nodes you will need an x509 key/certificate pair in order to proceed. </li>
 </ul>
 
-<h3 id="software-repositories">Software Repositories</h3>
+<h2 id="software-repositories">Software Repositories</h2>
 
-<p>On both nodes install (as root user) the <code>epel</code> and <code>argo</code> release packages via yum:</p>
+<h3 id="trustanchors-repository">Trustanchors repository</h3>
 
-<pre><code># yum install http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-# yum install http://rpm.hellasgrid.gr/mash/centos6-arstats/i386/ar-release-1.0.0-3.el6.noarch.rpm
-</code></pre>
-
-<p>These packages will configure on the host the necessary repository files under <code>/etc/yum.repos.d</code>.</p>
-
-<p>On Node 1 (Sync components, Consumer service and Hadoop client) you will also need to install the cloudera repository for Hadoop components (clients) to be installed. Under a file named <code>/etc/yum.repos.d/cloudera-cdh4.repo</code> place the following contents:</p>
-
-<pre><code>[cloudera-cdh4]
-name=Cloudera's Distribution for Hadoop, Version 4
-baseurl=http://archive.cloudera.com/cdh4/redhat/6/$basearch/cdh/4/
-gpgkey = http://archive.cloudera.com/cdh4/redhat/6/$basearch/cdh/RPM-GPG-KEY-cloudera
-gpgcheck = 1
-enabled = 1
-</code></pre>
-
-<p>On the same node will also need to install the EGI trust-anchors repository (this is required on the host for communicating with topology providing services). Under a file named <code>/etc/yum.repos.d/EGI-trustanchors.repo</code> place the following contents:</p>
+<p>On all nodes (Node 1, Node 2 and Node 3) create a file named <code>/etc/yum.repos.d/EGI-trustanchors.repo</code> and place within it the following contents:</p>
 
 <pre><code>[EGI-trustanchors]
 name=EGI-trustanchors
@@ -227,63 +225,113 @@ gpgcheck=1
 gpgkey=http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
 </code></pre>
 
-<p>On Node 2 (API and Web UI services) you will finally need to add the MongoDB repository. The name of the file should be <code>/etc/yum.repos.d/mongodb.repo</code> and its contents should be:</p>
+<h3 id="epel-repository">EPEL repository</h3>
 
-<pre><code>[mongodb]
+<p>On Node 1 and Node 2 install (as root user) the <code>epel-release</code> package via yum:</p>
+
+<pre><code># yum install epel-release
+</code></pre>
+
+<p>This package will configure on the host the necessary repository files under <code>/etc/yum.repos.d</code>. </p>
+
+<h3 id="argo-repository">ARGO repository</h3>
+
+<p>On both Node 1 and Node 2 create a new file with filename <code>/etc/yum.repos.d/argo.repo</code> and place within it the following contents:</p>
+
+<pre><code>[argo-prod]
+name=ARGO Product Repository
+baseurl=http://rpm.hellasgrid.gr/mash/centos6-arstats/$basearch
+enabled=0
+gpgcheck=0
+
+[argo-devel]
+name=ARstats Development Repository
+baseurl=http://rpm.hellasgrid.gr/mash/centos6-arstats-devel/$basearch
+enabled=0
+gpgcheck=0
+</code></pre>
+
+<h3 id="cloudera-v5-repository">Cloudera v5 repository</h3>
+
+<p>On Node 1 (Sync components, Consumer service and Compute Engine/Hadoop client) you will also need to install the cloudera repository for Hadoop components (clients) to be installed. Create a new file named <code>/etc/yum.repos.d/cloudera-cdh5.repo</code> place within it the following contents:</p>
+
+<pre><code>[cloudera-cdh5]
+# Packages for Cloudera's Distribution for Hadoop, Version 5, on RedHat or CentOS 6 x86_64
+name=Cloudera's Distribution for Hadoop, Version 5
+baseurl=http://archive.cloudera.com/cdh5/redhat/$releasever/$basearch/cdh/5/
+gpgkey = http://archive.cloudera.com/cdh5/redhat/$releasever/$basearch/cdh/RPM-GPG-KEY-cloudera
+gpgcheck = 1
+enabled = 1
+</code></pre>
+
+<h3 id="mongodb-v3-repository">MongoDB v3 repository</h3>
+
+<p>On Node 2 (API and Web UI services) you will need to add the MongoDB repository. The name of the file should be <code>/etc/yum.repos.d/mongodb_3.repo</code> and its contents should be:</p>
+
+<pre><code>[mongodb-org-3.0]
 name=MongoDB Repository
-baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/
+baseurl=http://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.0/x86_64/
 gpgcheck=0
 enabled=1
 </code></pre>
 
-<h3 id="node-1">Node 1</h3>
+<h1 id="packages">Packages</h1>
+
+<h2 id="node-1-consumer-service-connectors-and-compute-engine">Node 1 (Consumer service, Connectors and Compute Engine)</h2>
 
 <p>Install the <code>ca-policy-egi-core</code> meta-rpm with the following command:</p>
 
 <pre><code># yum install ca-policy-egi-core
 </code></pre>
 
-<p>Place the key/certificate pair under <code>/etc/grid-security/</code> folder with the following names and permissions:</p>
+<p>Place the key/certificate pair under the <code>/etc/grid-security/</code> folder with the following names and permissions:</p>
 
 <ul>
   <li>Key file: <code>/etc/grid-security/hostkey.pem</code> and permissions: 0400</li>
   <li>Certificate file: <code>/etc/grid-security/hostcert.pem</code> and permissions: 0644</li>
 </ul>
 
-<h4 id="sync-components-and-consumer-service">Sync Components and Consumer Service</h4>
+<h3 id="sync-components-and-consumer-service">Sync Components and Consumer Service</h3>
 
-<p>Next, as root user install the following packages via yum:</p>
+<p>Next, as root user install the following packages via yum and pip:</p>
 
-<pre><code># yum install ar-consumer
-# yum install ar-sync
+<pre><code># yum install python-pip
+# pip install --upgrade pymongo
+# yum install avro --enablerepo=argo-prod
+# yum install argo-egi-consumer --enablerepo=argo-prod
+# yum install argo-egi-connectors --enablerepo=argo-prod
 </code></pre>
 
-<p>The ar-sync package installs components needed for refreshing the current status of the monitored system. For configuration details of the sync components visit <a href="/guides/sync/">this</a> page. </p>
+<p>The argo-egi-connectors package installs components needed for fetching complimentary to the Compute Engine data from sources of truth (i.e. GOCDB service, POEM service etc). By default the connectors are configured to fetch this information on a daily basis. For configuration details of the connectors visit <a href="/guides/egi-connectors/">this</a> page. </p>
 
-<p>The ar-consumer service can be configured to connect to a pool of message brokers. By default the config is set to <code>mq.afroditi.hellasgrid.gr</code> and <code>mq.cro-ngi.hr</code>. </p>
+<p>The argo-egi-consumer service can be configured to connect to one or more message brokers. By default the configuration will connect to <code>mq.afroditi.hellasgrid.gr</code> and <code>mq.cro-ngi.hr</code>. </p>
 
-<p>This configuration is suggested as it will allow the consumer service to cycle to the next broker in the case the one it is connected to fails for some reason. For further configuration of the consumer service please refer <a href="/guides/consumer/">here</a>. </p>
+<p>This configuration (having the consumer connected to two or more broker instances) is suggested as it will allow the consumer service to cycle to the next broker in the case the one it is connected to fails for any reason. For further configuration details of the consumer service please refer <a href="/guides/consumer/">here</a>. </p>
 
-<p>Start consumer service and make sure to add it to appropriate run levels:</p>
+<p>After applying the necessary configurations start the consumer service and add it to appropriate run levels, so that it starts upon the next reboot. </p>
 
-<pre><code># service ar-consumer start
-# chkconfig ar-consumer on
+<pre><code># service argo-egi-consumer start
+# chkconfig argo-egi-consumer on
 </code></pre>
 
-<h4 id="compute-engine">Compute Engine</h4>
+<h3 id="compute-engine">Compute Engine</h3>
 
-<p>Install the component:</p>
+<p>As the root user execute the following command to install the compute engine:</p>
 
-<pre><code># yum install ar-compute
+<pre><code># yum install ar-compute --enablerepo=argo-prod
 </code></pre>
 
 <p>Edit the <code>/etc/ar-compute-engine.conf</code> configuration file and </p>
 
 <ul>
-  <li>set the value of the <code>mongo_host</code> variable to the IP of Node 2.</li>
+  <li>set the value of the <code>mongo_host</code> variable to the IP of Node 2. Note that if you have an internal network available among the nodes it should be preffered to use the internal IP. </li>
   <li>set the value of the <code>mode</code> variable to <code>cluster</code> like so: <code>mode=cluster</code>
 </li>
+  <li>set the values of the <code>prefilter_clean</code> and <code>sync_clean</code> variables to either <code>true</code> of <code>false</code>
+</li>
 </ul>
+
+<p>All configuration options are described in detail <a href="/guides/compute/compute-job-configuration/">here</a></p>
 
 <p>Under the folder <code>/etc/cron.d/</code> place two cronjobs that will handle hourly and daily calculations. </p>
 
@@ -300,11 +348,11 @@ enabled=1
   </li>
 </ul>
 
-<h4 id="hadoop-client">Hadoop client</h4>
+<h3 id="hadoop-client">Hadoop client</h3>
 
-<p>Configure the Node as a regular Hadoop client. </p>
+<p>Configure the Node as a MapReduce and HDFS Hadoop client. </p>
 
-<h3 id="node-2">Node 2</h3>
+<h2 id="node-2-datastore-and-web-api-services">Node 2 (Datastore and Web API services)</h2>
 
 <p>Place the key/certificate pair under the following folders with the following names and permissions:</p>
 
@@ -313,14 +361,14 @@ enabled=1
   <li>Certificate file: <code>/etc/pki/tls/certs/localhost.crt</code> and permissions: 0644</li>
 </ul>
 
-<h4 id="datastore">Datastore</h4>
+<h3 id="datastore">Datastore</h3>
 
 <p>Install MongoDB with the following command:</p>
 
-<pre><code># yum install mongodb-org-server mongodb-org
+<pre><code># yum install mongodb-org-server-3.0.7 mongodb-org-3.0.7
 </code></pre>
 
-<p>Edit the <code>/etc/mongod.conf</code> file and set the value of the variable <code>bind_ip</code> to <code>0.0.0.0</code> like so: <code>bind_ip=0.0.0.0</code>.</p>
+<p>Edit the <code>/etc/mongod.conf</code> file and set the value of the variable <code>bindIp</code> either to <code>0.0.0.0</code> or to a specific interface (i.e. use the internal NIC in case you have an internal subnet available among the nodes in your setup). </p>
 
 <p>To start and enable the MongoDB service use the following two commands:</p>
 
@@ -332,13 +380,19 @@ enabled=1
 
 <p>Install the ARGO web API service with the following command:</p>
 
-<pre><code># yum install ar-web-api
+<pre><code># yum install argo-web-api --enablerepo=argo-prod
 </code></pre>
+
+<p>The Web API has a single configuration file: <code>/etc/argo-web-api.conf</code>. Make sure that in the <code>[server]</code> section the variables <code>cert</code> and <code>key</code> point to the public x509 certificate and private rsa key files respectively. For further configuration options visit <a href="/guides/api">this</a> page.</p>
 
 <p>Finally, start the service using the following command:</p>
 
-<pre><code># start ar-web-api
+<pre><code># start argo-web-api
 </code></pre>
+
+<h3 id="node-3-web-ui-service">Node 3 (Web UI service)</h3>
+
+<p>Installation and configuration details for the ARGO Web UI services are available <a href="/guides/webui/">here</a>. </p>
 
 
         </div><!--col-md-8-->

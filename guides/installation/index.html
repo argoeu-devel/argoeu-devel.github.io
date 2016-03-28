@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>ARGO Availability and Reliability Monitoring - </title>
+  <title>ARGO Availability and Reliability Monitoring - Installation for standalone mode</title>
   <link rel="alternate" type="application/atom+xml" title="API Changes" href="/changes.atom" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -142,25 +142,67 @@
 
         </div>
         <div class="col-md-8 main">
+          	
+            <h1 class="highlight">
+            
+              <i class='fa fa-sitemap'></i> 
+            
+            Installation for standalone mode</h1>
           
-          <p class="lead"> </p>
+          <p class="lead"> This document will guide you through the standalone mode installation process.</p>
           
+<h1 id="installation-standalone-mode">Installation (standalone mode)</h1>
+
+<p>This document will guide you through the installation process. The ARGO components that will be installed on the node include the following items:</p>
+
+<ul>
+  <li>Consumer service</li>
+  <li>Connectors</li>
+  <li>Compute Engine</li>
+  <li>Web API service</li>
+</ul>
+
+<p>For a production environment we propose having one node with the following minimum specifications:</p>
+
+<ul>
+  <li>4 CPUs</li>
+  <li>8GB RAM</li>
+  <li>100 GB Disk</li>
+</ul>
+
+<p>You are stronly encouraged to use the Ansible based deployment playbook available on <a href="https://github.com/ARGOeu/argo-ansible">github</a>.</p>
+
+<p>If you are not familiar with Ansible or would rather follow the step-by-step guide continue reading. </p>
+
 <h1 id="prerequisites">Prerequisites</h1>
 
 <ul>
   <li>You will need a RHEL 6.x or similar OS (base installation) to proceed. Note that the following instructions have been tested against CentOS 6.x OSes.</li>
   <li>Make sure that on your host an ntp client service is configured properly.</li>
+  <li>You will need an x509 key/certificate pair in order to proceed. </li>
 </ul>
 
-<p>The first step is to install (as root user) the <code>epel</code> and <code>argo</code> release packages via yum:</p>
+<p>The first step is to install (as root user) the EPEL repository definitions via yum:</p>
 
-<pre><code># yum install http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-# yum install http://rpm.hellasgrid.gr/mash/centos6-arstats/i386/ar-release-1.0.0-3.el6.noarch.rpm
+<pre><code># yum install epel-release
 </code></pre>
 
-<p>These packages will configure on the host the necessary repository files under <code>/etc/yum.repos.d</code>.</p>
+<p>Create a new file with filename <code>/etc/yum.repos.d/argo.repo</code> and place within it the following contents:</p>
 
-<p>You will also need to install the cloudera repository for Hadoop components to be retrieved (although you will not install any Hadoop cluster, some libraries from the Hadoop ecosystem are needed). Under a file named <code>/etc/yum.repos.d/cloudera-cdh5.repo</code> place the following contents:</p>
+<pre><code>[argo-prod]
+name=ARGO Product Repository
+baseurl=http://rpm.hellasgrid.gr/mash/centos6-arstats/$basearch
+enabled=0
+gpgcheck=0
+
+[argo-devel]
+name=ARstats Development Repository
+baseurl=http://rpm.hellasgrid.gr/mash/centos6-arstats-devel/$basearch
+enabled=0
+gpgcheck=0
+</code></pre>
+
+<p>You will also need to install the cloudera repository for Hadoop components to be retrieved (although you will not install any Hadoop cluster, some libraries from the Hadoop ecosystem are needed). Under a new file named <code>/etc/yum.repos.d/cloudera-cdh5.repo</code> place the following contents:</p>
 
 <pre><code>[cloudera-cdh5]
 name=Cloudera's Distribution for Hadoop, Version 5
@@ -169,7 +211,16 @@ gpgkey =  http://archive.cloudera.com/cdh5/redhat/6/x86_64/cdh/RPM-GPG-KEY-cloud
 gpgcheck = 1
 </code></pre>
 
-<p>You will also need to install the EGI trust-anchors repository (this is required on the host for communicating with topology providing services). Under a file named <code>/etc/yum.repos.d/EGI-trustanchors.repo</code> place the following contents:</p>
+<p>You will need to add the MongoDB (version 3) repository. The name of the file should be <code>/etc/yum.repos.d/mongodb_3.repo</code> and its contents should be:</p>
+
+<pre><code>[mongodb-org-3.0]
+name=MongoDB Repository
+baseurl=http://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.0/x86_64/
+gpgcheck=0
+enabled=1
+</code></pre>
+
+<p>Lastly, you need to also install the EGI trustanchors repository (this is required on the host for communicating with topology providing services). Under a new file named <code>/etc/yum.repos.d/EGI-trustanchors.repo</code> place the following contents:</p>
 
 <pre><code>[EGI-trustanchors]
 name=EGI-trustanchors
@@ -179,7 +230,7 @@ gpgcheck=1
 gpgkey=http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
 </code></pre>
 
-<h1 id="installation">Installation</h1>
+<h1 id="packages">Packages</h1>
 
 <p>Install (via <code>pip</code>) the latest version of the pymongo library:</p>
 
@@ -187,47 +238,83 @@ gpgkey=http://repository.egi.eu/sw/production/cas/1/GPG-KEY-EUGridPMA-RPM-3
 # pip install --upgrade pymongo
 </code></pre>
 
-<p>Install (via <code>pip</code>) the latest version of the pymongo library:</p>
+<p>Install avro and the ARGO components:</p>
 
-<pre><code># yum install python-pip
-# pip install --upgrade pymongo
-</code></pre>
-
-<p>Install the component:</p>
-
-<pre><code># yum install ar-compute
+<pre><code># yum install avro --enablerepo=argo-prod
+# yum install argo-egi-consumer --enablerepo=argo-prod
+# yum install argo-egi-connectors --enablerepo=argo-prod
+# yum install ar-compute --enablerepo=argo-prod
+# yum install mongodb-org-server-3.0.7 mongodb-org-3.0.7
+# yum install argo-web-api --enablerepo=argo-prod
 </code></pre>
 
 <h1 id="configuration">Configuration</h1>
 
+<h2 id="connectors-configuration">Connectors configuration</h2>
+
+<p>The argo-egi-connectors package installs components needed for fetching complimentary to the Compute Engine data from sources of truth (i.e. GOCDB service, POEM service etc). By default the connectors are configured to fetch this information on a daily basis. For configuration details of the connectors visit <a href="/guides/egi-connectors/">this</a> page. </p>
+
+<h2 id="consumer-configuration">Consumer configuration</h2>
+
+<p>The argo-egi-consumer service can be configured to connect to one or more message brokers. By default the configuration will connect to <code>mq.afroditi.hellasgrid.gr</code> and <code>mq.cro-ngi.hr</code>. </p>
+
+<p>This configuration (having the consumer connected to two or more broker instances) is suggested as it will allow the consumer service to cycle to the next broker in the case the one it is connected to fails for any reason. For further configuration details of the consumer service please refer <a href="/guides/consumer/">here</a>. </p>
+
+<p>After applying the necessary configurations start the consumer service and add it to appropriate run levels, so that it starts upon the next reboot. </p>
+
+<pre><code># service argo-egi-consumer start
+# chkconfig argo-egi-consumer on
+</code></pre>
+
+<h2 id="ce-configuration">CE configuration</h2>
+
 <p>Edit the <code>/etc/ar-compute-engine.conf</code> configuration file and</p>
 
 <ul>
-  <li>set the values of the <code>mongo_host</code> and <code>mongo_port</code> variables to point to a running mongo service</li>
-  <li>set the value of the <code>mode</code> variable to <code>local</code> or <code>distributed</code>
+  <li>set the value of the <code>mongo_host</code> variable to <code>127.0.0.1</code>
+</li>
+  <li>set the value of the <code>mode</code> variable to <code>local</code>
 </li>
   <li>set the values of the <code>prefilter_clean</code> and <code>sync_clean</code> variables to either <code>true</code> of <code>false</code>
 </li>
 </ul>
 
+<p>All configuration options are described in detail <a href="/guides/compute/compute-job-configuration/">here</a></p>
+
+<p>Under the folder <code>/etc/cron.d/</code> place two cronjobs that will handle hourly and daily calculations. </p>
+
 <p>Under the folder <code>/etc/cron.d/</code> place two cronjobs that will handle hourly and daily calculations.</p>
 
-<ul>
-  <li>
-    <p>for the daily caclulations edit <code>/etc/cron.d/ar_job_cycle_daily</code> and place the following contents:</p>
+<p>For the daily caclulations edit <code>/etc/cron.d/ar_job_cycle_daily</code> and place the following contents:</p>
 
-    <p>0 0 * * * root /usr/libexec/ar-compute/standalone/job_cycle.py -d $(/bin/date –utc –date ‘-1 day’ +\%Y-\%m-\%d)</p>
-  </li>
-</ul>
+<pre><code>0 0 * * * root /usr/libexec/ar-compute/standalone/job_cycle.py -d $(/bin/date --utc --date '-1 day' +\%Y-\%m-\%d)
+</code></pre>
 
-<p>Optionally - for the hourly caclulations edit <code>/etc/cron.d/ar_job_cycle_hourly</code> and place the following contents:</p>
+<p>Optionally, for having hourly caclulations edit <code>/etc/cron.d/ar_job_cycle_hourly</code> and place the following contents:</p>
 
 <pre><code>55 * * * * root /usr/libexec/ar-compute/standalone/job_cycle.py -d $(/bin/date --utc  +\%Y-\%m-\%d)
 </code></pre>
 
-<h1 id="log-files">Log files</h1>
+<h3 id="log-files">Log files</h3>
 
 <p>The compute engine uses by default the system syslog to log any messages. You may change this behaviour by editing the configucation file <code>/etc/ar-compute-engine.conf</code>. You may also wish to change the logging level by setting the <code>log_level</code> value to your preference.</p>
+
+<h2 id="web-api-and-datastore-configurations">Web API and datastore configurations</h2>
+
+<p>Edit the <code>/etc/mongod.conf</code> file and set the value of the variable <code>bindIp</code> to <code>27.0.0.1</code>. </p>
+
+<p>To start and enable the MongoDB service use the following two commands:</p>
+
+<pre><code># service mongod start
+# chkconfig mongod on
+</code></pre>
+
+<p>The Web API has a single configuration file: <code>/etc/argo-web-api.conf</code>. Make sure that in the <code>[server]</code> section the variables <code>cert</code> and <code>key</code> point to the public x509 certificate and private rsa key files respectively. For further configuration options visit <a href="/guides/api">this</a> page.</p>
+
+<p>Finally, start the Web API service using the following command:</p>
+
+<pre><code># start argo-web-api
+</code></pre>
 
         </div><!--col-md-8-->
         <div class="col-md-2">&nbsp;</div>
