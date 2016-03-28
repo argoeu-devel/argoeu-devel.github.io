@@ -147,7 +147,7 @@
             
               <i class='fa fa-cog'></i> 
             
-            Compute Engine Ingestion - Flume Decode Interceptor</h1>
+            Compute Engine Ingestion | Flume Decode Interceptor</h1>
           
           <p class="lead"> Using a custom flume interceptor while ingesting data from kafka to hdfs</p>
           
@@ -157,20 +157,18 @@
 
 <p>ARGO Messaging API produces JSON messages in the following schema:</p>
 
-<p><code>
-json
-{
+<pre><code>{
    "messageId": "12",
    "attributes": [
       {
-         "key": "foo",
-         "value": "bar"
+	 "key": "foo",
+	 "value": "bar"
       }
    ],
    "data": "dGhpcyBpcyB0aGUgcGF5bG9hZA==",
    "publishTime": "2016-03-09T13:02:21.139873825Z"
 }
-</code></p>
+</code></pre>
 
 <p>Notice that the payload is included in the “data” field and is encoded in base64. Usually in the compute engine the
 encoded payload when decoded will result in a binary AVRO file.</p>
@@ -190,39 +188,40 @@ interceptor on the KAFKA source. Interceptors give the ability to flume to drop 
 
 <p>To build the jar file use the following commands:</p>
 
-<ul>
-  <li><code>cd /flume/decode_interceptor</code></li>
-  <li><code>mvn clean</code></li>
-  <li><code>mvn package</code></li>
-</ul>
+<pre><code>`cd /flume/decode_interceptor`
+`mvn clean`
+`mvn package`
+</code></pre>
 
-<p>The build process produces the following file:
-<code>
-/flume/decode_interceptor/target/decode-interceptor-x.y.z-SNAPSHOT.jar
-</code>
-<em>(where x,y,z are integers used for versioning)</em></p>
+<p>The build process produces the following file:</p>
 
-<p>To only test the interceptor, just issue
-- <code>cd /flume/decode_interceptor</code>
-- <code>mvn test</code></p>
+<pre><code>/flume/decode_interceptor/target/decode-interceptor-x.y.z-SNAPSHOT.jar
+</code></pre>
+
+<p><em>(where x,y,z are integers used for versioning)</em></p>
+
+<p>To only test the interceptor, just issue</p>
+
+<pre><code>`cd /flume/decode_interceptor`
+`mvn test`
+</code></pre>
 
 <h2 id="how-to-deploy-the-decode-interceptor-at-flume-node">How to deploy the Decode Interceptor at flume node</h2>
 
 <p>This file must be deployed to the node that flume-agent runs
 At flume-agent node, deploy the JAR file to the following path (please create if doesn’t exist)</p>
 
-<p><code>
-/usr/lib/flume-ng/plugins.d/decode_interceptor/lib/
-</code></p>
+<pre><code>/usr/lib/flume-ng/plugins.d/decode_interceptor/lib/
+</code></pre>
 
 <p>Then on the flume configuration file the interceptor must be added to the relevant source
 for e.g.</p>
 
-<p><em>Contents of flume configuration file:</em>
-<code>
-flume1.sources.kafka-source-1.interceptors = DecodeInterceptor
+<p><em>Contents of flume configuration file:</em></p>
+
+<pre><code>flume1.sources.kafka-source-1.interceptors = DecodeInterceptor
 flume1.sources.kafka-source-1.interceptors.DecodeInterceptor.type=argo.DecodeInterceptor$Builder
-</code></p>
+</code></pre>
 
         </div><!--col-md-8-->
         <div class="col-md-2">&nbsp;</div>
