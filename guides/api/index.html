@@ -208,13 +208,12 @@ epel-release package for the appropriate OS. For example:</p>
 
     <pre><code> mkdir ~/go-workspace
  export GOPATH=~/go-workspace
+ export PATH=$PATH:GOPATH
 </code></pre>
   </li>
 </ol>
 
-<p>You may add the last <code>export</code> line into the <code>~/.bashrc</code> or the
-  <code>~/.bash_profile</code> file to have <code>GOPATH</code> environment variable properly setup
-  upon  every login.</p>
+<p>You may add the <code>export</code> lines into the <code>~/.bashrc</code> or the <code>~/.bash_profile</code> file to have the <code>GOPATH</code> and <code>PATH</code> environment variables properly setup upon every login.</p>
 
 <ol>
   <li>
@@ -275,6 +274,7 @@ gzip = true
 cert = /etc/pki/tls/certs/localhost.crt
 privkey = /etc/pki/tls/private/localhost.key
 reqsizelimit = 1073741824
+enable_cors = false
 
 [mongodb]
 host = "127.0.0.1"
