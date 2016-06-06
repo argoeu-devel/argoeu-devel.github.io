@@ -108,8 +108,8 @@
             <a class="list-group-item " href="/guides/messaging/"><em class="fa fa-comments-o"></em> Messaging Service</a>
           
           
-          	
-            <a class="list-group-item active " href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em> Compute Engine</a>
+            
+            <a class="list-group-item " href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em> Compute Engine</a>
           
   	  <div id='caret-data1'>
   	      
@@ -132,7 +132,7 @@
             <em class="fa fa-cog"></em> CLI </a>
 
  	    
-              <a class="list-group-item-level2 active"  href="/guides/argo-compute-engine/flume_decode_interceptor/">
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/flume_decode_interceptor/">
             
             <em class="fa fa-cog"></em> Flume Decode Interceptor</a>
 
@@ -160,88 +160,79 @@
             
               <i class='fa fa-cog'></i> 
             
-            Compute Engine Ingestion | Flume Decode Interceptor</h1>
+            Compute Engine Ingestion | Ingestion Dataflow</h1>
           
-          <p class="lead"> Using a custom flume interceptor while ingesting data from kafka to hdfs</p>
+          <p class="lead"> Description of the Ingestion Dataflow</p>
           
 <h2 id="description">Description</h2>
 
-<p>When using the ARGO Messaging API for ingestion in-front of the compute engine, a broker network is needed for the relay of messages and an ingestion mechanism for storing the data on HDFS. The ingestion mechanism used is the flume service.</p>
+<p>Ingestion dataflow in the compute engine involves the orchestration of the following components:
+ - ARGO Messaging API endpoint (properly configured)
+ - Kafka broker network infrastructure
+ - Apache Flume configuration on hadoop cluster (for ingestion of messages to HDFS)</p>
 
-<p>ARGO Messaging API produces JSON messages in the following schema:</p>
+<h2 id="api-ingestion-endpoint--argo-messaging-api-in-front-of-compute-engine">API ingestion endpoint:  ARGO Messaging API in front of Compute Engine</h2>
 
-<pre><code>{
-   "messageId": "12",
-   "attributes": [
+<p>The API ingestion endpoint will be implemented by configuring and running ARGO Messaging API service in front of the Compute Engine ( &amp; hadoop cluster). Clients should be able to deliver a specific AVRO encoded payload based on already defined AVRO file spec. Type of AVRO payloads (and specs) include:
+- Metric data
+- Endpoint Topology sync data
+- Group Endpoint Topology sync data
+- Poem profile sync data
+- Weight sync data
+- Downtime sync data</p>
+
+<p>The client should choose the right ARGO Messaging API project (based on tenant) and a specific topic based on the payload
+For e.g. for sending metric data for tenant TA a request should be made to <code>/v1/projects/TA/metric_data</code></p>
+
+<p>Then the client should publish the corresponding message in encoded AVRO format and further encoded to base64.
+Should also supply two message attributes:
+- <code>type</code> : type of payload (metric_data,weight,downtime etc)
+- <code>date</code> : partition date (daily) in the format: <code>YYYY-MM-DD</code></p>
+
+<p>An example of an encoded message for metric_data ingestion would be the following:
+`
+{
+   “attributes”: [
       {
-	 "key": "foo",
-	 "value": "bar"
+         “key”: “date”,
+         “value”: “2015-10-06”
+      },
+      {
+         “key”: “type”,
+         “value”: “metric_data”
       }
    ],
-   "data": "dGhpcyBpcyB0aGUgcGF5bG9hZA==",
-   "publishTime": "2016-03-09T13:02:21.139873825Z"
-}
-</code></pre>
+   “data”: “CONTENTS_OF_BASE64_ENCODED_STRING_OF_AVRO_BINARY_REPRESENTATION”,</p>
 
-<p>Notice that the payload is included in the “data” field and is encoded in base64. Usually in the compute engine the
-encoded payload when decoded will result in a binary AVRO file.</p>
+<p>}</p>
 
-<p>Flume is configured to listen to a KAFKA source (broker network) and transfer though a memory channel each event to an HDFS sink (destination).</p>
+<p>`</p>
 
-<h2 id="the-need-for-the-interceptor">The need for the interceptor</h2>
+<h2 id="kafka-broker-infrastructure">KAFKA Broker infrastructure</h2>
 
-<p>In order to keep only the integral part of the payload and transfer it decoded to it’s final destination we need to define a flume
-interceptor on the KAFKA source. Interceptors give the ability to flume to drop or modify events. Interceptors are actually JAVA classes that implement the Interceptor Interface. Flume comes with a bunch of build in interceptors but gives also the ability to define custom ones.</p>
+<p>ARGO Messaging API will forward the client messages to a kafka backend. Kafka backend should be accessible by the API endpoint node and visible to the Compute Engine’s Hadoop Cluster. Tenant namespacing is accomplished by the following kafka topic convention: “TENANT_NAME.topic_name”. Names produced by this convention should not conflict with topic names already present in kafka infrastructure.</p>
 
-<p>For the ingestion part of the Compute Engine a custom flume Decode Interceptor was developed as a small maven project.</p>
+<h2 id="apache-flume-set-up-and-configuration-for-metric-data">Apache FLUME set-up and configuration for metric data</h2>
 
-<h2 id="interceptor-and-event-headers">Interceptor and event headers</h2>
-<p>Interceptor parses the original JSON message looking for the “attributes” dictionary. For each defined attribute the interceptor reads it’s key/value pair and exposes it as a flume event header. The flume header gets an “argo_” prefix in order to maintain discernibility from other flume environment headers that the event might carry. Also the interceptor supplies the event with a special header = ‘flume.avro.schema.url’ which will be used further down the line by the AvroEventSerializer when storing the event to HDFS.</p>
+<p>Apache Flume ingests relevant messages from the kafka back-end and stores them to HDFS destinations. In order to fill the role properly must be configured in the following fashion:</p>
 
-<h2 id="how-to-test-the-decode-interceptor">How to test the Decode Interceptor</h2>
+<p>For each tenant Apache Flume should have a kafka source configured to the corresponding metric_data topic. Usually the topic is named ‘TENANT_NAME.metric_data’. A corresponding memory channel should follow the kafka-source and the flume events should end in an HDFS sink.  </p>
 
-<p>The Decode Interceptor project is hosted in the directory <code>/flume/decode_interceptor</code> of the argo-compute-engine repo.</p>
+<p><code>KAFKA SOURCE &gt; MEMORY CHANNEL &gt; HDFS SINK</code></p>
 
-<p>To build the jar file use the following commands:</p>
+<h2 id="hdfs-destinations">HDFS destinations</h2>
 
-<pre><code>cd /flume/decode_interceptor
-mvn clean
-mvn package
-</code></pre>
+<p>Flume dataflow store the metric data in the following hdfs destination:
+<code>/argo/{TENANT}/metric_data/date={date_timestamp}</code></p>
 
-<p>The build process produces the following file:</p>
+<p>Files are also accessible by hive if corresponding tables are created and set to those locations. Folder <code>./ingestion/hive/</code> includes scripts for creation of hive tables that query data on ingestion HDFS directories.</p>
 
-<pre><code>/flume/decode_interceptor/target/decode-interceptor-x.y.z-SNAPSHOT.jar
-</code></pre>
+<p>Avro schema’s used should be stored in an accessible hdfs destination such as ‘/argo/schemas/’</p>
 
-<p><em>(where x,y,z are integers used for versioning)</em></p>
+<h2 id="apache-flume-configuration">Apache Flume Configuration</h2>
 
-<p>To only test the interceptor, just issue</p>
-
-<pre><code>cd /flume/decode_interceptor
-mvn test
-</code></pre>
-
-<h2 id="how-to-deploy-the-decode-interceptor-at-flume-node">How to deploy the Decode Interceptor at flume node</h2>
-
-<p>This file must be deployed to the node that flume-agent runs
-At flume-agent node, deploy the JAR file to the following path (please create if doesn’t exist)</p>
-
-<pre><code>/usr/lib/flume-ng/plugins.d/decode_interceptor/lib/
-</code></pre>
-
-<p>Then on the flume configuration file the interceptor must be added to the relevant source
-for e.g.</p>
-
-<p><em>Contents of flume configuration file:</em></p>
-
-<pre><code>flume1.sources.kafka-source-1.interceptors = DecodeInterceptor
-flume1.sources.kafka-source-1.interceptors.DecodeInterceptor.type=argo.DecodeInterceptor$Builder
-flume1.sources.kafka-source-1.interceptors.DecoreInterceptor.schemaURL=hdfs://path/to/available/schemas
-</code></pre>
-
-<p>The <code>schemaURL</code> parameter defines a hdfs url pointing to an available HDFS location that contains AVRO avsc schema files used
-in encoding supported ingestion data.</p>
+<p>Apache flume agent for ingestion of metric data is configured based on configuration template provided in <code>./ingestion/flume/conf/lume-agent-metric-data.conf.template</code>
+Flume Decode interceptor must be build and the target <code>decode-interceptor.jar</code> placed on the node’s <code>/usr/lib/flume-ng/plugins.d/decode-intereptor/lib</code> directory. Also Cloudera’s CDK AvroEventSerializer.jar must be placed on the node’s <code>/usr/lib/flume-ng/plugins.d/avro-serializer/lib</code></p>
 
         </div><!--col-md-8-->
         <div class="col-md-2">&nbsp;</div>
