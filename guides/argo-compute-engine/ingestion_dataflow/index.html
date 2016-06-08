@@ -225,6 +225,10 @@ Should also supply two message attributes:
 <p>Flume dataflow store the metric data in the following hdfs destination:
 <code>/argo/{TENANT}/metric_data/date={date_timestamp}</code></p>
 
+<p>Flume dataflow store the sync data in the following hdfs destination pattern:
+<code>/argo/{TENANT}/{type}/report={report_name}/date={date_timestamp}</code>
+where <code>{type}</code> is the type of sync data (weights,downtimes,endpoint_groups,group_groups,metric_profiles)</p>
+
 <p>Files are also accessible by hive if corresponding tables are created and set to those locations. Folder <code>./ingestion/hive/</code> includes scripts for creation of hive tables that query data on ingestion HDFS directories.</p>
 
 <p>Avro schema’s used should be stored in an accessible hdfs destination such as ‘/argo/schemas/’</p>
