@@ -187,26 +187,16 @@ For e.g. for sending metric data for tenant TA a request should be made to <code
 <p>Then the client should publish the corresponding message in encoded AVRO format and further encoded to base64.
 Should also supply two message attributes:
 - <code>type</code> : type of payload (metric_data,weight,downtime etc)
-- <code>date</code> : partition date (daily) in the format: <code>YYYY-MM-DD</code></p>
+- <code>partition_date</code> : partition date (daily) in the format: <code>YYYY-MM-DD</code></p>
 
 <p>An example of an encoded message for metric_data ingestion would be the following:
-`
-{
-   “attributes”: [
-      {
-         “key”: “date”,
-         “value”: “2015-10-06”
-      },
-      {
-         “key”: “type”,
-         “value”: “metric_data”
-      }
-   ],
-   “data”: “CONTENTS_OF_BASE64_ENCODED_STRING_OF_AVRO_BINARY_REPRESENTATION”,</p>
-
-<p>}</p>
-
-<p>`</p>
+<code>{
+  "attributes": {
+    "type": "downtimes",
+    "partition_date": "2015-11-01"
+  },
+  "data": "CONTENTS_OF_BASE64_ENCODED_STRING_OF_AVRO_BINARY_REPRESENTATION"
+}</code></p>
 
 <h2 id="kafka-broker-infrastructure">KAFKA Broker infrastructure</h2>
 
@@ -223,10 +213,10 @@ Should also supply two message attributes:
 <h2 id="hdfs-destinations">HDFS destinations</h2>
 
 <p>Flume dataflow store the metric data in the following hdfs destination:
-<code>/argo/{TENANT}/metric_data/date={date_timestamp}</code></p>
+<code>/argo/{TENANT}/metric_data/date={partition_date}</code></p>
 
 <p>Flume dataflow store the sync data in the following hdfs destination pattern:
-<code>/argo/{TENANT}/{type}/report={report_name}/date={date_timestamp}</code>
+<code>/argo/{TENANT}/{type}/report={report_name}/date={partition_date}</code>
 where <code>{type}</code> is the type of sync data (weights,downtimes,endpoint_groups,group_groups,metric_profiles)</p>
 
 <p>Files are also accessible by hive if corresponding tables are created and set to those locations. Folder <code>./ingestion/hive/</code> includes scripts for creation of hive tables that query data on ingestion HDFS directories.</p>
