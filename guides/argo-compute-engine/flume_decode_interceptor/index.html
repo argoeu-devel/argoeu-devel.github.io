@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>ARGO Availability and Reliability Monitoring - Compute Engine documentation | ARGO</title>
+  <link rel="alternate" type="application/atom+xml" title="API Changes" href="/changes.atom" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ARGO is a lightweight service for Service Level Monitoring designed for medium and large sized e-Infrastructures. ">
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ARGO Availability and Reliability Monitoring" />
+    <meta property="og:description" content="ARGO is a lightweight service for Service Level Monitoring designed for medium and large sized e-Infrastructures." />
+    <meta property="og:url" content="http://argoeu.github.io/" />
+    <meta property="og:site_name" content="ARGO Documentation" />
+    <meta property="article:publisher" content="ARGO Team" />
+    <meta property="og:image" content="http://argoeu.github.io/shared/images/argo-logo.png" />
+  <meta name="author" content="">
+  <link rel="icon" href="/shared/favicon.ico">
+  <!-- Bootstrap core CSS -->
+  <link href="/shared/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/shared/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/shared/css/font-beba.css">
+
+  <link href="/shared/css/custom.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+
+<body class="documentation">
+  <!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+		    <span class="sr-only">Toggle navigation</span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/index.html"><img src='/shared/images/argo-logo.png' alt='ARGO'  /></a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+		  <ul class="nav navbar-nav navbar-right">
+		    <li class="active"><a href="/index.html">Home</a></li>
+		    <li><a href="/index.html#what">About</a></li>
+		    <li><a href="/index.html#features">Features</a></li>
+		    <li><a href="/use-cases/">Use cases</a></li>
+		    <li class="dropdown">
+		      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Documentation <span class="caret"></span></a>
+		      <ul class="dropdown-menu" role="menu">
+			<li><a href="/overview/"><em class="fa fa-file-text-o"></em>  Overview</a></li>
+			<li><a href="/guides/installation/"><em class="fa fa-file-text-o"></em>  Installation</a></li>
+			<li><a href="/guides/sync/"><em class="fa fa-refresh"></em> EGI Connectors</a></li>
+			<li><a href="/guides/poem/"><em class="fa fa-check-square-o"></em>  Poem service</a></li>
+			<li><a href="/guides/consumer/"><em class="fa fa-send-o"></em>  Consumer</a></li>
+			<li><a href="/guides/messaging/"><em class="fa fa-comments-o"></em>  Messaging Service</a></li>
+			<li><a href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em>  Compute Engine</a></li>
+			<li><a href="/guides/api/"><em class="fa fa-cogs"></em>  API </a></li>
+			<li><a href="/guides/webui/"><em class="fa fa-connectdevelop"></em>  Web UI</a></li>
+			<li class="divider"></li>
+			<li class="dropdown-header">Developers</li>
+			<li><a href="/api/v2/"><em class="fa fa-cogs"></em>  API v2 documentation </a></li>
+			<li><a href="https://api-doc.argo.grnet.gr/argo-web-api/" target="_blank"><em class="fa fa-cogs"></em>  Swagger - API v2  </a></li>
+			<li><a href="/messaging/v1/overview/"><em class="fa fa-cogs"></em> Messaging v1 documentation </a></li>
+			<li><a href="https://api-doc.argo.grnet.gr/argo-messaging/" target="_blank"><em class="fa fa-cogs"></em> Swagger - Messaging v1</a></li>
+			<li><a href="#"><em class="fa fa-github-alt"></em>  Github</a></li>
+		      </ul>
+		    </li>
+		  </ul>
+		</div><!--/.nav-collapse -->
+	</div><!--container-->
+</nav>
+
+  <div class='container-fluid' >
+    <div class='row'>
+        <div class="col-md-2 sidebar">
+                   <div class="list-group" >	
+            <a class="list-group-item disabled blue" href="/overview/">Documentation</a>
+          
+            <a class="list-group-item" href="/overview/">Overview</a>
+          
+            <a class="list-group-item disabled blue" href="/guides/installation/">Installation</a>
+          
+            <a class="list-group-item" href="/guides/installation/"><em class="fa fa-terminal"></em> Standalone</a>
+          
+          
+            <a class="list-group-item" href="/guides/installation_cluster/"><em class="fa fa-sitemap"></em> Cluster Mode</a>
+          
+            <a class="list-group-item disabled blue" href="/guides/egi-connectors/">Components</a>
+          
+            <a class="list-group-item" href="/guides/egi-connectors/"><em class="fa fa-refresh"></em> EGI Connectors</a>
+
+          
+          
+            <a class="list-group-item" href="/guides/poem/"><em class="fa fa-check-square-o"></em> Poem service</a>
+          
+          
+            <a class="list-group-item" href="/guides/consumer/"><em class="fa fa-send-o"></em> Consumer</a>
+          
+            
+            <a class="list-group-item " href="/guides/messaging/"><em class="fa fa-comments-o"></em> Messaging Service</a>
+          
+          
+          	
+            <a class="list-group-item active " href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em> Compute Engine</a>
+          
+  	  <div id='caret-data1'>
+  	      
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/installation/">
+            
+            <em class="fa fa-cog"></em> Installation </a>
+            
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/input/">
+            
+            <em class="fa fa-cog"></em> Input </a>
+ 	    
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/report-configuration/">
+            
+            <em class="fa fa-cog"></em> Report configurations </a>
+
+ 
+ 	    
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/cli-interaction/">
+            
+            <em class="fa fa-cog"></em> CLI </a>
+
+ 	    
+              <a class="list-group-item-level2 active"  href="/guides/argo-compute-engine/flume_decode_interceptor/">
+            
+            <em class="fa fa-cog"></em> Flume Decode Interceptor</a>
+
+
+	  </div>
+          
+            <a class="list-group-item" href="/guides/api/"> 
+          
+          <em class="fa fa-cogs"></em> API</a>
+
+          
+            <a class="list-group-item" href="/guides/webui/"><em class="fa fa-connectdevelop"></em> Web UI</a>
+          
+          </div> <!--list group-->
+          <p>&nbsp;</p>
+
+          
+
+
+
+        </div>
+        <div class="col-md-8 main">
+          	
+            <h1 class="highlight">
+            
+              <i class='fa fa-cog'></i> 
+            
+            Compute Engine Ingestion | Flume Decode Interceptor</h1>
+          
+          <p class="lead"> Using a custom flume interceptor while ingesting data from kafka to hdfs</p>
+          
+<h2 id="description">Description</h2>
+
+<p>When using the ARGO Messaging API for ingestion in-front of the compute engine, a broker network is needed for the relay of messages and an ingestion mechanism for storing the data on HDFS. The ingestion mechanism used is the flume service.</p>
+
+<p>ARGO Messaging API produces JSON messages in the following schema:</p>
+
+<pre><code>{
+   "messageId": "12",
+   "attributes": [
+      {
+	 "key": "foo",
+	 "value": "bar"
+      }
+   ],
+   "data": "dGhpcyBpcyB0aGUgcGF5bG9hZA==",
+   "publishTime": "2016-03-09T13:02:21.139873825Z"
+}
+</code></pre>
+
+<p>Notice that the payload is included in the “data” field and is encoded in base64. Usually in the compute engine the
+encoded payload when decoded will result in a binary AVRO file.</p>
+
+<p>Flume is configured to listen to a KAFKA source (broker network) and transfer though a memory channel each event to an HDFS sink (destination).</p>
+
+<h2 id="the-need-for-the-interceptor">The need for the interceptor</h2>
+
+<p>In order to keep only the integral part of the payload and transfer it decoded to it’s final destination we need to define a flume
+interceptor on the KAFKA source. Interceptors give the ability to flume to drop or modify events. Interceptors are actually JAVA classes that implement the Interceptor Interface. Flume comes with a bunch of build in interceptors but gives also the ability to define custom ones.</p>
+
+<p>For the ingestion part of the Compute Engine a custom flume Decode Interceptor was developed as a small maven project.</p>
+
+<h2 id="interceptor-and-event-headers">Interceptor and event headers</h2>
+<p>Interceptor parses the original JSON message looking for the “attributes” dictionary. For each defined attribute the interceptor reads it’s key/value pair and exposes it as a flume event header. The flume header gets an “argo_” prefix in order to maintain discernibility from other flume environment headers that the event might carry. Also the interceptor supplies the event with a special header = ‘flume.avro.schema.url’ which will be used further down the line by the AvroEventSerializer when storing the event to HDFS.</p>
+
+<h2 id="how-to-test-the-decode-interceptor">How to test the Decode Interceptor</h2>
+
+<p>The Decode Interceptor project is hosted in the directory <code>/flume/decode_interceptor</code> of the argo-compute-engine repo.</p>
+
+<p>To build the jar file use the following commands:</p>
+
+<pre><code>cd /flume/decode_interceptor
+mvn clean
+mvn package
+</code></pre>
+
+<p>The build process produces the following file:</p>
+
+<pre><code>/flume/decode_interceptor/target/decode-interceptor-x.y.z-SNAPSHOT.jar
+</code></pre>
+
+<p><em>(where x,y,z are integers used for versioning)</em></p>
+
+<p>To only test the interceptor, just issue</p>
+
+<pre><code>cd /flume/decode_interceptor
+mvn test
+</code></pre>
+
+<h2 id="how-to-deploy-the-decode-interceptor-at-flume-node">How to deploy the Decode Interceptor at flume node</h2>
+
+<p>This file must be deployed to the node that flume-agent runs
+At flume-agent node, deploy the JAR file to the following path (please create if doesn’t exist)</p>
+
+<pre><code>/usr/lib/flume-ng/plugins.d/decode_interceptor/lib/
+</code></pre>
+
+<p>Then on the flume configuration file the interceptor must be added to the relevant source
+for e.g.</p>
+
+<p><em>Contents of flume configuration file:</em></p>
+
+<pre><code>flume1.sources.kafka-source-1.interceptors = DecodeInterceptor
+flume1.sources.kafka-source-1.interceptors.DecodeInterceptor.type=argo.DecodeInterceptor$Builder
+flume1.sources.kafka-source-1.interceptors.DecoreInterceptor.schemaURL=hdfs://path/to/available/schemas
+</code></pre>
+
+<p>The <code>schemaURL</code> parameter defines a hdfs url pointing to an available HDFS location that contains AVRO avsc schema files used
+in encoding supported ingestion data.</p>
+
+        </div><!--col-md-8-->
+        <div class="col-md-2">&nbsp;</div>
+      </div><!--row-->
+    </div><!--container fluid-->
+    <!-- from -->
+<div class="jumbotron">
+    <div class="container" style='padding-left:40px;'>
+      <a href='https://www.grnet.gr/en' target='blank'><img src='/shared/images/grnet_transparent.png' style='padding-left:40px;' alt='GRNET S.A - Greek Research & Technology Network' title='GRNET S.A - Greek Research & Technology Network'/></a>
+      <a href='http://www.cnrs.fr/' target='blank'><img src='/shared/images/cnrs.png' style='padding-left:40px;' alt='Centre national de la recherche scientifique' title='Centre national de la recherche scientifique'/></a>
+      <a href='http://www.srce.unizg.hr/en/' target='blank'><img src='/shared/images/srce.png' style='padding-left:40px;' alt='SCRE - Web stranice Sveučilišnog računskog centra' title='SCRE - Web stranice Sveučilišnog računskog centra'/></a>
+      <a href='http://www.egi.eu' target='blank'><img src='/shared/images/egi2.png' style='padding-left:40px;margin-top:-20px;' alt='European Grid Infrastructure' title='European Grid Infrastructure'/></a>
+    </div> <!-- /container -->
+</div> <!-- jumbotron -->
+<!-- from-->
+
+
+  
+<!--footer -->
+    <footer  id="footer" class="footer">
+	<div class='footer_top'>       
+	<div class="row ">
+       </div>
+       <div class="row ">
+	
+        <div class=" col-md-offset-1 col-md-3">
+		<p><img src='/shared/images/argo-logo.png' alt='Argo'  /></p>		
+		<p>ARGO is a lightweight service for Service Level Monitoring designed for medium and large sized e-Infrastructures. </p>
+   	</div>
+	 <div class="col-md-offset-1 col-md-3">
+		<h4>Contact Us</h4>
+		<address>
+ 		<strong>Email</strong><br>
+      <a href="mailto:argoeu-project@googlegroups.com" style='color:white;'>argoeu-project[AT]googlegroups.com</a>
+		</address>
+   	</div>
+ 	<div class="col-md-3">
+		<h4>Open development </h4>
+    <p> We follow an open development process. All the repositories of ARGO are hosted on Github under the ARGOeu organization.</p>
+   	</div>
+    <div class="col-md-1"></div>
+      </div>
+      </div><!--footer_top-->
+      <div class="footer_bottom_holder">
+	<div class="footer_bottom">
+    <div class="textwidget"><span>Copyright &copy; 2014 - 2015 GRNET S.A. </span>
+    </div>
+  <div class="textwidget"><span>
+      <a href='http://validator.w3.org/check?uri=referer' target='blank'>
+        <img src='/shared/images/validated.png' alt='HTML5 - CSS3 - W3C Validated' title='HTML5 - CSS3 - W3C Validated' height="30"/>
+       </a>
+    </span>
+  </div>
+	</div>
+     </div>	
+    </footer>
+    <a href="#" class="back-to-top" style="display: inline;">
+      <i class="fa fa-arrow-circle-up"></i>
+    </a>
+<!--/footer -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/shared/js/jquery.min.js"></script>
+    <script src="/shared/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/shared/js/ie10-viewport-bug-workaround.js"></script>
+      <script src="/shared/js/jquery.easing.1.3.js"></script>
+  <script src="/shared/js/jquery.animate-enhanced.min.js"></script>
+  <script src="/shared/js/jquery.superslides.min.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    $(function() {
+    
+
+      $('#slides').superslides({
+        hashchange: false,
+        play: 10000
+      });
+
+        var offset = 250;
+        var duration = 300;
+        jQuery(window).scroll(function() {
+          if (jQuery(this).scrollTop() > offset) {
+            jQuery('.back-to-top').fadeIn(duration);
+          } else {
+            jQuery('.back-to-top').fadeOut(duration);
+          }
+        });
+        jQuery('.back-to-top').click(function(event) {
+          event.preventDefault();
+          jQuery('html, body').animate({scrollTop: 0}, duration);
+          return false;
+        })
+      });
+
+  </script>
+
+</body>
+</html>

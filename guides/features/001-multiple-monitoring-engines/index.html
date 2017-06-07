@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>ARGO Availability and Reliability Monitoring - </title>
+  <link rel="alternate" type="application/atom+xml" title="API Changes" href="/changes.atom" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ARGO is a lightweight service for Service Level Monitoring designed for medium and large sized e-Infrastructures. ">
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ARGO Availability and Reliability Monitoring" />
+    <meta property="og:description" content="ARGO is a lightweight service for Service Level Monitoring designed for medium and large sized e-Infrastructures." />
+    <meta property="og:url" content="http://argoeu.github.io/" />
+    <meta property="og:site_name" content="ARGO Documentation" />
+    <meta property="article:publisher" content="ARGO Team" />
+    <meta property="og:image" content="http://argoeu.github.io/shared/images/argo-logo.png" />
+  <meta name="author" content="">
+  <link rel="icon" href="/shared/favicon.ico">
+  <!-- Bootstrap core CSS -->
+  <link href="/shared/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/shared/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/shared/css/font-beba.css">
+
+  <link href="/shared/css/custom.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+
+<body class="documentation">
+  <!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+		    <span class="sr-only">Toggle navigation</span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/index.html"><img src='/shared/images/argo-logo.png' alt='ARGO'  /></a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+		  <ul class="nav navbar-nav navbar-right">
+		    <li class="active"><a href="/index.html">Home</a></li>
+		    <li><a href="/index.html#what">About</a></li>
+		    <li><a href="/index.html#features">Features</a></li>
+		    <li><a href="/use-cases/">Use cases</a></li>
+		    <li class="dropdown">
+		      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Documentation <span class="caret"></span></a>
+		      <ul class="dropdown-menu" role="menu">
+			<li><a href="/overview/"><em class="fa fa-file-text-o"></em>  Overview</a></li>
+			<li><a href="/guides/installation/"><em class="fa fa-file-text-o"></em>  Installation</a></li>
+			<li><a href="/guides/sync/"><em class="fa fa-refresh"></em> EGI Connectors</a></li>
+			<li><a href="/guides/poem/"><em class="fa fa-check-square-o"></em>  Poem service</a></li>
+			<li><a href="/guides/consumer/"><em class="fa fa-send-o"></em>  Consumer</a></li>
+			<li><a href="/guides/messaging/"><em class="fa fa-comments-o"></em>  Messaging Service</a></li>
+			<li><a href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em>  Compute Engine</a></li>
+			<li><a href="/guides/api/"><em class="fa fa-cogs"></em>  API </a></li>
+			<li><a href="/guides/webui/"><em class="fa fa-connectdevelop"></em>  Web UI</a></li>
+			<li class="divider"></li>
+			<li class="dropdown-header">Developers</li>
+			<li><a href="/api/v2/"><em class="fa fa-cogs"></em>  API v2 documentation </a></li>
+			<li><a href="https://api-doc.argo.grnet.gr/argo-web-api/" target="_blank"><em class="fa fa-cogs"></em>  Swagger - API v2  </a></li>
+			<li><a href="/messaging/v1/overview/"><em class="fa fa-cogs"></em> Messaging v1 documentation </a></li>
+			<li><a href="https://api-doc.argo.grnet.gr/argo-messaging/" target="_blank"><em class="fa fa-cogs"></em> Swagger - Messaging v1</a></li>
+			<li><a href="#"><em class="fa fa-github-alt"></em>  Github</a></li>
+		      </ul>
+		    </li>
+		  </ul>
+		</div><!--/.nav-collapse -->
+	</div><!--container-->
+</nav>
+
+  <div class='container-fluid' >
+    <div class='row'>
+        <div class="col-md-2 sidebar">
+                   <div class="list-group" >	
+            <a class="list-group-item disabled blue" href="/overview/">Documentation</a>
+          
+            <a class="list-group-item" href="/overview/">Overview</a>
+          
+            <a class="list-group-item disabled blue" href="/guides/installation/">Installation</a>
+          
+            <a class="list-group-item" href="/guides/installation/"><em class="fa fa-terminal"></em> Standalone</a>
+          
+          
+            <a class="list-group-item" href="/guides/installation_cluster/"><em class="fa fa-sitemap"></em> Cluster Mode</a>
+          
+            <a class="list-group-item disabled blue" href="/guides/egi-connectors/">Components</a>
+          
+            <a class="list-group-item" href="/guides/egi-connectors/"><em class="fa fa-refresh"></em> EGI Connectors</a>
+
+          
+          
+            <a class="list-group-item" href="/guides/poem/"><em class="fa fa-check-square-o"></em> Poem service</a>
+          
+          
+            <a class="list-group-item" href="/guides/consumer/"><em class="fa fa-send-o"></em> Consumer</a>
+          
+            
+            <a class="list-group-item " href="/guides/messaging/"><em class="fa fa-comments-o"></em> Messaging Service</a>
+          
+          
+            
+            <a class="list-group-item " href="/guides/argo-compute-engine/"><em class="fa fa-cog"></em> Compute Engine</a>
+          
+  	  <div id='caret-data1'>
+  	      
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/installation/">
+            
+            <em class="fa fa-cog"></em> Installation </a>
+            
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/input/">
+            
+            <em class="fa fa-cog"></em> Input </a>
+ 	    
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/report-configuration/">
+            
+            <em class="fa fa-cog"></em> Report configurations </a>
+
+ 
+ 	    
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/cli-interaction/">
+            
+            <em class="fa fa-cog"></em> CLI </a>
+
+ 	    
+              <a class="list-group-item-level2"  href="/guides/argo-compute-engine/flume_decode_interceptor/">
+            
+            <em class="fa fa-cog"></em> Flume Decode Interceptor</a>
+
+
+	  </div>
+          
+            <a class="list-group-item" href="/guides/api/"> 
+          
+          <em class="fa fa-cogs"></em> API</a>
+
+          
+            <a class="list-group-item" href="/guides/webui/"><em class="fa fa-connectdevelop"></em> Web UI</a>
+          
+          </div> <!--list group-->
+          <p>&nbsp;</p>
+
+          
+
+
+
+        </div>
+        <div class="col-md-8 main">
+          
+          <p class="lead"> </p>
+          <ul>
+  <li>Start Date: 2016-02-03</li>
+  <li>RFC PR:</li>
+</ul>
+
+<h1 id="summary">Summary</h1>
+
+<p>This is an RFC for ARGO Compute Engine to support metric data received from two
+or more monitoring engines enabled in active-active mode</p>
+
+<h1 id="motivation">Motivation</h1>
+
+<p>Till now ARGO Compute Engine received metric data from a distributed monitoring
+engine involving Nagios nodes dedicated for each high-level group.</p>
+
+<p>With the introduction of a Centralized Single Monitoring Engine, accompanied with
+an HA plan to run two of them in active-active setup, Compute Engine needs to
+be able to accept metric data from two (or more) centralized sources at the same time
+increasing the resolution of the metric Timelines.</p>
+
+<h1 id="detailed-design">Detailed design</h1>
+
+<p>Right now, metric data generated by the Monitoring Engine, are gathered from ARGO Compute Engine and used
+as events to populate timelines (regarding service endpoints). With the HA scenario of two central Monitoring engines
+running in active-active mode the metric data will be doubled.</p>
+
+<p>Each timeline will be populated with events originating from both of the Monitoring Instances. In the case that one of them
+is considered problematic, the resulting timeline will include both legit and wrong events ~ thus corrupted. There should be
+a mechanism to be able to request exclusions of metric data per monitoring engine for a designated period of time.</p>
+
+<p>Thus there are two major design goals for the Compute Engine:</p>
+
+<ul>
+  <li>Able to accept data from multiple monitoring engines …thus multiple values in the monitoring_host avro field</li>
+  <li>Able to exclude metric data for specific time periods for problematic monitoring engines (based again on monitoring_host field and timestamp)</li>
+</ul>
+
+<p>The exclusion of problematic monitoring engines is implemented building upon the available recomputation request.
+Extra information about excluding monitoring engines will be appended in the available recomputation schema.</p>
+
+<p>Previous recomputation schema:</p>
+
+<p><code>
+json
+[{
+  "reason": "testing_compute_engine",
+  "start_time": "2013-12-08T12:03:44Z",
+  "end_time": "2013-12-10T12:03:44Z",
+  "exclude": [
+    "SITE-A",
+    "SITE-B"
+  ],
+  "status": "running",
+  "timestamp": "2015-02-01 14:58:40"
+}]
+</code></p>
+
+<p>Refactored recomputation schema:</p>
+
+<p><code>
+json
+[{
+  "reason": "testing_compute_engine",
+  "start_time": "2013-12-08T12:03:44Z",
+  "end_time": "2013-12-10T12:03:44Z",
+  "exclude": [
+    "SITE-A",
+    "SITE-B"
+  ],
+  "status": "running",
+  "timestamp": "2015-02-01 14:58:40",
+  "exclude_monitoring_source": [
+    { "host": "monA",
+      "start_time": "2013-12-08T12:03:44Z",
+      "end_time": "2013-12-08T15:03:44Z"
+    }]
+}]
+</code></p>
+
+<h1 id="implementation-details">Implementation Details</h1>
+
+<p>Implementation includes changes in Apache Pig Scripts used in computations as well in the custom UDF Java Classes.</p>
+
+<p>Specifically:
+* Accept metric data for different monitoring_host values
+* Parse extra monitoring field in recomputation.json inside RecomputationManager class
+* Ask RecomputationManager if a monitoring engine is excluded for a specific timestamp
+* Use Refactored RecompManager in PickEndpoints Filter UDF to filter metric data based on monitoring_host and timestamp
+* Add unit tests for both recManager and PickEndpoints UDF
+* Update accordingly compute-ar.pig, compute-status.pig UDF definitions and calls</p>
+
+<h1 id="unresolved-questions">Unresolved questions</h1>
+
+<p>Need to specify the administrative process of issuing a recomputation request which includes
+exclusion of a monitoring engine’s metric data.</p>
+
+        </div><!--col-md-8-->
+        <div class="col-md-2">&nbsp;</div>
+      </div><!--row-->
+    </div><!--container fluid-->
+    <!-- from -->
+<div class="jumbotron">
+    <div class="container" style='padding-left:40px;'>
+      <a href='https://www.grnet.gr/en' target='blank'><img src='/shared/images/grnet_transparent.png' style='padding-left:40px;' alt='GRNET S.A - Greek Research & Technology Network' title='GRNET S.A - Greek Research & Technology Network'/></a>
+      <a href='http://www.cnrs.fr/' target='blank'><img src='/shared/images/cnrs.png' style='padding-left:40px;' alt='Centre national de la recherche scientifique' title='Centre national de la recherche scientifique'/></a>
+      <a href='http://www.srce.unizg.hr/en/' target='blank'><img src='/shared/images/srce.png' style='padding-left:40px;' alt='SCRE - Web stranice Sveučilišnog računskog centra' title='SCRE - Web stranice Sveučilišnog računskog centra'/></a>
+      <a href='http://www.egi.eu' target='blank'><img src='/shared/images/egi2.png' style='padding-left:40px;margin-top:-20px;' alt='European Grid Infrastructure' title='European Grid Infrastructure'/></a>
+    </div> <!-- /container -->
+</div> <!-- jumbotron -->
+<!-- from-->
+
+
+  
+<!--footer -->
+    <footer  id="footer" class="footer">
+	<div class='footer_top'>       
+	<div class="row ">
+       </div>
+       <div class="row ">
+	
+        <div class=" col-md-offset-1 col-md-3">
+		<p><img src='/shared/images/argo-logo.png' alt='Argo'  /></p>		
+		<p>ARGO is a lightweight service for Service Level Monitoring designed for medium and large sized e-Infrastructures. </p>
+   	</div>
+	 <div class="col-md-offset-1 col-md-3">
+		<h4>Contact Us</h4>
+		<address>
+ 		<strong>Email</strong><br>
+      <a href="mailto:argoeu-project@googlegroups.com" style='color:white;'>argoeu-project[AT]googlegroups.com</a>
+		</address>
+   	</div>
+ 	<div class="col-md-3">
+		<h4>Open development </h4>
+    <p> We follow an open development process. All the repositories of ARGO are hosted on Github under the ARGOeu organization.</p>
+   	</div>
+    <div class="col-md-1"></div>
+      </div>
+      </div><!--footer_top-->
+      <div class="footer_bottom_holder">
+	<div class="footer_bottom">
+    <div class="textwidget"><span>Copyright &copy; 2014 - 2015 GRNET S.A. </span>
+    </div>
+  <div class="textwidget"><span>
+      <a href='http://validator.w3.org/check?uri=referer' target='blank'>
+        <img src='/shared/images/validated.png' alt='HTML5 - CSS3 - W3C Validated' title='HTML5 - CSS3 - W3C Validated' height="30"/>
+       </a>
+    </span>
+  </div>
+	</div>
+     </div>	
+    </footer>
+    <a href="#" class="back-to-top" style="display: inline;">
+      <i class="fa fa-arrow-circle-up"></i>
+    </a>
+<!--/footer -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/shared/js/jquery.min.js"></script>
+    <script src="/shared/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/shared/js/ie10-viewport-bug-workaround.js"></script>
+      <script src="/shared/js/jquery.easing.1.3.js"></script>
+  <script src="/shared/js/jquery.animate-enhanced.min.js"></script>
+  <script src="/shared/js/jquery.superslides.min.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    $(function() {
+    
+
+      $('#slides').superslides({
+        hashchange: false,
+        play: 10000
+      });
+
+        var offset = 250;
+        var duration = 300;
+        jQuery(window).scroll(function() {
+          if (jQuery(this).scrollTop() > offset) {
+            jQuery('.back-to-top').fadeIn(duration);
+          } else {
+            jQuery('.back-to-top').fadeOut(duration);
+          }
+        });
+        jQuery('.back-to-top').click(function(event) {
+          event.preventDefault();
+          jQuery('html, body').animate({scrollTop: 0}, duration);
+          return false;
+        })
+      });
+
+  </script>
+
+</body>
+</html>
