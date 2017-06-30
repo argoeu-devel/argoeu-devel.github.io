@@ -1,0 +1,935 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pymod.ams &mdash; ARGO-AMS library 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="ARGO-AMS library 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARGO-AMS library
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ARGO-AMS library</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pymod.ams</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pymod.ams</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">amsexceptions</span> <span class="k">import</span> <span class="n">AmsServiceException</span><span class="p">,</span> <span class="n">AmsConnectionException</span><span class="p">,</span> <span class="n">AmsMessageException</span><span class="p">,</span> <span class="n">AmsException</span>
+<span class="kn">from</span> <span class="nn">amsmsg</span> <span class="k">import</span> <span class="n">AmsMessage</span>
+<span class="kn">from</span> <span class="nn">amstopic</span> <span class="k">import</span> <span class="n">AmsTopic</span>
+<span class="kn">from</span> <span class="nn">amssubscription</span> <span class="k">import</span> <span class="n">AmsSubscription</span>
+
+<div class="viewcode-block" id="ArgoMessagingService"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService">[docs]</a><span class="k">class</span> <span class="nc">ArgoMessagingService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ArgoMessagingService.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pullopts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;maxMessages&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;returnImmediately&quot;</span><span class="p">:</span> <span class="s2">&quot;False&quot;</span><span class="p">}</span>
+        <span class="c1"># Create route list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">routes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;topic_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;topic_get&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;topic_publish&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">:publish?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;topic_create&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;put&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;topic_delete&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;topic_getacl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">:acl?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;topic_modifyacl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">:modifyAcl?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_create&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;put&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_delete&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_get&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_pull&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">:pull?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_ack&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">:acknowledge?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_pushconfig&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">:modifyPushConfig?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_getacl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{3}</span><span class="s2">:acl?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_modifyacl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{3}</span><span class="s2">:modifyAcl?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">]}</span>
+        <span class="c1"># Containers for topic and subscription objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topics</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_create_sub_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]:</span> <span class="n">AmsSubscription</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">topic</span><span class="p">,</span>
+                                                     <span class="n">s</span><span class="p">[</span><span class="s1">&#39;pushConfig&#39;</span><span class="p">],</span>
+                                                     <span class="n">s</span><span class="p">[</span><span class="s1">&#39;ackDeadlineSeconds&#39;</span><span class="p">],</span>
+                                                     <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="p">)})</span>
+
+    <span class="k">def</span> <span class="nf">_delete_sub_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+
+    <span class="k">def</span> <span class="nf">_create_topic_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]:</span> <span class="n">AmsTopic</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="p">)})</span>
+
+    <span class="k">def</span> <span class="nf">_delete_topic_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+
+<div class="viewcode-block" id="ArgoMessagingService.getacl_topic"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.getacl_topic">[docs]</a>    <span class="k">def</span> <span class="nf">getacl_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Get access control lists for topic</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               topic (str): The topic name.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">topicobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_getacl&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_getacl&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">topicobj</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span><span class="o">.</span><span class="n">acls</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;authorized_users&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">topicobj</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span><span class="o">.</span><span class="n">acls</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.modifyacl_topic"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.modifyacl_topic">[docs]</a>    <span class="k">def</span> <span class="nf">modifyacl_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">users</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Modify access control lists for topic</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               topic (str): The topic name.</span>
+<span class="sd">               users (list): List of users that will have access to topic.</span>
+<span class="sd">                             Empty list of users will reset access control list.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">topicobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_modifyacl&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">msg_body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;authorized_users&quot;</span><span class="p">:</span> <span class="n">users</span><span class="p">})</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;topic_modifyacl&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">topicobj</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span><span class="o">.</span><span class="n">acls</span> <span class="o">=</span> <span class="n">users</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="n">AmsServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.getacl_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.getacl_sub">[docs]</a>    <span class="k">def</span> <span class="nf">getacl_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Get access control lists for subscription</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               sub (str): The subscription name.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_getacl&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_getacl&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">subobj</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span><span class="o">.</span><span class="n">acls</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;authorized_users&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">subobj</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span><span class="o">.</span><span class="n">acls</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.modifyacl_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.modifyacl_sub">[docs]</a>    <span class="k">def</span> <span class="nf">modifyacl_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">users</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Modify access control lists for subscription</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               sub (str): The subscription name.</span>
+<span class="sd">               users (list): List of users that will have access to subscription.</span>
+<span class="sd">                             Empty list of users will reset access control list.</span>
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_modifyacl&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">msg_body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;authorized_users&quot;</span><span class="p">:</span> <span class="n">users</span><span class="p">})</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_modifyacl&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">subobj</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span><span class="o">.</span><span class="n">acls</span> <span class="o">=</span> <span class="n">users</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="n">AmsServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.pushconfig_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.pushconfig_sub">[docs]</a>    <span class="k">def</span> <span class="nf">pushconfig_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">push_endpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">retry_policy_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">retry_policy_period</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Modify push configuration of given subscription</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               sub: shortname of subscription</span>
+<span class="sd">               push_endpoint: URL of remote endpoint that should receive messages in push subscription mode</span>
+<span class="sd">               retry_policy_type:</span>
+<span class="sd">               retry_policy_period:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">push_endpoint</span><span class="p">:</span>
+            <span class="n">push_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pushConfig&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;pushEndpoint&quot;</span><span class="p">:</span> <span class="n">push_endpoint</span><span class="p">,</span>
+                                        <span class="s2">&quot;retryPolicy&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">retry_policy_type</span><span class="p">,</span>
+                                                        <span class="s2">&quot;period&quot;</span><span class="p">:</span> <span class="n">retry_policy_period</span><span class="p">}}}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">push_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pushConfig&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+
+        <span class="n">msg_body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">push_dict</span><span class="p">)</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_pushconfig&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_pushconfig&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/projects/</span><span class="si">{0}</span><span class="s1">/subscriptions/</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">subobj</span><span class="p">:</span>
+            <span class="n">subobj</span><span class="o">.</span><span class="n">push_endpoint</span> <span class="o">=</span> <span class="n">push_endpoint</span>
+            <span class="n">subobj</span><span class="o">.</span><span class="n">retry_policy_type</span> <span class="o">=</span> <span class="n">retry_policy_type</span>
+            <span class="n">subobj</span><span class="o">.</span><span class="n">retry_policy_period</span> <span class="o">=</span> <span class="n">retry_policy_period</span>
+
+        <span class="k">return</span> <span class="n">p</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.iter_subs"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.iter_subs">[docs]</a>    <span class="k">def</span> <span class="nf">iter_subs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterate over AmsSubscription objects</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic: Iterate over subscriptions only associated to this topic name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_subs</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">topic</span> <span class="ow">and</span> <span class="n">topic</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">topic</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">s</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">topic</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">s</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.iter_topics"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.iter_topics">[docs]</a>    <span class="k">def</span> <span class="nf">iter_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterate over AmsTopic objects&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_topics</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">t</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.list_topics"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.list_topics">[docs]</a>    <span class="k">def</span> <span class="nf">list_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the topics of a selected project</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                python-requests library call</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_list&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_list&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_topic_obj</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.has_topic"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.has_topic">[docs]</a>    <span class="k">def</span> <span class="nf">has_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inspect if topic already exists or not</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic: str. Topic name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="n">AmsServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">except</span> <span class="n">AmsConnectionException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.get_topic"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.get_topic">[docs]</a>    <span class="k">def</span> <span class="nf">get_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the details of a selected topic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic: str. Topic name.</span>
+<span class="sd">            retobj: Controls whether method should return AmsTopic object</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_get&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_get&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_topic_obj</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">retobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.publish"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.publish">[docs]</a>    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Publish a message or list of messages to a selected topic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic (str): Topic name.</span>
+<span class="sd">            msg (list): A list with one or more messages to send.</span>
+<span class="sd">                        Each message is represented as AmsMessage object or python</span>
+<span class="sd">                        dictionary with at least data or one attribute key defined.</span>
+<span class="sd">        Kwargs:</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                       python-requests library call.</span>
+<span class="sd">        Return:</span>
+<span class="sd">            dict: Dictionary with messageIds of published messages</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">[</span><span class="n">msg</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">AmsMessage</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">msg_body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">})</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsMessageException</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_publish&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;topic_publish&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.list_subs"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.list_subs">[docs]</a>    <span class="k">def</span> <span class="nf">list_subs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Lists all subscriptions in a project with a GET request.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_list&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_list&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;subscriptions&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_topic_obj</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]})</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_sub_obj</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.get_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.get_sub">[docs]</a>    <span class="k">def</span> <span class="nf">get_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the details of a subscription.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sub: str. The subscription name.</span>
+<span class="sd">            retobj: Controls whether method should return AmsSubscription object</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_get&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_get&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_topic_obj</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]})</span>
+        <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_sub_obj</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">retobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.has_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.has_sub">[docs]</a>    <span class="k">def</span> <span class="nf">has_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inspect if subscription already exists or not</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sub: str. The subscription name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="n">AmsServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">except</span> <span class="n">AmsConnectionException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.pull_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.pull_sub">[docs]</a>    <span class="k">def</span> <span class="nf">pull_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_immediately</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function consumes messages from a subscription in a project</span>
+<span class="sd">        with a POST request.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sub: str. The subscription name.</span>
+<span class="sd">            num: int. The number of messages to pull.</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">wasmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pullopt</span><span class="p">(</span><span class="s1">&#39;maxMessages&#39;</span><span class="p">)</span>
+        <span class="n">wasretim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pullopt</span><span class="p">(</span><span class="s1">&#39;returnImmediately&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pullopt</span><span class="p">(</span><span class="s1">&#39;maxMessages&#39;</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pullopt</span><span class="p">(</span><span class="s1">&#39;returnImmediately&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">return_immediately</span><span class="p">))</span>
+        <span class="n">msg_body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pullopts</span><span class="p">)</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_pull&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_pull&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="n">msgs</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;receivedMessages&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pullopt</span><span class="p">(</span><span class="s1">&#39;maxMessages&#39;</span><span class="p">,</span> <span class="n">wasmax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pullopt</span><span class="p">(</span><span class="s1">&#39;returnImmediately&#39;</span><span class="p">,</span> <span class="n">wasretim</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;ackId&#39;</span><span class="p">],</span> <span class="n">AmsMessage</span><span class="p">(</span><span class="n">b64enc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])),</span> <span class="n">msgs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.ack_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.ack_sub">[docs]</a>    <span class="k">def</span> <span class="nf">ack_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Messages retrieved from a pull subscription can be acknowledged by sending message with an array of ackIDs.</span>
+<span class="sd">        The service will retrieve the ackID corresponding to the highest message offset and will consider that message</span>
+<span class="sd">        and all previous messages as acknowledged by the consumer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sub: str. The subscription name.</span>
+<span class="sd">            ids: list(str). A list of ids of the messages to acknowledge.</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">msg_body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;ackIds&quot;</span><span class="p">:</span> <span class="n">ids</span><span class="p">})</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_ack&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_ack&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.set_pullopt"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.set_pullopt">[docs]</a>    <span class="k">def</span> <span class="nf">set_pullopt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function for setting pull options</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key: str. The name of the pull option (ex. maxMessages, returnImmediately).Messaging specific</span>
+<span class="sd">               names are allowed.</span>
+<span class="sd">            value: str or int. The name of the pull option (ex. maxMessages, returnImmediately).Messaging specific names</span>
+<span class="sd">            are allowed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pullopts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)})</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.get_pullopt"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.get_pullopt">[docs]</a>    <span class="k">def</span> <span class="nf">get_pullopt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function for getting pull options</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key: str. The name of the pull option (ex. maxMessages, returnImmediately).Messaging specific</span>
+<span class="sd">               names are allowed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str. The value of the pull option</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pullopts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.create_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.create_sub">[docs]</a>    <span class="k">def</span> <span class="nf">create_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">ackdeadline</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">push_endpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">retry_policy_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">retry_policy_period</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function creates a new subscription in a project with a PUT request</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sub: str. The subscription name.</span>
+<span class="sd">            topic: str. The topic name.</span>
+<span class="sd">            ackdeadline: int. It is a custom &quot;ack&quot; deadline (in seconds) in the subscription. If your code doesn&#39;t</span>
+<span class="sd">                              acknowledge the message in this time, the message is sent again. If you don&#39;t specify</span>
+<span class="sd">                              the deadline, the default is 10 seconds.</span>
+<span class="sd">            push_endpoint: URL of remote endpoint that should receive messages in push subscription mode</span>
+<span class="sd">            retry_policy_type:</span>
+<span class="sd">            retry_policy_period:</span>
+<span class="sd">            retobj: Controls whether method should return AmsSubscription object</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">msg_body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">topic</span><span class="o">.</span><span class="n">fullname</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span>
+                               <span class="s2">&quot;ackDeadlineSeconds&quot;</span><span class="p">:</span> <span class="n">ackdeadline</span><span class="p">})</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_create&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_create&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">push_endpoint</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pushconfig_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">push_endpoint</span><span class="p">,</span> <span class="n">retry_policy_type</span><span class="p">,</span> <span class="n">retry_policy_period</span><span class="p">)</span>
+            <span class="n">r</span><span class="p">[</span><span class="s1">&#39;pushConfig&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;pushEndpoint&quot;</span><span class="p">:</span> <span class="n">push_endpoint</span><span class="p">,</span>
+                               <span class="s2">&quot;retryPolicy&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">retry_policy_type</span><span class="p">,</span>
+                                               <span class="s2">&quot;period&quot;</span><span class="p">:</span> <span class="n">retry_policy_period</span><span class="p">}}</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_sub_obj</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">topic</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">retobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.delete_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.delete_sub">[docs]</a>    <span class="k">def</span> <span class="nf">delete_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function deletes a selected subscription in a project</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sub: str. The subscription name.</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_delete&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_delete&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="n">sub_fullname</span> <span class="o">=</span> <span class="s2">&quot;/projects/</span><span class="si">{0}</span><span class="s2">/subscriptions/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sub_fullname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delete_sub_obj</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">sub_fullname</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.topic"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.topic">[docs]</a>    <span class="k">def</span> <span class="nf">topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function create a topic in a project. It&#39;s wrapper around few</span>
+<span class="sd">           methods defined in client class. Method will ensure that AmsTopic</span>
+<span class="sd">           object is returned either by fetching existing one or creating</span>
+<span class="sd">           a new one in case it doesn&#39;t exist.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               topic (str): The topic name</span>
+<span class="sd">           Kwargs:</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                       python-requests library call.</span>
+<span class="sd">           Return:</span>
+<span class="sd">               object (AmsTopic)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.create_topic"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.create_topic">[docs]</a>    <span class="k">def</span> <span class="nf">create_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function creates a topic in a project</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic: str. The topic name.</span>
+<span class="sd">            retobj: Controls whether method should return AmsTopic object</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_create&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s2">&quot;topic_create&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_topic_obj</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">retobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.delete_topic"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.delete_topic">[docs]</a>    <span class="k">def</span> <span class="nf">delete_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This function deletes a topic in a project</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topic: str. The topic name.</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_delete&quot;</span><span class="p">]</span>
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_delete&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="n">topic_fullname</span> <span class="o">=</span> <span class="s2">&quot;/projects/</span><span class="si">{0}</span><span class="s2">/topics/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">topic_fullname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delete_topic_obj</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">topic_fullname</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">r</span></div></div>
+
+
+<div class="viewcode-block" id="do_get"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_get">[docs]</a><span class="k">def</span> <span class="nf">do_get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This global function supports all the GET requests. Used for (topics,</span>
+<span class="sd">    subscriptions, messages). The requests library is used for the final GET</span>
+<span class="sd">    request.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url: str. The final messaging service endpoint</span>
+<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># try to send a GET request to the messaging service.</span>
+    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># the get request based on requests.</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="c1"># if the result returns an error code an exception is raised.</span>
+        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="do_put"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_put">[docs]</a><span class="k">def</span> <span class="nf">do_put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This global function supports all the PUT requests. Used for (topics,</span>
+<span class="sd">    subscriptions, messages). The requests library is used for the final PUT</span>
+<span class="sd">    request.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url: str. The final messaging service endpoint</span>
+<span class="sd">        body: dict. Body the post data to send based on the PUT request. The post data is always in json format.</span>
+<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># try to send a PUT request to the messaging service.</span>
+    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># the post request based on requests.</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="c1"># if the result returns an error code an exception is raised.</span>
+        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="k">if</span> <span class="n">decoded</span> <span class="k">else</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="do_post"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_post">[docs]</a><span class="k">def</span> <span class="nf">do_post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This global function supports all the POST requests. Used for (topics,</span>
+<span class="sd">       subscriptions, messages). The requests library is used for the final POST</span>
+<span class="sd">       request.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url: str. The final messaging service endpoint</span>
+<span class="sd">        body: dict. Body the post data to send based on the PUT request. The post data is always in json format.</span>
+<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># try to send a Post request to the messaging service.</span>
+    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># the post request based on requests.</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="c1"># if the result returns an error code an exception is raised.</span>
+        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="k">if</span> <span class="n">decoded</span> <span class="k">else</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="do_delete"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_delete">[docs]</a><span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A global delete function that is used to make the appropriate request.</span>
+<span class="sd">    Used for (topics, subscriptions). The requests library is used for the final</span>
+<span class="sd">    delete request.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url: str. The final messaging service endpoint</span>
+<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># try to send a delete request to the messaging service.</span>
+    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># the delete request based on requests.</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="c1"># if the result returns an error code an exception is raised.</span>
+            <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">ArgoMessagingService</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;messaging-devel.argo.grnet.gr&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;YOUR_TOKEN&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;ARGO&quot;</span><span class="p">)</span>
+    <span class="n">allprojects</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">list_topics</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, ARGO Team.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
