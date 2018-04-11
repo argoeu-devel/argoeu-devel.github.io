@@ -170,7 +170,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span> <span class="o">=</span> <span class="n">fullname</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="n">topic</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">push_endpoint</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">retry_policy_type</span> <span class="o">=</span>  <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry_policy_type</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">retry_policy_period</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">if</span> <span class="n">pushconfig</span><span class="p">[</span><span class="s1">&#39;pushEndpoint&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">push_endpoint</span> <span class="o">=</span> <span class="n">pushconfig</span><span class="p">[</span><span class="s1">&#39;pushEndpoint&#39;</span><span class="p">]</span>
@@ -217,6 +217,38 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">pull_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">,</span> <span class="n">return_immediately</span><span class="o">=</span><span class="n">return_immediately</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AmsSubscription.offsets"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.offsets">[docs]</a>    <span class="k">def</span> <span class="nf">offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Retrieve the current positions of min,max and current offsets.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               offset(str): The name of the offset.If not specified, it will return all three of them as a dict.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">           Return:</span>
+<span class="sd">                 [dict or int]</span>
+<span class="sd">                 dict(offsets): A dictionary containing all 3 offsets. OR</span>
+<span class="sd">                 int(offset): The value of the specified offset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">getoffsets_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AmsSubscription.move_offset"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.move_offset">[docs]</a>    <span class="k">def</span> <span class="nf">move_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">move_to</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Modify the position of current offset</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               move_to(int): Position to move the offset.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">           Return:</span>
+<span class="sd">                 {}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">modifyoffset_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">move_to</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AmsSubscription.acl"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.acl">[docs]</a>    <span class="k">def</span> <span class="nf">acl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">users</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set or get ACLs assigned to subscription</span>

@@ -160,13 +160,14 @@
 <span class="kn">from</span> <span class="nn">amstopic</span> <span class="k">import</span> <span class="n">AmsTopic</span>
 <span class="kn">from</span> <span class="nn">amssubscription</span> <span class="k">import</span> <span class="n">AmsSubscription</span>
 
-<div class="viewcode-block" id="ArgoMessagingService"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService">[docs]</a><span class="k">class</span> <span class="nc">ArgoMessagingService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="ArgoMessagingService.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pullopts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;maxMessages&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;returnImmediately&quot;</span><span class="p">:</span> <span class="s2">&quot;False&quot;</span><span class="p">}</span>
+
+<div class="viewcode-block" id="AmsHttpRequests"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests">[docs]</a><span class="k">class</span> <span class="nc">AmsHttpRequests</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Class encapsulates methods used by ArgoMessagingService. Each method represent</span>
+<span class="sd">       HTTP request made to AMS with the help of requests library. Proper service error</span>
+<span class="sd">       handling is implemented according to HTTP status codes returned by service.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="AmsHttpRequests.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Create route list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">routes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;topic_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
                        <span class="s2">&quot;topic_get&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
@@ -183,7 +184,146 @@
                        <span class="s2">&quot;sub_ack&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">:acknowledge?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
                        <span class="s2">&quot;sub_pushconfig&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{4}</span><span class="s2">:modifyPushConfig?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
                        <span class="s2">&quot;sub_getacl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{3}</span><span class="s2">:acl?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
-                       <span class="s2">&quot;sub_modifyacl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{3}</span><span class="s2">:modifyAcl?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">]}</span>
+                       <span class="s2">&quot;sub_modifyacl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{3}</span><span class="s2">:modifyAcl?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_offsets&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{3}</span><span class="s2">:offsets?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+                       <span class="s2">&quot;sub_mod_offset&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/subscriptions/</span><span class="si">{3}</span><span class="s2">:modifyOffset?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">]}</span>
+        <span class="c1"># HTTP error status codes returned by AMS according to:</span>
+        <span class="c1"># http://argoeu.github.io/messaging/v1/api_errors/</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;post&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">408</span><span class="p">,</span> <span class="mi">413</span><span class="p">]),</span>
+                       <span class="s1">&#39;get&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">([</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">]),</span>
+                       <span class="s1">&#39;put&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">409</span><span class="p">])</span>
+                       <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="nf">_make_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">route_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Common method for PUT, GET, POST HTTP requests with appropriate</span>
+<span class="sd">        service error handling. For known error HTTP statuses, returned JSON</span>
+<span class="sd">        will be used as exception error message, otherwise assume and build one</span>
+<span class="sd">        from response content string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="n">route_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># the get request based on requests.</span>
+            <span class="n">reqmethod</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">requests</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">reqmethod</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+
+            <span class="c1"># JSON error returned by AMS</span>
+            <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">m</span><span class="p">]:</span>
+                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+
+            <span class="c1"># handle other erroneous behaviour and construct error message</span>
+            <span class="c1"># from plaintxt content in response</span>
+            <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">m</span><span class="p">]:</span>
+                <span class="n">errormsg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
+                                      <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="p">}}</span>
+                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">errormsg</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">decoded</span> <span class="k">if</span> <span class="n">decoded</span> <span class="k">else</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="AmsHttpRequests.do_get"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.do_get">[docs]</a>    <span class="k">def</span> <span class="nf">do_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method supports all the GET requests. Used for (topics,</span>
+<span class="sd">        subscriptions, messages).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: str. The final messaging service endpoint</span>
+<span class="sd">            route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># try to send a GET request to the messaging service.</span>
+        <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="o">=</span><span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="AmsHttpRequests.do_put"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.do_put">[docs]</a>    <span class="k">def</span> <span class="nf">do_put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method supports all the PUT requests. Used for (topics,</span>
+<span class="sd">        subscriptions, messages).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: str. The final messaging service endpoint</span>
+<span class="sd">            body: dict. Body the post data to send based on the PUT request. The post data is always in json format.</span>
+<span class="sd">            route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># try to send a PUT request to the messaging service.</span>
+        <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="o">=</span><span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="AmsHttpRequests.do_post"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.do_post">[docs]</a>    <span class="k">def</span> <span class="nf">do_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Method supports all the POST requests. Used for (topics,</span>
+<span class="sd">        subscriptions, messages).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: str. The final messaging service endpoint</span>
+<span class="sd">            body: dict. Body the post data to send based on the PUT request. The post data is always in json format.</span>
+<span class="sd">            route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># try to send a Post request to the messaging service.</span>
+        <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="o">=</span><span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="AmsHttpRequests.do_delete"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete method that is used to make the appropriate request.</span>
+<span class="sd">        Used for (topics, subscriptions).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: str. The final messaging service endpoint</span>
+<span class="sd">            route_name: str. The name of the route to follow selected from the route list</span>
+<span class="sd">            reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># try to send a delete request to the messaging service.</span>
+        <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="n">route_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># the delete request based on requests.</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+
+            <span class="c1"># JSON error returned by AMS</span>
+            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">m</span><span class="p">]:</span>
+                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+
+            <span class="c1"># handle other erroneous behaviour</span>
+            <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">m</span><span class="p">]:</span>
+                <span class="n">errormsg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
+                                      <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="p">}}</span>
+                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">errormsg</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ArgoMessagingService"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService">[docs]</a><span class="k">class</span> <span class="nc">ArgoMessagingService</span><span class="p">(</span><span class="n">AmsHttpRequests</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Class abstract Argo Messaging Service by covering all available HTTP API</span>
+<span class="sd">       calls that are wrapped in series of methods. Class is entry point for</span>
+<span class="sd">       client code.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ArgoMessagingService.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ArgoMessagingService</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pullopts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;maxMessages&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;returnImmediately&quot;</span><span class="p">:</span> <span class="s2">&quot;False&quot;</span><span class="p">}</span>
         <span class="c1"># Containers for topic and subscription objects</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topics</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
@@ -220,7 +360,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_getacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_getacl&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -250,7 +390,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_modifyacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
@@ -285,7 +425,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_getacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_getacl&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -295,6 +435,64 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="p">[</span><span class="n">subobj</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span><span class="o">.</span><span class="n">acls</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.getoffsets_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.getoffsets_sub">[docs]</a>    <span class="k">def</span> <span class="nf">getoffsets_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Retrieve the current positions of min,max and current offsets.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               sub (str): The subscription name.</span>
+<span class="sd">               offset(str): The name of the offset.If not specified, it will return all three of them as a dict.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_offsets&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_offsets&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">offset</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">r</span><span class="p">[</span><span class="n">offset</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AmsException</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; is not a valid offset position.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArgoMessagingService.modifyoffset_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.modifyoffset_sub">[docs]</a>    <span class="k">def</span> <span class="nf">modifyoffset_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">move_to</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Modify the position of the current offset.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               sub (str): The subscription name.</span>
+<span class="sd">               move_to(int): Position to move the offset.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_mod_offset&quot;</span><span class="p">]</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">move_to</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">move_to</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">move_to</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">move_to</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">move_to</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">move_to</span><span class="p">)</span>
+
+        <span class="c1"># Compose url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
+
+        <span class="c1"># Request body</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="n">move_to</span><span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s2">&quot;sub_mod_offset&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">except</span> <span class="n">AmsServiceException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
 
 <div class="viewcode-block" id="ArgoMessagingService.modifyacl_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.modifyacl_sub">[docs]</a>    <span class="k">def</span> <span class="nf">modifyacl_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">users</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -314,7 +512,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_modifyacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
@@ -353,7 +551,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_pushconfig&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_pushconfig&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/projects/</span><span class="si">{0}</span><span class="s1">/subscriptions/</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">sub</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
@@ -364,13 +562,13 @@
 
         <span class="k">return</span> <span class="n">p</span></div>
 
-<div class="viewcode-block" id="ArgoMessagingService.iter_subs"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.iter_subs">[docs]</a>    <span class="k">def</span> <span class="nf">iter_subs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ArgoMessagingService.iter_subs"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.iter_subs">[docs]</a>    <span class="k">def</span> <span class="nf">iter_subs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over AmsSubscription objects</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            topic: Iterate over subscriptions only associated to this topic name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">list_subs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_subs</span><span class="p">(</span><span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">topic</span> <span class="ow">and</span> <span class="n">topic</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">topic</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
@@ -378,10 +576,10 @@
             <span class="k">elif</span> <span class="ow">not</span> <span class="n">topic</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="ArgoMessagingService.iter_topics"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.iter_topics">[docs]</a>    <span class="k">def</span> <span class="nf">iter_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ArgoMessagingService.iter_topics"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.iter_topics">[docs]</a>    <span class="k">def</span> <span class="nf">iter_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over AmsTopic objects&quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">list_topics</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_topics</span><span class="p">(</span><span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
             <span class="k">yield</span> <span class="n">t</span></div>
@@ -396,7 +594,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_list&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_list&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -439,7 +637,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_get&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_get&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -477,7 +675,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_publish&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;topic_publish&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
 
@@ -490,7 +688,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_list&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_list&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -516,7 +714,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_get&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_get&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -569,7 +767,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_pull&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_pull&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
         <span class="n">msgs</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;receivedMessages&#39;</span><span class="p">]</span>
 
@@ -594,7 +792,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_ack&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_ack&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">True</span></div>
@@ -647,7 +845,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_create&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">msg_body</span><span class="p">,</span> <span class="s2">&quot;sub_create&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -675,7 +873,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_delete&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sub</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;sub_delete&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -719,7 +917,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_create&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s2">&quot;topic_create&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -741,7 +939,7 @@
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_delete&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;topic_delete&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
@@ -751,118 +949,6 @@
 
         <span class="k">return</span> <span class="n">r</span></div></div>
 
-
-<div class="viewcode-block" id="do_get"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_get">[docs]</a><span class="k">def</span> <span class="nf">do_get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This global function supports all the GET requests. Used for (topics,</span>
-<span class="sd">    subscriptions, messages). The requests library is used for the final GET</span>
-<span class="sd">    request.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        url: str. The final messaging service endpoint</span>
-<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
-<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># try to send a GET request to the messaging service.</span>
-    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># the get request based on requests.</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
-        <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-        <span class="c1"># if the result returns an error code an exception is raised.</span>
-        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
-
-    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="do_put"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_put">[docs]</a><span class="k">def</span> <span class="nf">do_put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This global function supports all the PUT requests. Used for (topics,</span>
-<span class="sd">    subscriptions, messages). The requests library is used for the final PUT</span>
-<span class="sd">    request.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        url: str. The final messaging service endpoint</span>
-<span class="sd">        body: dict. Body the post data to send based on the PUT request. The post data is always in json format.</span>
-<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
-<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># try to send a PUT request to the messaging service.</span>
-    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># the post request based on requests.</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
-        <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
-
-        <span class="c1"># if the result returns an error code an exception is raised.</span>
-        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
-
-    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="k">if</span> <span class="n">decoded</span> <span class="k">else</span> <span class="p">{}</span></div>
-
-
-<div class="viewcode-block" id="do_post"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_post">[docs]</a><span class="k">def</span> <span class="nf">do_post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This global function supports all the POST requests. Used for (topics,</span>
-<span class="sd">       subscriptions, messages). The requests library is used for the final POST</span>
-<span class="sd">       request.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        url: str. The final messaging service endpoint</span>
-<span class="sd">        body: dict. Body the post data to send based on the PUT request. The post data is always in json format.</span>
-<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
-<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># try to send a Post request to the messaging service.</span>
-    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># the post request based on requests.</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
-        <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
-
-        <span class="c1"># if the result returns an error code an exception is raised.</span>
-        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
-
-    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="k">if</span> <span class="n">decoded</span> <span class="k">else</span> <span class="p">{}</span></div>
-
-
-<div class="viewcode-block" id="do_delete"><a class="viewcode-back" href="../../pymod.html#pymod.ams.do_delete">[docs]</a><span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A global delete function that is used to make the appropriate request.</span>
-<span class="sd">    Used for (topics, subscriptions). The requests library is used for the final</span>
-<span class="sd">    delete request.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        url: str. The final messaging service endpoint</span>
-<span class="sd">        route_name: str. The name of the route to follow selected from the route list</span>
-<span class="sd">        reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># try to send a delete request to the messaging service.</span>
-    <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># the delete request based on requests.</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-            <span class="c1"># if the result returns an error code an exception is raised.</span>
-            <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-    <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span></div>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">test</span> <span class="o">=</span> <span class="n">ArgoMessagingService</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;messaging-devel.argo.grnet.gr&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;YOUR_TOKEN&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;ARGO&quot;</span><span class="p">)</span>
