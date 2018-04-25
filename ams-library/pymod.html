@@ -798,30 +798,19 @@ subscription name.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pymod.amssubscription.AmsSubscription.move_offset">
-<code class="descname">move_offset</code><span class="sig-paren">(</span><em>move_to</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.move_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.move_offset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the position of current offset</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>move_to(int): Position to move the offset.</dd>
-<dt>Kwargs:</dt>
-<dd><dl class="first last docutils">
-<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
-<dd>python-requests library call.</dd>
-</dl>
-</dd>
-<dt>Return:</dt>
-<dd>{}</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="pymod.amssubscription.AmsSubscription.offsets">
-<code class="descname">offsets</code><span class="sig-paren">(</span><em>offset=’all’</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.offsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.offsets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the current positions of min,max and current offsets.</p>
+<code class="descname">offsets</code><span class="sig-paren">(</span><em>offset=’all’</em>, <em>move_to=0</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.offsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the positions of min, max and current offsets or move
+current offset to new one.</p>
 <dl class="docutils">
 <dt>Args:</dt>
-<dd>offset(str): The name of the offset.If not specified, it will return all three of them as a dict.</dd>
+<dd><dl class="first docutils">
+<dt>offset (str): The name of the offset. If not specified, it will</dt>
+<dd>return all three of them as a dict. Values that can
+be specified are ‘max’, ‘min’, ‘current’ and ‘all’.</dd>
+</dl>
+<p class="last">move_to (int): New position for current offset.</p>
+</dd>
 <dt>Kwargs:</dt>
 <dd><dl class="first last docutils">
 <dt>reqkwargs: keyword argument that will be passed to underlying</dt>
@@ -829,9 +818,12 @@ subscription name.</p>
 </dl>
 </dd>
 <dt>Return:</dt>
-<dd>[dict or int]
-dict(offsets): A dictionary containing all 3 offsets. OR
-int(offset): The value of the specified offset.</dd>
+<dd><dl class="first docutils">
+<dt>dict: A dictionary containing all 3 offsets. If move_to</dt>
+<dd>is specified, current offset will be moved and updated.</dd>
+</dl>
+<p class="last">int: The value of the specified offset.</p>
+</dd>
 </dl>
 </dd></dl>
 
