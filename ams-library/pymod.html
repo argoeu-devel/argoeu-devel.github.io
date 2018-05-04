@@ -1,0 +1,1036 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pymod package &mdash; ARGO-AMS library 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ARGO-AMS library 1.0 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ARGO-AMS library
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">pymod package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pymod.ams">pymod.ams module</a></li>
+<li><a class="reference internal" href="#module-pymod.amsexceptions">pymod.amsexceptions module</a></li>
+<li><a class="reference internal" href="#module-pymod.amsmsg">pymod.amsmsg module</a></li>
+<li><a class="reference internal" href="#pymod-amssubscription-module">pymod.amssubscription module</a></li>
+<li><a class="reference internal" href="#pymod-amstopic-module">pymod.amstopic module</a></li>
+<li><a class="reference internal" href="#module-pymod">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ARGO-AMS library</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>pymod package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/pymod.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pymod-package">
+<h1>pymod package<a class="headerlink" href="#pymod-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pymod.ams">
+<span id="pymod-ams-module"></span><h2>pymod.ams module<a class="headerlink" href="#module-pymod.ams" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pymod.ams.AmsHttpRequests">
+<em class="property">class </em><code class="descclassname">pymod.ams.</code><code class="descname">AmsHttpRequests</code><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Class encapsulates methods used by ArgoMessagingService. Each method represent
+HTTP request made to AMS with the help of requests library. Proper service error
+handling is implemented according to HTTP status codes returned by service.</p>
+<dl class="method">
+<dt id="pymod.ams.AmsHttpRequests.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.AmsHttpRequests.do_delete">
+<code class="descname">do_delete</code><span class="sig-paren">(</span><em>url</em>, <em>route_name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.do_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.do_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete method that is used to make the appropriate request.
+Used for (topics, subscriptions).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>url: str. The final messaging service endpoint
+route_name: str. The name of the route to follow selected from the route list
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.AmsHttpRequests.do_get">
+<code class="descname">do_get</code><span class="sig-paren">(</span><em>url</em>, <em>route_name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.do_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.do_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method supports all the GET requests. Used for (topics,
+subscriptions, messages).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>url: str. The final messaging service endpoint
+route_name: str. The name of the route to follow selected from the route list
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.AmsHttpRequests.do_post">
+<code class="descname">do_post</code><span class="sig-paren">(</span><em>url</em>, <em>body</em>, <em>route_name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.do_post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.do_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method supports all the POST requests. Used for (topics,
+subscriptions, messages).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>url: str. The final messaging service endpoint
+body: dict. Body the post data to send based on the PUT request. The post data is always in json format.
+route_name: str. The name of the route to follow selected from the route list
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.AmsHttpRequests.do_put">
+<code class="descname">do_put</code><span class="sig-paren">(</span><em>url</em>, <em>body</em>, <em>route_name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.do_put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.do_put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method supports all the PUT requests. Used for (topics,
+subscriptions, messages).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>url: str. The final messaging service endpoint
+body: dict. Body the post data to send based on the PUT request. The post data is always in json format.
+route_name: str. The name of the route to follow selected from the route list
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymod.ams.ArgoMessagingService">
+<em class="property">class </em><code class="descclassname">pymod.ams.</code><code class="descname">ArgoMessagingService</code><span class="sig-paren">(</span><em>endpoint</em>, <em>token=”</em>, <em>project=”</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pymod.ams.AmsHttpRequests" title="pymod.ams.AmsHttpRequests"><code class="xref py py-class docutils literal"><span class="pre">pymod.ams.AmsHttpRequests</span></code></a></p>
+<p>Class abstract Argo Messaging Service by covering all available HTTP API
+calls that are wrapped in series of methods. Class is entry point for
+client code.</p>
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>endpoint</em>, <em>token=”</em>, <em>project=”</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.ack_sub">
+<code class="descname">ack_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>ids</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.ack_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.ack_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Messages retrieved from a pull subscription can be acknowledged by sending message with an array of ackIDs.
+The service will retrieve the ackID corresponding to the highest message offset and will consider that message
+and all previous messages as acknowledged by the consumer.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub: str. The subscription name.
+ids: list(str). A list of ids of the messages to acknowledge.
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.create_sub">
+<code class="descname">create_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>topic</em>, <em>ackdeadline=10</em>, <em>push_endpoint=None</em>, <em>retry_policy_type=’linear’</em>, <em>retry_policy_period=300</em>, <em>retobj=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.create_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.create_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a new subscription in a project with a PUT request</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">sub: str. The subscription name.
+topic: str. The topic name.
+ackdeadline: int. It is a custom “ack” deadline (in seconds) in the subscription. If your code doesn’t</p>
+<blockquote>
+<div>acknowledge the message in this time, the message is sent again. If you don’t specify
+the deadline, the default is 10 seconds.</div></blockquote>
+<p class="last">push_endpoint: URL of remote endpoint that should receive messages in push subscription mode
+retry_policy_type:
+retry_policy_period:
+retobj: Controls whether method should return AmsSubscription object
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.create_topic">
+<code class="descname">create_topic</code><span class="sig-paren">(</span><em>topic</em>, <em>retobj=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.create_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.create_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a topic in a project</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topic: str. The topic name.
+retobj: Controls whether method should return AmsTopic object
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.delete_sub">
+<code class="descname">delete_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.delete_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.delete_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function deletes a selected subscription in a project</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub: str. The subscription name.
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.delete_topic">
+<code class="descname">delete_topic</code><span class="sig-paren">(</span><em>topic</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.delete_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.delete_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function deletes a topic in a project</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topic: str. The topic name.
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.get_pullopt">
+<code class="descname">get_pullopt</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.get_pullopt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.get_pullopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for getting pull options</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>key: str. The name of the pull option (ex. maxMessages, returnImmediately).Messaging specific</dt>
+<dd>names are allowed.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>str. The value of the pull option</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.get_sub">
+<code class="descname">get_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>retobj=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.get_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.get_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the details of a subscription.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub: str. The subscription name.
+retobj: Controls whether method should return AmsSubscription object
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.get_topic">
+<code class="descname">get_topic</code><span class="sig-paren">(</span><em>topic</em>, <em>retobj=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.get_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.get_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the details of a selected topic.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topic: str. Topic name.
+retobj: Controls whether method should return AmsTopic object
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.getacl_sub">
+<code class="descname">getacl_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.getacl_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.getacl_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get access control lists for subscription</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub (str): The subscription name.</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.getacl_topic">
+<code class="descname">getacl_topic</code><span class="sig-paren">(</span><em>topic</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.getacl_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.getacl_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get access control lists for topic</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topic (str): The topic name.</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.getoffsets_sub">
+<code class="descname">getoffsets_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>offset=’all’</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.getoffsets_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.getoffsets_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current positions of min,max and current offsets.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub (str): The subscription name.
+offset(str): The name of the offset.If not specified, it will return all three of them as a dict.</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.has_sub">
+<code class="descname">has_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.has_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.has_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspect if subscription already exists or not</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub: str. The subscription name.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.has_topic">
+<code class="descname">has_topic</code><span class="sig-paren">(</span><em>topic</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.has_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.has_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspect if topic already exists or not</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topic: str. Topic name</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.iter_subs">
+<code class="descname">iter_subs</code><span class="sig-paren">(</span><em>topic=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.iter_subs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.iter_subs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over AmsSubscription objects</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topic: Iterate over subscriptions only associated to this topic name</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.iter_topics">
+<code class="descname">iter_topics</code><span class="sig-paren">(</span><em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.iter_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.iter_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over AmsTopic objects</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.list_subs">
+<code class="descname">list_subs</code><span class="sig-paren">(</span><em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.list_subs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.list_subs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists all subscriptions in a project with a GET request.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.list_topics">
+<code class="descname">list_topics</code><span class="sig-paren">(</span><em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.list_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.list_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the topics of a selected project</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.modifyacl_sub">
+<code class="descname">modifyacl_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>users</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.modifyacl_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.modifyacl_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify access control lists for subscription</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">sub (str): The subscription name.
+users (list): List of users that will have access to subscription.</p>
+<blockquote class="last">
+<div>Empty list of users will reset access control list.</div></blockquote>
+</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.modifyacl_topic">
+<code class="descname">modifyacl_topic</code><span class="sig-paren">(</span><em>topic</em>, <em>users</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.modifyacl_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.modifyacl_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify access control lists for topic</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">topic (str): The topic name.
+users (list): List of users that will have access to topic.</p>
+<blockquote class="last">
+<div>Empty list of users will reset access control list.</div></blockquote>
+</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.modifyoffset_sub">
+<code class="descname">modifyoffset_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>move_to</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.modifyoffset_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.modifyoffset_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the position of the current offset.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Args:</dt>
+<dd>sub (str): The subscription name.
+move_to(int): Position to move the offset.</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.publish">
+<code class="descname">publish</code><span class="sig-paren">(</span><em>topic</em>, <em>msg</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.publish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Publish a message or list of messages to a selected topic.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">topic (str): Topic name.
+msg (list): A list with one or more messages to send.</p>
+<blockquote class="last">
+<div>Each message is represented as AmsMessage object or python
+dictionary with at least data or one attribute key defined.</div></blockquote>
+</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+<dt>Return:</dt>
+<dd>dict: Dictionary with messageIds of published messages</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.pull_sub">
+<code class="descname">pull_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>num=1</em>, <em>return_immediately=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.pull_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.pull_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function consumes messages from a subscription in a project
+with a POST request.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub: str. The subscription name.
+num: int. The number of messages to pull.
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.pushconfig_sub">
+<code class="descname">pushconfig_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>push_endpoint=None</em>, <em>retry_policy_type=’linear’</em>, <em>retry_policy_period=300</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.pushconfig_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.pushconfig_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify push configuration of given subscription</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub: shortname of subscription
+push_endpoint: URL of remote endpoint that should receive messages in push subscription mode
+retry_policy_type:
+retry_policy_period:
+reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.set_pullopt">
+<code class="descname">set_pullopt</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.set_pullopt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.set_pullopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for setting pull options</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first docutils">
+<dt>key: str. The name of the pull option (ex. maxMessages, returnImmediately).Messaging specific</dt>
+<dd>names are allowed.</dd>
+</dl>
+<p class="last">value: str or int. The name of the pull option (ex. maxMessages, returnImmediately).Messaging specific names
+are allowed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.topic">
+<code class="descname">topic</code><span class="sig-paren">(</span><em>topic</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function create a topic in a project. It’s wrapper around few
+methods defined in client class. Method will ensure that AmsTopic
+object is returned either by fetching existing one or creating
+a new one in case it doesn’t exist.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>topic (str): The topic name</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+<dt>Return:</dt>
+<dd>object (AmsTopic)</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pymod.amsexceptions">
+<span id="pymod-amsexceptions-module"></span><h2>pymod.amsexceptions module<a class="headerlink" href="#module-pymod.amsexceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="pymod.amsexceptions.AmsConnectionException">
+<em class="property">exception </em><code class="descclassname">pymod.amsexceptions.</code><code class="descname">AmsConnectionException</code><span class="sig-paren">(</span><em>exp</em>, <em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsConnectionException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsConnectionException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pymod.amsexceptions.AmsException" title="pymod.amsexceptions.AmsException"><code class="xref py py-class docutils literal"><span class="pre">pymod.amsexceptions.AmsException</span></code></a></p>
+<p>Exception for connection related problems catched from requests library</p>
+<dl class="method">
+<dt id="pymod.amsexceptions.AmsConnectionException.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>exp</em>, <em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsConnectionException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsConnectionException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="pymod.amsexceptions.AmsException">
+<em class="property">exception </em><code class="descclassname">pymod.amsexceptions.</code><code class="descname">AmsException</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<p>Base exception class for all Argo Messaging service related errors</p>
+<dl class="method">
+<dt id="pymod.amsexceptions.AmsException.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="pymod.amsexceptions.AmsMessageException">
+<em class="property">exception </em><code class="descclassname">pymod.amsexceptions.</code><code class="descname">AmsMessageException</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsMessageException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsMessageException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pymod.amsexceptions.AmsException" title="pymod.amsexceptions.AmsException"><code class="xref py py-class docutils literal"><span class="pre">pymod.amsexceptions.AmsException</span></code></a></p>
+<p>Exception that indicate problems with constructing message</p>
+<dl class="method">
+<dt id="pymod.amsexceptions.AmsMessageException.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsMessageException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsMessageException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="pymod.amsexceptions.AmsServiceException">
+<em class="property">exception </em><code class="descclassname">pymod.amsexceptions.</code><code class="descname">AmsServiceException</code><span class="sig-paren">(</span><em>json</em>, <em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsServiceException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsServiceException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pymod.amsexceptions.AmsException" title="pymod.amsexceptions.AmsException"><code class="xref py py-class docutils literal"><span class="pre">pymod.amsexceptions.AmsException</span></code></a></p>
+<p>Exception for Argo Messaging Service API errors</p>
+<dl class="method">
+<dt id="pymod.amsexceptions.AmsServiceException.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>json</em>, <em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsexceptions.html#AmsServiceException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsexceptions.AmsServiceException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pymod.amsmsg">
+<span id="pymod-amsmsg-module"></span><h2>pymod.amsmsg module<a class="headerlink" href="#module-pymod.amsmsg" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pymod.amsmsg.AmsMessage">
+<em class="property">class </em><code class="descclassname">pymod.amsmsg.</code><code class="descname">AmsMessage</code><span class="sig-paren">(</span><em>b64enc=True</em>, <em>attributes=”</em>, <em>data=None</em>, <em>messageId=”</em>, <em>publishTime=”</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">_abcoll.Callable</span></code></p>
+<p>Abstraction of AMS Message</p>
+<p>AMS Message is constituted from mandatory data field
+and arbitrary number of attributes. Data is Base64
+encoded prior dispatching message to AMS service and
+Base64 decoded when it is being pulled from service.</p>
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>b64enc=True</em>, <em>attributes=”</em>, <em>data=None</em>, <em>messageId=”</em>, <em>publishTime=”</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.dict">
+<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct python dict from message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.get_attr">
+<code class="descname">get_attr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.get_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.get_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch all attributes of the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the data of the message and Base64 decode it</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.get_msgid">
+<code class="descname">get_msgid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.get_msgid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.get_msgid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the message id of the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.get_publishtime">
+<code class="descname">get_publishtime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.get_publishtime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.get_publishtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the publish time of the message set by the AMS service</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.json">
+<code class="descname">json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return JSON interpretation of the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.set_attr">
+<code class="descname">set_attr</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.set_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.set_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set attributes of message</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>key (str): Key of the attribute
+value (str): Value of the attribute</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amsmsg.AmsMessage.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>data</em>, <em>b64enc=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amsmsg.html#AmsMessage.set_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amsmsg.AmsMessage.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set data of message</p>
+<p>Default behaviour is to Base64 encode data prior sending it by the
+publisher. Method is also used internally when pull from subscription
+is being made by subscriber and in that case, data is already Base64 encoded</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>data (str): Data of the message</dd>
+<dt>Kwargs:</dt>
+<dd>b64enc (bool): Control whether data should be Base64 encoded</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pymod-amssubscription-module">
+<h2>pymod.amssubscription module<a class="headerlink" href="#pymod-amssubscription-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pymod.amssubscription"></span><dl class="class">
+<dt id="pymod.amssubscription.AmsSubscription">
+<em class="property">class </em><code class="descclassname">pymod.amssubscription.</code><code class="descname">AmsSubscription</code><span class="sig-paren">(</span><em>fullname</em>, <em>topic</em>, <em>pushconfig</em>, <em>ackdeadline</em>, <em>init</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Abstraction of AMS subscription</p>
+<p>Subscription represents stream of messages that can be pulled from AMS
+service or pushed to some receiver. Supported methods are wrappers
+around methods defined in client class with preconfigured
+subscription name.</p>
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fullname</em>, <em>topic</em>, <em>pushconfig</em>, <em>ackdeadline</em>, <em>init</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.ack">
+<code class="descname">ack</code><span class="sig-paren">(</span><em>ids</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.ack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.ack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acknowledge receive of messages</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd>ids (list): A list of ackIds of the messages to acknowledge.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.acl">
+<code class="descname">acl</code><span class="sig-paren">(</span><em>users=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.acl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.acl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set or get ACLs assigned to subscription</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>users (list): If list of users is specified, give those user</dt>
+<dd>access to subscription. Empty list will reset access permission.</dd>
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete subscription</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.offsets">
+<code class="descname">offsets</code><span class="sig-paren">(</span><em>offset=’all’</em>, <em>move_to=0</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.offsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the positions of min, max and current offsets or move
+current offset to new one.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first docutils">
+<dt>offset (str): The name of the offset. If not specified, it will</dt>
+<dd>return all three of them as a dict. Values that can
+be specified are ‘max’, ‘min’, ‘current’ and ‘all’.</dd>
+</dl>
+<p class="last">move_to (int): New position for current offset.</p>
+</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+<dt>Return:</dt>
+<dd><dl class="first docutils">
+<dt>dict: A dictionary containing all 3 offsets. If move_to</dt>
+<dd>is specified, current offset will be moved and updated.</dd>
+</dl>
+<p class="last">int: The value of the specified offset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.pull">
+<code class="descname">pull</code><span class="sig-paren">(</span><em>num=1</em>, <em>return_immediately=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.pull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.pull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pull messages from subscription</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><p class="first">num (int): Number of messages to pull
+return_immediately (boolean): If True and if stream of messages is empty,</p>
+<blockquote>
+<div>subscriber call will not block and wait for
+messages</div></blockquote>
+<dl class="last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+<dt>Return:</dt>
+<dd>[(ackId, AmsMessage)]: List of tuples with ackId and AmsMessage instance</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.pushconfig">
+<code class="descname">pushconfig</code><span class="sig-paren">(</span><em>push_endpoint=None</em>, <em>retry_policy_type=’linear’</em>, <em>retry_policy_period=300</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.pushconfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.pushconfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure Push mode parameters of subscription. When push_endpoint
+is defined, subscription will automatically start to send messages to it.</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><p class="first">push_endpoint (str): URL of remote endpoint that will receive messages
+retry_policy_type (str):
+retry_policy_period (int):
+reqkwargs: keyword argument that will be passed to underlying</p>
+<blockquote class="last">
+<div>python-requests library call.</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pymod-amstopic-module">
+<h2>pymod.amstopic module<a class="headerlink" href="#pymod-amstopic-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pymod.amstopic"></span><dl class="class">
+<dt id="pymod.amstopic.AmsTopic">
+<em class="property">class </em><code class="descclassname">pymod.amstopic.</code><code class="descname">AmsTopic</code><span class="sig-paren">(</span><em>fullname</em>, <em>init</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Abstraction of AMS Topic</p>
+<p>Topic represents named bucket on AMS service that can hold messages.
+Supported methods are wrappers around the methods defined in client
+class with preconfigured topic name.</p>
+<dl class="method">
+<dt id="pymod.amstopic.AmsTopic.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fullname</em>, <em>init</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pymod.amstopic.AmsTopic.acl">
+<code class="descname">acl</code><span class="sig-paren">(</span><em>users=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic.acl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic.acl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set or get ACLs assigned to topic</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>users (list): If list of users is specified, give those user</dt>
+<dd>access to topic. Empty list will reset access permission.</dd>
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amstopic.AmsTopic.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete subscription</p>
+<dl class="docutils">
+<dt>Return:</dt>
+<dd>True: succesfull topic deletion</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amstopic.AmsTopic.iter_subs">
+<code class="descname">iter_subs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic.iter_subs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic.iter_subs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator method that can be used to iterate over subscriptions
+associated with the topic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amstopic.AmsTopic.publish">
+<code class="descname">publish</code><span class="sig-paren">(</span><em>msg</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic.publish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Publish message to topic</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>msg (list, dict): One or list of dictionaries representing AMS</dt>
+<dd>Message</dd>
+</dl>
+</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: Keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>dict: Dictionary with messageIds of published messages</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amstopic.AmsTopic.subscription">
+<code class="descname">subscription</code><span class="sig-paren">(</span><em>sub</em>, <em>ackdeadline=10</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic.subscription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic.subscription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a subscription for the topic. It’s wrapper around few
+methods defined in client class. Method will ensure that AmsSubscription
+object is returned either by fetching existing one or creating
+a new one in case it doesn’t exist.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>sub (str): Name of the subscription</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>ackdeadline (int): Time window in which the AMS service expects</dt>
+<dd>acknowledgement received for pulled messages</dd>
+<dt>reqkwargs: Keyword arguments that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+<dt>Return:</dt>
+<dd>object (AmsSubscription)</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pymod">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pymod" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, ARGO Team.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
