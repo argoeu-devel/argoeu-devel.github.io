@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API Subscriptions - AMS documentation [V1]</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "API Subscriptions";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../overview/" class="icon icon-home"> AMS documentation [V1]</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Basic Information</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../overview/">Overview and Introduction</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../msg_backend/">Messaging Backend - Apache Kafka</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../msg_flow/">Messaging API flow</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../auth/">Authentication & Authorization</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../projects_users/">Project & User management guide</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>How to Guides</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../publisher/">Publisher Guide</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>API & References</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../api_basic/">API Basic Information</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../api_auth/">API Authentication</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../api_users/">API Users</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../api_projects/">API Projects</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../api_topics/">API Topics</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">API Subscriptions</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#subscriptions-api-calls">Subscriptions Api Calls</a></li>
+                
+                    <li><a class="toctree-l4" href="#put-manage-subscriptions-create-subscriptions">[PUT] Manage Subscriptions - Create subscriptions</a></li>
+                
+                    <li><a class="toctree-l4" href="#get-manage-subscriptions-list-all-subscriptions">[GET] Manage Subscriptions - List All Subscriptions</a></li>
+                
+                    <li><a class="toctree-l4" href="#get-manage-subscriptions-get-a-subscriptions-list-of-authorized-users">[GET] Manage Subscriptions - Get a subscription's list of authorized users</a></li>
+                
+                    <li><a class="toctree-l4" href="#delete-manage-subscriptions-delete-subscriptions">[DELETE] Manage Subscriptions - Delete Subscriptions</a></li>
+                
+                    <li><a class="toctree-l4" href="#post-modify-ack-deadline">[POST] Modify Ack Deadline</a></li>
+                
+                    <li><a class="toctree-l4" href="#post-modify-push-configuration">[POST] Modify Push Configuration</a></li>
+                
+                    <li><a class="toctree-l4" href="#post-pull-messages-from-a-subscription-consume">[POST] Pull messages from a subscription (Consume)</a></li>
+                
+                    <li><a class="toctree-l4" href="#post-sending-an-ack">[POST] Sending an ACK</a></li>
+                
+                    <li><a class="toctree-l4" href="#get-get-offsets">[GET] Get Offsets</a></li>
+                
+                    <li><a class="toctree-l4" href="#post-modify-offsets">[POST] Modify Offsets</a></li>
+                
+                    <li><a class="toctree-l4" href="#get-subscription-metrics">[GET] Subscription Metrics</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../api_metrics/">API Operational Metrics</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../api_errors/">API Error Messages</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Q&A</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../qa_general_questions/">General</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../qa_ruby/">Ruby</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../overview/">AMS documentation [V1]</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../overview/">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>API & References &raquo;</li>
+        
+      
+    
+    <li>API Subscriptions</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/ARGOeu/argo-messaging" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="subscriptions-api-calls">Subscriptions Api Calls</h1>
+<h2 id="put-manage-subscriptions-create-subscriptions">[PUT] Manage Subscriptions - Create subscriptions</h2>
+<p>This request creates a new subscription in a project with a PUT request</p>
+<h3 id="request">Request</h3>
+<p><code>PUT /v1/projects/{project_name}/subscriptions/{subscription_name}</code></p>
+<h3 id="where">Where</h3>
+<ul>
+<li>Project_name: Name of the project to create</li>
+<li>subscription_name: The subscription name to create</li>
+</ul>
+<h3 id="example-request">Example request</h3>
+<pre><code class="json">curl -X PUT -H &quot;Content-Type: application/json&quot;  -d 'PUTBODY'
+ &quot;https://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine ?key=S3CR3T&quot;`
+</code></pre>
+
+<h3 id="put-body">PUT  BODY</h3>
+<pre><code class="json">{
+ &quot;topic&quot;: &quot;projects/BRAND_NEW/topics/monitoring&quot;,
+ &quot;ackDeadlineSeconds&quot;:10
+}
+</code></pre>
+
+<h3 id="responses">Responses</h3>
+<p>Success Response
+<code>200 OK</code></p>
+<pre><code class="json">{
+ &quot;name&quot;: &quot;projects/BRAND_NEW/subscriptions/alert_engine&quot;,
+ &quot;topic&quot;: &quot;projects/BRAND_NEW/topics/monitoring&quot;,
+ &quot;ackDeadlineSeconds&quot;: 10  
+}
+</code></pre>
+
+<h3 id="errors">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="get-manage-subscriptions-list-all-subscriptions">[GET] Manage Subscriptions - List All Subscriptions</h2>
+<p>This request lists all available subscriptions under a specific project in the service using pagination</p>
+<p>It is important to note that if there are no results to return the service will return the following:</p>
+<p>Success Response
+<code>200 OK</code></p>
+<pre><code class="json">{
+ &quot;users&quot;: [],
+  &quot;nextPageToken&quot;: &quot;&quot;,
+  &quot;totalSize&quot;: 0
+ }
+</code></pre>
+
+<p>Also the default value for <code>pageSize = 0</code> and <code>pageToken = "</code>.</p>
+<p><code>Pagesize = 0</code> returns all the results.</p>
+<h3 id="paginated-request-that-returns-all-subscriptions-under-the-specified-project">Paginated Request that returns all subscriptions under the specified project</h3>
+<p>This request lists all subscriptions  in a project with a GET  request</p>
+<h3 id="request_1">Request</h3>
+<p><code>GET /v1/projects/{project_name}/subscriptions</code></p>
+<h3 id="where_1">Where</h3>
+<ul>
+<li>Project_name: Name of the project to list the subscriptions</li>
+</ul>
+<h3 id="example-request_1">Example request</h3>
+<pre><code>curl -X PUT -H &quot;Content-Type: application/json&quot;
+  &quot;https://{URL}/v1/projects/BRAND_NEW/subscriptions?key=S3CR3T&quot;
+</code></pre>
+
+<h3 id="responses_1">Responses</h3>
+<p>Success Response
+<code>200 OK</code></p>
+<pre><code class="json"> {
+  &quot;subscriptions&quot;:[
+  {
+    &quot;name&quot;: &quot;projects/BRAND_NEW/subscriptions/alert_engine&quot;,
+    &quot;topic&quot;: &quot;projects/BRAND_NEW/topics/monitoring&quot;,
+    &quot;pushConfig&quot;: {},
+    &quot;ackDeadlineSeconds&quot;: 10
+  },
+ {
+   &quot;name&quot;: &quot;projects/BRAND_NEW/subscriptions/alert_engine2&quot;,
+   &quot;topic&quot;: &quot;projects/BRAND_NEW/topics/monitoring&quot;,
+   &quot;pushConfig&quot;: {},
+   &quot;ackDeadlineSeconds&quot;: 10
+ }],
+ &quot;nextPageToken&quot;: &quot;&quot;,
+ &quot;totalSize&quot;: 2
+}
+</code></pre>
+
+<h3 id="paginated-request-that-returns-the-next-page-of-a-specific-size">Paginated Request that returns the next page of a specific size</h3>
+<p>This request lists subscriptions  in a project with a GET  request</p>
+<h3 id="request_2">Request</h3>
+<p><code>GET /v1/projects/{project_name}/subscriptions</code></p>
+<h3 id="where_2">Where</h3>
+<ul>
+<li>Project_name: Name of the project to list the subscriptions</li>
+</ul>
+<h3 id="example-request_2">Example request</h3>
+<pre><code>curl -X PUT -H &quot;Content-Type: application/json&quot;
+  &quot;https://{URL}/v1/projects/BRAND_NEW/subscriptions?key=S3CR3T&amp;pageSize=1&amp;pageToken=some_token&quot;
+</code></pre>
+
+<h3 id="responses_2">Responses</h3>
+<p>Success Response
+<code>200 OK</code></p>
+<pre><code class="json"> {
+  &quot;subscriptions&quot;:[
+   {
+    &quot;name&quot;: &quot;projects/BRAND_NEW/subscriptions/alert_engine&quot;,
+    &quot;topic&quot;: &quot;projects/BRAND_NEW/topics/monitoring&quot;,
+    &quot;pushConfig&quot;: {},
+    &quot;ackDeadlineSeconds&quot;: 10
+  }
+ ],
+ &quot;nextPageToken&quot;: &quot;&quot;,
+ &quot;totalSize&quot;: 2
+}
+</code></pre>
+
+<h3 id="paginated-request-that-returns-the-first-page-of-a-specific-size">Paginated Request that returns the first page of a specific size</h3>
+<p>This request lists subscriptions  in a project with a GET  request</p>
+<h3 id="request_3">Request</h3>
+<p><code>GET /v1/projects/{project_name}/subscriptions</code></p>
+<h3 id="where_3">Where</h3>
+<ul>
+<li>Project_name: Name of the project to list the subscriptions</li>
+</ul>
+<h3 id="example-request_3">Example request</h3>
+<pre><code>curl -X PUT -H &quot;Content-Type: application/json&quot;
+  &quot;https://{URL}/v1/projects/BRAND_NEW/subscriptions?key=S3CR3T&amp;pageSize=1&quot;
+</code></pre>
+
+<h3 id="responses_3">Responses</h3>
+<p>Success Response
+<code>200 OK</code></p>
+<pre><code class="json"> {
+ &quot;subscriptions&quot;:[
+  {
+    &quot;name&quot;: &quot;projects/BRAND_NEW/subscriptions/alert_engine2&quot;,
+    &quot;topic&quot;: &quot;projects/BRAND_NEW/topics/monitoring&quot;,
+    &quot;pushConfig&quot;: {},
+    &quot;ackDeadlineSeconds&quot;: 10
+  }
+ ],
+ &quot;nextPageToken&quot;: &quot;some_token&quot;,
+ &quot;totalSize&quot;: 2
+}
+</code></pre>
+
+<h3 id="errors_1">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="get-manage-subscriptions-get-a-subscriptions-list-of-authorized-users">[GET] Manage Subscriptions - Get a subscription's list of authorized users</h2>
+<p>This request returns a list of authorized users to consume from the subscription</p>
+<h3 id="request_4">Request</h3>
+<pre><code class="json">GET /v1/projects/{project_name}/subscriptions/{sub_name}:acl
+</code></pre>
+
+<h3 id="where_4">Where</h3>
+<ul>
+<li>Project_name: Name of the project to get</li>
+<li>Sub_name: The subscription name</li>
+</ul>
+<h3 id="example-request_4">Example request</h3>
+<pre><code class="json">curl -H &quot;Content-Type: application/json&quot;  
+ &quot;https://{URL}/v1/projects/BRAND_NEW/subscriptions/subscription:acl?key=S3CR3T&quot;`
+</code></pre>
+
+<h3 id="responses_4">Responses</h3>
+<p>Success Response
+<code>200 OK</code></p>
+<pre><code class="json">{
+ &quot;authorized_users&quot;: [&quot;userC&quot;,&quot;userD&quot;]
+}
+</code></pre>
+
+<h3 id="errors_2">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="delete-manage-subscriptions-delete-subscriptions">[DELETE] Manage Subscriptions - Delete Subscriptions</h2>
+<p>This request deletes a subscription in a project with a DELETE request</p>
+<h3 id="request_5">Request</h3>
+<p><code>DELETE /v1/projects/{project_name}/subscriptions/{subscription_name}</code></p>
+<h3 id="where_5">Where</h3>
+<ul>
+<li>Project_name: Name of the project</li>
+<li>subscription_name: The subscription name to delete</li>
+</ul>
+<h3 id="example-request_5">Example request</h3>
+<pre><code class="json">curl -X DELETE -H &quot;Content-Type: application/json&quot;  
+http://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine?key=S3CR3T
+</code></pre>
+
+<h3 id="responses_5">Responses</h3>
+<p>Success Response
+Code: <code>200 OK</code>, Empty response if successful.</p>
+<h3 id="errors_3">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="post-modify-ack-deadline">[POST] Modify Ack Deadline</h2>
+<p>This request modifies the acknowledgment deadline for the subscription. The ack deadline value is measured in seconds. The minimum ack deadline value allowed is 0sec and the maximum 600sec.</p>
+<h3 id="request_6">Request</h3>
+<p><code>POST /v1/projects/{project_name}/subscriptions/{subscription_name}:modifyAckDeadline</code></p>
+<h3 id="post-body">Post body:</h3>
+<pre><code>{
+  &quot;ackDeadlineSeconds&quot;: 20
+}
+</code></pre>
+
+<h3 id="where_6">Where</h3>
+<ul>
+<li>Project_name: Name of the project</li>
+<li>subscription_name: The subscription name to consume</li>
+<li>ackDeadlineSeconds: integer representing seconds for the acknowledgment deadline (min=0sec, max=600sec).</li>
+</ul>
+<h3 id="example-request_6">Example request</h3>
+<pre><code class="json">curl -X POST -H &quot;Content-Type: application/json&quot;  
+-d POSTDATA http://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine:modifyAckDeadline?key=S3CR3T
+</code></pre>
+
+<h3 id="post-body_1">post body:</h3>
+<pre><code>{
+  &quot;ackDeadlineSeconds&quot;: 30
+}
+</code></pre>
+
+<h3 id="responses_6">Responses</h3>
+<p>Success Response
+Code: <code>200 OK</code>, Empty response if successful. The deadline will change to 30seconds</p>
+<h3 id="errors_4">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="post-modify-push-configuration">[POST] Modify Push Configuration</h2>
+<p>This request modifies the push configuration of a subscription</p>
+<h3 id="request_7">Request</h3>
+<p><code>POST /v1/projects/{project_name}/subscriptions/{subscription_name}:modifyPushConfig</code></p>
+<h3 id="post-body_2">Post body:</h3>
+<pre><code>{
+  &quot;pushConfig&quot;: {  &quot;pushEndpoint&quot;: &quot;&quot;,
+                   &quot;retryPolicy&quot;: { &quot;type&quot;: &quot;linear&quot;, &quot;period&quot;: 300 }
+  }
+}
+</code></pre>
+
+<h3 id="where_7">Where</h3>
+<ul>
+<li>Project_name: Name of the project</li>
+<li>subscription_name: The subscription name to consume</li>
+<li>pushConfig: configuration including pushEndpoint for the remote endpoint to receive the messages. Also includes retryPolicy (type of retryPolicy and period parameters)</li>
+</ul>
+<h3 id="example-request_7">Example request</h3>
+<pre><code class="json">curl -X POST -H &quot;Content-Type: application/json&quot;  
+-d POSTDATA http://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine:modifyPushConfig?key=S3CR3T
+</code></pre>
+
+<h3 id="post-body_3">post body:</h3>
+<pre><code>{
+  &quot;pushConfig&quot;: {&quot;pushEndpoint&quot;: &quot;host:example.com:8080/path/to/hook&quot;,
+                 &quot;retryPolicy&quot;:  { &quot;type&quot;: &quot;linear&quot;, &quot;period&quot;: 300 }
+  }
+}
+</code></pre>
+
+<h3 id="responses_7">Responses</h3>
+<p>Success Response
+Code: <code>200 OK</code>, Empty response if successful.</p>
+<h3 id="errors_5">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="post-pull-messages-from-a-subscription-consume">[POST] Pull messages from a subscription (Consume)</h2>
+<p>This request consumes messages from a subscription in a project with a POST request</p>
+<h3 id="request_8">Request</h3>
+<p><code>POST /v1/projects/{project_name}/subscriptions/{subscription_name}:pull</code></p>
+<h3 id="post-body_4">Post body:</h3>
+<pre><code class="json">{
+ &quot;maxMessages&quot;: &quot;1&quot;
+}
+</code></pre>
+
+<h3 id="where_8">Where</h3>
+<ul>
+<li>Project_name: Name of the project</li>
+<li>subscription_name: The subscription name to consume</li>
+<li>maxMessages: the max number of messages to consume</li>
+<li>returnImmediately: (true or false) to prevent the subscriber from waiting if the queue is currently empty. If not specified the default value is true.</li>
+</ul>
+<p>You can specify the max number of messages returned by one call by setting maxMessages field. By default, the server will keep the connection open until at least one message is received; you can optionally set the returnImmediately field to true to prevent the subscriber from waiting if the queue is currently empty.</p>
+<h3 id="example-request_8">Example request</h3>
+<pre><code class="json">curl -X POST -H &quot;Content-Type: application/json&quot;
+  -d POSTDATA https://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine:pull?key=S3CR3T&quot;
+</code></pre>
+
+<h3 id="post-body_5">post body:</h3>
+<p>{
+ "maxMessages": "1"
+}</p>
+<h3 id="responses_8">Responses</h3>
+<p><code>200 OK</code></p>
+<pre><code class="json">{
+  &quot;receivedMessages&quot;: [
+    {
+      &quot;ackId&quot;: &quot;dQNNHlAbEGEIBE...&quot;,
+      &quot;message&quot;: {
+        &quot;attributes&quot;: [
+          {
+            &quot;key&quot;: &quot;whatever&quot;,
+            &quot;value&quot;: &quot;foo&quot;
+          }
+        ],
+        &quot;data&quot;: &quot;U28geW91IHdlbnQgYWhlYWQgYW5kIGRlY29kZWQgdGhpcywgeW91IGNvdWxkbid0IHJlc2lzdCBlaCA/&quot;,
+        &quot;messageId&quot;: &quot;100309303&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+
+<h3 id="errors_6">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="post-sending-an-ack">[POST] Sending an ACK</h2>
+<p>Messages retrieved from a pull subscription can be acknowledged by sending message with an array of ackIDs.</p>
+<h3 id="request_9">Request</h3>
+<p><code>POST /v1/projects/{project_name}/subscriptions/{subscription_name}:acknowledge</code></p>
+<h3 id="post-body_6">Post body:</h3>
+<pre><code class="json">{
+  &quot;ackIds&quot;: [
+  &quot;dQNNHlAbEGEIBE...&quot;
+ ]
+
+}
+</code></pre>
+
+<h3 id="where_9">Where</h3>
+<ul>
+<li>Project_name: Name of the project</li>
+<li>subscription_name: The subscription name to consume</li>
+<li>ackIds: the ids of the messages</li>
+</ul>
+<h3 id="example-request_9">Example request</h3>
+<pre><code>curl -X POST -H &quot;Content-Type: application/json&quot;  
+-d POSTDATA http://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine:acknowledge?key=S3CR3T&quot;
+</code></pre>
+
+<h3 id="post-body_7">post body:</h3>
+<pre><code class="json">{
+ &quot;ackIds&quot;: [
+  &quot;dQNNHlAbEGEIBE...&quot;
+ ]
+}
+</code></pre>
+
+<h3 id="responses_9">Responses</h3>
+<p>Success Response
+<code>200 OK</code></p>
+<h3 id="errors_7">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="get-get-offsets">[GET] Get Offsets</h2>
+<p>This request returns the min, max and current offset of a subscription</p>
+<h3 id="request_10">Request</h3>
+<p><code>GET /v1/projects/{project_name}/subscriptions/{subscription_name}:Offsets</code></p>
+<h3 id="post-body_8">Post body:</h3>
+<pre><code>{
+  &quot;max&quot;: 14,
+  &quot;min&quot;: 0,
+  &quot;current&quot;: 4
+}
+</code></pre>
+
+<h3 id="where_10">Where</h3>
+<ul>
+<li>Project_name: Name of the project</li>
+<li>subscription_name: The subscription name to consume</li>
+</ul>
+<h3 id="example-request_10">Example request</h3>
+<pre><code class="json">curl -X GET -H &quot;Content-Type: application/json&quot;  
+-d POSTDATA http://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine:offsets?key=S3CR3T&quot;
+</code></pre>
+
+<h3 id="post-body_9">post body:</h3>
+<pre><code>{
+  &quot;max&quot;: 14,
+  &quot;min&quot;: 0,
+  &quot;current&quot;: 4
+}
+</code></pre>
+
+<h3 id="responses_10">Responses</h3>
+<p>Success Response
+Code: <code>200 OK</code>, Empty response if successful.</p>
+<h3 id="errors_8">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="post-modify-offsets">[POST] Modify Offsets</h2>
+<p>This request modifies the current offset of a subscription</p>
+<h3 id="request_11">Request</h3>
+<p><code>POST /v1/projects/{project_name}/subscriptions/{subscription_name}:modifyOFfset</code></p>
+<h3 id="post-body_10">Post body:</h3>
+<pre><code>{
+ &quot;offset&quot;:3
+}
+</code></pre>
+
+<h3 id="where_11">Where</h3>
+<ul>
+<li>Project_name: Name of the project</li>
+<li>subscription_name: The subscription name to consume</li>
+<li>offset_config: an offset number in int64</li>
+</ul>
+<h3 id="example-request_11">Example request</h3>
+<pre><code class="json">curl -X POST -H &quot;Content-Type: application/json&quot;  
+-d POSTDATA http://{URL}/v1/projects/BRAND_NEW/subscriptions/alert_engine:modifyOffset?key=S3CR3T&quot;
+</code></pre>
+
+<h3 id="post-body_11">post body:</h3>
+<pre><code>{
+  &quot;offset&quot;:14
+}
+</code></pre>
+
+<h3 id="responses_11">Responses</h3>
+<p>Success Response
+Code: <code>200 OK</code>, Empty response if successful.</p>
+<h3 id="errors_9">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+<h2 id="get-subscription-metrics">[GET] Subscription Metrics</h2>
+<p>The following request returns related metrics for the specific subscription: for eg the number of consumed messages</p>
+<h3 id="request_12">Request</h3>
+<pre><code>GET &quot;/v1/projects/{project_name}/subscriptions/{sub_name}:metrics&quot;
+</code></pre>
+
+<h3 id="where_12">Where</h3>
+<ul>
+<li>Project_name: name of the project</li>
+<li>sub_name: name of the subscription</li>
+</ul>
+<h3 id="example-request_12">Example request</h3>
+<pre><code class="json">curl  -H &quot;Content-Type: application/json&quot;
+&quot;https://{URL}/v1/projects/BRAND_NEW/subscriptions/monitoring:metrics?key=S3CR3T&quot;
+</code></pre>
+
+<h3 id="responses_12">Responses</h3>
+<p>If successful it returns the number of messages consumed in the specific subscription
+Success Response
+<code>200 OK</code></p>
+<pre><code>{
+   &quot;metrics&quot;: [
+      {
+         &quot;metric&quot;: &quot;subscription.number_of_messages&quot;,
+         &quot;metric_type&quot;: &quot;counter&quot;,
+         &quot;value_type&quot;: &quot;int64&quot;,
+         &quot;resource_type&quot;: &quot;subscription&quot;,
+         &quot;resource_name&quot;: &quot;sub1&quot;,
+         &quot;timeseries&quot;: [
+            {
+               &quot;timestamp&quot;: &quot;2017-06-30T14:20:38Z&quot;,
+               &quot;value&quot;: 0
+            }
+         ],
+         &quot;description&quot;: &quot;Counter that displays the number number of messages published to the specific topic&quot;
+      },
+      {
+         &quot;metric&quot;: &quot;topic.number_of_bytes&quot;,
+         &quot;metric_type&quot;: &quot;counter&quot;,
+         &quot;value_type&quot;: &quot;int64&quot;,
+         &quot;resource_type&quot;: &quot;topic&quot;,
+         &quot;resource_name&quot;: &quot;sub1&quot;,
+         &quot;timeseries&quot;: [
+            {
+               &quot;timestamp&quot;: &quot;2017-06-30T14:20:38Z&quot;,
+               &quot;value&quot;: 0
+            }
+         ],
+         &quot;description&quot;: &quot;Counter that displays the total size of data (in bytes) published to the specific topic&quot;
+      }
+   ]
+}
+</code></pre>
+
+<h3 id="errors_10">Errors</h3>
+<p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../api_metrics/" class="btn btn-neutral float-right" title="API Operational Metrics"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../api_topics/" class="btn btn-neutral" title="API Topics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>Copyright © 2014 - 2016 GRNET S.A.</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../api_topics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../api_metrics/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
