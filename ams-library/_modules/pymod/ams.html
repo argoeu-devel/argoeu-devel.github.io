@@ -145,12 +145,18 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pymod.ams</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">amsexceptions</span> <span class="k">import</span> <span class="n">AmsServiceException</span><span class="p">,</span> <span class="n">AmsConnectionException</span><span class="p">,</span> <span class="n">AmsMessageException</span><span class="p">,</span> <span class="n">AmsException</span>
-<span class="kn">from</span> <span class="nn">amsmsg</span> <span class="k">import</span> <span class="n">AmsMessage</span>
-<span class="kn">from</span> <span class="nn">amstopic</span> <span class="k">import</span> <span class="n">AmsTopic</span>
-<span class="kn">from</span> <span class="nn">amssubscription</span> <span class="k">import</span> <span class="n">AmsSubscription</span>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">.amsexceptions</span> <span class="k">import</span> <span class="n">AmsServiceException</span><span class="p">,</span> <span class="n">AmsConnectionException</span><span class="p">,</span> <span class="n">AmsMessageException</span><span class="p">,</span> <span class="n">AmsException</span>
+<span class="kn">from</span> <span class="nn">.amsmsg</span> <span class="k">import</span> <span class="n">AmsMessage</span>
+<span class="kn">from</span> <span class="nn">.amstopic</span> <span class="k">import</span> <span class="n">AmsTopic</span>
+<span class="kn">from</span> <span class="nn">.amssubscription</span> <span class="k">import</span> <span class="n">AmsSubscription</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ordereddict</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 
 
 <div class="viewcode-block" id="AmsHttpRequests"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests">[docs]</a><span class="k">class</span> <span class="nc">AmsHttpRequests</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -207,22 +213,33 @@
             <span class="n">reqmethod</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">requests</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">reqmethod</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span>
+            <span class="n">status_code</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span>
+
+            <span class="k">if</span> <span class="n">content</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="p">):</span>
+               <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+
+            <span class="c1"># handle authnz related errors for all calls</span>
+            <span class="k">elif</span> <span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span> <span class="ow">or</span> <span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
+                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
 
             <span class="c1"># JSON error returned by AMS</span>
-            <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors_route</span><span class="p">[</span><span class="n">route_name</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
+            <span class="k">elif</span> <span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">status_code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors_route</span><span class="p">[</span><span class="n">route_name</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="k">if</span> <span class="n">content</span> <span class="k">else</span> <span class="p">{}</span>
                 <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">decoded</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
 
             <span class="c1"># handle other erroneous behaviour and construct error message from</span>
             <span class="c1"># JSON or plaintext content in response</span>
-            <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors_route</span><span class="p">[</span><span class="n">route_name</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">status_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors_route</span><span class="p">[</span><span class="n">route_name</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">errormsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                    <span class="n">errormsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                    <span class="n">errormsg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
-                                          <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">}}</span>
+                    <span class="n">errormsg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">status_code</span><span class="p">,</span>
+                                          <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">content</span><span class="p">}}</span>
                 <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">errormsg</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -330,8 +347,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pullopts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;maxMessages&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
                          <span class="s2">&quot;returnImmediately&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">}</span>
         <span class="c1"># Containers for topic and subscription objects</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">topics</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topics</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subs</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ArgoMessagingService.assign_token"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.assign_token">[docs]</a>    <span class="k">def</span> <span class="nf">assign_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">cert</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -355,8 +372,12 @@
             <span class="c1"># if the request send to authn didn&#39;t contain an x509 cert, that means that there was also no token provided</span>
             <span class="c1"># when initializing the ArgoMessagingService object, since we only try to authenticate through authn</span>
             <span class="c1"># when no token was provided</span>
-            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;While trying the [auth_x509]: No certificate provided.&#39;</span><span class="p">:</span>
-                <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;No token provided&quot;</span>
+
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">msg</span> <span class="o">==</span> <span class="s1">&#39;While trying the [auth_x509]: No certificate provided.&#39;</span><span class="p">:</span>
+                <span class="n">refined_msg</span> <span class="o">=</span> <span class="s2">&quot;No certificate provided. No token provided&quot;</span>
+                <span class="n">errormsg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span>
+                                      <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">refined_msg</span><span class="p">}}</span>
+                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">errormsg</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="s2">&quot;auth_x509&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">e</span></div>
 
 <div class="viewcode-block" id="ArgoMessagingService.auth_via_cert"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.auth_via_cert">[docs]</a>    <span class="k">def</span> <span class="nf">auth_via_cert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cert</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
@@ -388,7 +409,7 @@
             <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;auth_x509&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
             <span class="c1"># if the `token` field was not found in the response, raise an error</span>
             <span class="k">if</span> <span class="s2">&quot;token&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
-                <span class="n">errord</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Token was not found in the response.Response: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)}}</span>
+                <span class="n">errord</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Token was not found in the response. Response: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)}}</span>
                 <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">errord</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="s2">&quot;auth_x509&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;token&quot;</span><span class="p">]</span>
         <span class="k">except</span> <span class="p">(</span><span class="n">AmsServiceException</span><span class="p">,</span> <span class="n">AmsConnectionException</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -525,7 +546,6 @@
             <span class="n">errormsg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; is not valid offset position&quot;</span><span class="p">}}</span>
             <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">errormsg</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="s2">&quot;sub_offsets&quot;</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="ArgoMessagingService.modifyoffset_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.modifyoffset_sub">[docs]</a>    <span class="k">def</span> <span class="nf">modifyoffset_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">move_to</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">          Modify the position of the current offset.</span>
@@ -628,7 +648,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">list_subs</span><span class="p">(</span><span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">topic</span> <span class="ow">and</span> <span class="n">topic</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">topic</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">s</span>
             <span class="k">elif</span> <span class="ow">not</span> <span class="n">topic</span><span class="p">:</span>
@@ -639,7 +664,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">list_topics</span><span class="p">(</span><span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">t</span></div>
 
 <div class="viewcode-block" id="ArgoMessagingService.list_topics"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.list_topics">[docs]</a>    <span class="k">def</span> <span class="nf">list_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
@@ -832,7 +862,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_pullopt</span><span class="p">(</span><span class="s1">&#39;maxMessages&#39;</span><span class="p">,</span> <span class="n">wasmax</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_pullopt</span><span class="p">(</span><span class="s1">&#39;returnImmediately&#39;</span><span class="p">,</span> <span class="n">wasretim</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;ackId&#39;</span><span class="p">],</span> <span class="n">AmsMessage</span><span class="p">(</span><span class="n">b64enc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])),</span> <span class="n">msgs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;ackId&#39;</span><span class="p">],</span> <span class="n">AmsMessage</span><span class="p">(</span><span class="n">b64enc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])),</span> <span class="n">msgs</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="ArgoMessagingService.ack_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.ack_sub">[docs]</a>    <span class="k">def</span> <span class="nf">ack_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Messages retrieved from a pull subscription can be acknowledged by sending message with an array of ackIDs.</span>
