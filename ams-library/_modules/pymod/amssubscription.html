@@ -210,6 +210,20 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">pull_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">,</span> <span class="n">return_immediately</span><span class="o">=</span><span class="n">return_immediately</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="AmsSubscription.time_to_offset"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.time_to_offset">[docs]</a>    <span class="k">def</span> <span class="nf">time_to_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Retrieve the closest(greater than) available offset to the given timestamp.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               timestamp(datetime.datetime): The timestamp of the offset we are looking for.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">time_to_offset_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="AmsSubscription.offsets"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.offsets">[docs]</a>    <span class="k">def</span> <span class="nf">offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">move_to</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">           Retrieve the positions of min, max and current offsets or move</span>
