@@ -154,17 +154,17 @@
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">.amsexceptions</span> <span class="k">import</span> <span class="p">(</span><span class="n">AmsServiceException</span><span class="p">,</span> <span class="n">AmsConnectionException</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">.amsexceptions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">AmsServiceException</span><span class="p">,</span> <span class="n">AmsConnectionException</span><span class="p">,</span>
                             <span class="n">AmsMessageException</span><span class="p">,</span> <span class="n">AmsException</span><span class="p">,</span>
                             <span class="n">AmsTimeoutException</span><span class="p">,</span> <span class="n">AmsBalancerException</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.amsmsg</span> <span class="k">import</span> <span class="n">AmsMessage</span>
-<span class="kn">from</span> <span class="nn">.amstopic</span> <span class="k">import</span> <span class="n">AmsTopic</span>
-<span class="kn">from</span> <span class="nn">.amssubscription</span> <span class="k">import</span> <span class="n">AmsSubscription</span>
+<span class="kn">from</span> <span class="nn">.amsmsg</span> <span class="kn">import</span> <span class="n">AmsMessage</span>
+<span class="kn">from</span> <span class="nn">.amstopic</span> <span class="kn">import</span> <span class="n">AmsTopic</span>
+<span class="kn">from</span> <span class="nn">.amssubscription</span> <span class="kn">import</span> <span class="n">AmsSubscription</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="k">except</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">ordereddict</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+    <span class="kn">from</span> <span class="nn">ordereddict</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -176,7 +176,7 @@
 <span class="sd">       library. service error handling is implemented according to HTTP</span>
 <span class="sd">       status codes returned by service and the balancer.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="AmsHttpRequests.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AmsHttpRequests.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Create route list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">routes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;topic_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
                        <span class="s2">&quot;topic_get&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{2}</span><span class="s2">/topics/</span><span class="si">{3}</span><span class="s2">?key=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
@@ -486,7 +486,7 @@
 <span class="sd">       Class abstract Argo Messaging Service by covering all available HTTP API</span>
 <span class="sd">       calls that are wrapped in series of methods.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="ArgoMessagingService.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cert</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">authn_port</span><span class="o">=</span><span class="mi">8443</span><span class="p">):</span>
+<div class="viewcode-block" id="ArgoMessagingService.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cert</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">authn_port</span><span class="o">=</span><span class="mi">8443</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ArgoMessagingService</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">authn_port</span> <span class="o">=</span> <span class="n">authn_port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>

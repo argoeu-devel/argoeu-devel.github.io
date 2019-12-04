@@ -148,9 +148,9 @@
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="k">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Callable</span>
-<span class="kn">from</span> <span class="nn">.amsexceptions</span> <span class="k">import</span> <span class="n">AmsMessageException</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">.amsexceptions</span> <span class="kn">import</span> <span class="n">AmsMessageException</span>
 
 <div class="viewcode-block" id="AmsMessage"><a class="viewcode-back" href="../../pymod.html#pymod.amsmsg.AmsMessage">[docs]</a><span class="k">class</span> <span class="nc">AmsMessage</span><span class="p">(</span><span class="n">Callable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Abstraction of AMS Message</span>
@@ -160,14 +160,14 @@
 <span class="sd">       encoded prior dispatching message to AMS service and</span>
 <span class="sd">       Base64 decoded when it is being pulled from service.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="AmsMessage.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.amsmsg.AmsMessage.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b64enc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="AmsMessage.__init__"><a class="viewcode-back" href="../../pymod.html#pymod.amsmsg.AmsMessage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b64enc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">messageId</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">publishTime</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span> <span class="o">=</span> <span class="n">attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_messageId</span> <span class="o">=</span> <span class="n">messageId</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_publishTime</span> <span class="o">=</span> <span class="n">publishTime</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">b64enc</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s1">&#39;attributes&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="p">})</span>
         <span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">b64enc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -253,7 +253,7 @@
 
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span></div>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span></div>
 </pre></div>
 
