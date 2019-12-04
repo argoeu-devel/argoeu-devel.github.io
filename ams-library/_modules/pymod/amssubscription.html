@@ -176,7 +176,8 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">delete_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AmsSubscription.pushconfig"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.pushconfig">[docs]</a>    <span class="k">def</span> <span class="nf">pushconfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">push_endpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">retry_policy_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">retry_policy_period</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="AmsSubscription.pushconfig"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.pushconfig">[docs]</a>    <span class="k">def</span> <span class="nf">pushconfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">push_endpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">retry_policy_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                   <span class="n">retry_policy_period</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Configure Push mode parameters of subscription. When push_endpoint</span>
 <span class="sd">           is defined, subscription will automatically start to send messages to it.</span>
 
@@ -194,11 +195,19 @@
                                         <span class="n">retry_policy_period</span><span class="o">=</span><span class="n">retry_policy_period</span><span class="p">,</span>
                                         <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AmsSubscription.pull"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.pull">[docs]</a>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_immediately</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="AmsSubscription.pull"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.pull">[docs]</a>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">retrysleep</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">retrybackoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">return_immediately</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull messages from subscription</span>
 
 <span class="sd">           Kwargs:</span>
 <span class="sd">               num (int): Number of messages to pull</span>
+<span class="sd">               retry: int. Number of request retries before giving up. Default</span>
+<span class="sd">                           is 0 meaning no further request retry will be made</span>
+<span class="sd">                           after first unsuccesfull request.</span>
+<span class="sd">               retrysleep: int. Static number of seconds to sleep before next</span>
+<span class="sd">                           request attempt</span>
+<span class="sd">               retrybackoff: int. Backoff factor to apply between each request</span>
+<span class="sd">                             attempts</span>
 <span class="sd">               return_immediately (boolean): If True and if stream of messages is empty,</span>
 <span class="sd">                                             subscriber call will not block and wait for</span>
 <span class="sd">                                             messages</span>
@@ -266,11 +275,18 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">modifyacl_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">users</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AmsSubscription.ack"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.ack">[docs]</a>    <span class="k">def</span> <span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="AmsSubscription.ack"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.ack">[docs]</a>    <span class="k">def</span> <span class="nf">ack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">retrysleep</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">retrybackoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Acknowledge receive of messages</span>
 
 <span class="sd">           Kwargs:</span>
 <span class="sd">               ids (list): A list of ackIds of the messages to acknowledge.</span>
+<span class="sd">               retry: int. Number of request retries before giving up. Default</span>
+<span class="sd">                           is 0 meaning no further request retry will be made</span>
+<span class="sd">                           after first unsuccesfull request.</span>
+<span class="sd">               retrysleep: int. Static number of seconds to sleep before next</span>
+<span class="sd">                           request attempt</span>
+<span class="sd">               retrybackoff: int. Backoff factor to apply between each request</span>
+<span class="sd">                             attempts</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">ack_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div></div>

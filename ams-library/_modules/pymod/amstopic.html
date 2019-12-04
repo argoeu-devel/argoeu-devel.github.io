@@ -174,10 +174,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">delete_topic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AmsTopic.subscription"><a class="viewcode-back" href="../../pymod.html#pymod.amstopic.AmsTopic.subscription">[docs]</a>    <span class="k">def</span> <span class="nf">subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">ackdeadline</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a subscription for the topic. It&#39;s wrapper around few</span>
-<span class="sd">           methods defined in client class. Method will ensure that AmsSubscription</span>
-<span class="sd">           object is returned either by fetching existing one or creating</span>
-<span class="sd">           a new one in case it doesn&#39;t exist.</span>
+        <span class="sd">&quot;&quot;&quot;Create a subscription for the topic.</span>
+
+<span class="sd">           It&#39;s wrapper around few methods defined in client class. Method will</span>
+<span class="sd">           ensure that AmsSubscription object is returned either by fetching</span>
+<span class="sd">           existing one or creating a new one in case it doesn&#39;t exist.</span>
 
 <span class="sd">           Args:</span>
 <span class="sd">               sub (str): Name of the subscription</span>
@@ -222,13 +223,21 @@
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">iter_subs</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="AmsTopic.publish"><a class="viewcode-back" href="../../pymod.html#pymod.amstopic.AmsTopic.publish">[docs]</a>    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="AmsTopic.publish"><a class="viewcode-back" href="../../pymod.html#pymod.amstopic.AmsTopic.publish">[docs]</a>    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">retrysleep</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">retrybackoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Publish message to topic</span>
 
 <span class="sd">           Args:</span>
 <span class="sd">               msg (list, dict): One or list of dictionaries representing AMS</span>
 <span class="sd">                                 Message</span>
 <span class="sd">           Kwargs:</span>
+<span class="sd">               retry: int. Number of request retries before giving up. Default</span>
+<span class="sd">                           is 0 meaning no further request retry will be made</span>
+<span class="sd">                           after first unsuccesfull request.</span>
+<span class="sd">               retrysleep: int. Static number of seconds to sleep before next</span>
+<span class="sd">                           request attempt</span>
+<span class="sd">               retrybackoff: int. Backoff factor to apply between each request</span>
+<span class="sd">                             attempts</span>
+
 <span class="sd">               reqkwargs: Keyword argument that will be passed to underlying</span>
 <span class="sd">                          python-requests library call.</span>
 
@@ -236,7 +245,9 @@
 <span class="sd">               dict: Dictionary with messageIds of published messages</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="n">retry</span><span class="p">,</span>
+                                 <span class="n">retrysleep</span><span class="o">=</span><span class="n">retrysleep</span><span class="p">,</span>
+                                 <span class="n">retrybackoff</span><span class="o">=</span><span class="n">retrybackoff</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
