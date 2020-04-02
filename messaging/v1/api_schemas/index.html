@@ -353,6 +353,10 @@
 <p>Please refer to section <a href="../api_errors/">Errors</a> to see all possible Errors</p>
 <h2 id="post-manage-schemas-create-new-schema">[POST] Manage Schemas - Create new Schema</h2>
 <p>This request creates a new schema</p>
+<h3 id="supported-schema-types">Supported Schema Types</h3>
+<blockquote>
+<p>JSON,AVRO</p>
+</blockquote>
 <h3 id="request_2">Request</h3>
 <pre><code class="json">POST &quot;/v1/projects/{project_name}/schemas/{schema_name}&quot;
 </code></pre>
@@ -530,11 +534,20 @@ we can explicitly do it on this API call.</p>
 </code></pre>
 
 <h3 id="post-body_2">Post body:</h3>
+<h4 id="json-schema">JSON Schema</h4>
 <pre><code class="json">{
   &quot;name&quot;: &quot;name1&quot;,
   &quot;email&quot;: &quot;e1@example.com&quot;,
   &quot;address&quot;: &quot;address1&quot;,
   &quot;telephone&quot;: &quot;6980574421&quot;
+}
+</code></pre>
+
+<h4 id="avro-schema">AVRO Schema</h4>
+<p>When dealing with an AVRO Schema, the binary message needs to be encoded to <code>base64</code>
+alongside its <code>schema</code> and sent via the <code>data</code> field which is required.</p>
+<pre><code class="json">{
+  &quot;data&quot;: &quot;DGFnZWxvc8T8Cg==&quot;
 }
 </code></pre>
 
