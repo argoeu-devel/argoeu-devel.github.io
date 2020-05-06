@@ -111,11 +111,11 @@
     <a class="current" href="./">Metric Templates</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#metric-templates">Metric Templates</a></li>
+    <li class="toctree-l3"><a href="#metric-templates">Metric templates</a></li>
     
         <ul>
         
-            <li><a class="toctree-l4" href="#list-of-metric-templates">List of Metric Templates</a></li>
+            <li><a class="toctree-l4" href="#list-of-metric-templates">List of metric templates</a></li>
         
         </ul>
     
@@ -145,6 +145,21 @@
                 <li class="">
                     
     <a class="" href="../tenant_thresholds_profiles/">Thresholds Profiles</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Guides</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../superadmin_guide/">SuperAdmin POEM guide</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../tenant_guide/">Tenant POEM guide</a>
                 </li>
     </ul>
 	    </li>
@@ -188,11 +203,11 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="metric-templates">Metric Templates</h1>
-<h2 id="list-of-metric-templates">List of Metric Templates</h2>
+                <h1 id="metric-templates">Metric templates</h1>
+<h2 id="list-of-metric-templates">List of metric templates</h2>
 <p>Metric templates page is only accessible through Administration page. It is used for importing <a href="../tenant_metrics/">metrics</a> from metric templates, and only superusers have necessary permissions to perform metric imports. The page is shown in image below.</p>
 <p><img alt="Tenant Metric templates" src="../figures/tenant_metric_templates.png" /></p>
-<p>The list shows all the available metric templates defined in POEM. User can select metric templates by clicking the checkbox next to its name, or select all metric templates by checking <strong>Select all</strong> checkbox. </p>
+<p>The list shows all the available metric templates defined in POEM. User can select metric templates by clicking the checkbox next to their names, or select all metric templates by checking <strong>Select all</strong> checkbox. </p>
 <p>Before user can even start importing metrics, (s)he must choose OS. It is possible to choose between CentOS 6 and CentOS 7. It is the OS installed in tenant's monitoring box. When the appropriate OS is selected from the drop down menu, only metric templates available for that OS are shown.</p>
 <p>Metric templates can then further be filtered by probe and type (active or passive).</p>
 <p>Note that when metric templates are filtered by any condition, <strong>Select all</strong> checkbox selects only the filtered metric templates. For example, if the user filters metric templates by probe, say <code>check_http</code>, and (s)he checks <strong>Select all</strong>, metric templates associated to <code>check_http</code> probe are going to be selected.</p>

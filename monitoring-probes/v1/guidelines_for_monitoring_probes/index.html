@@ -157,26 +157,30 @@
 <p>List of existing probes can be found in <a href="https://poem.argo.grnet.gr/ui/public_probes/">POEM</a>.</p>
 <p>Some other conditions:</p>
 <ul>
-<li>Each probe must provide the following arguments:
-    <code>-h help (--help)
-    -t timeout (--timeout)</code></li>
-<li>The following arguments can also be used if applicable:
-    <code>-H hostname (--hostname)
-    -p port (--port)
-    -u url (--url)
-    -v verbose (--verbose)
-    -w warning threshold (--warning)
-    -c critical threshold (--critical)
-    -u username (--username)
-    -p password (--password)</code></li>
-<li>Maximum output size for test/plugin output is 16KB. Above that limit the output will be truncated.</li>
+<li>
+<p>Each probe must provide the following arguments:</p>
+<p><code>-h help (--help)
+-t timeout (--timeout)</code>
+* The following arguments can also be used if applicable:</p>
+<p><code>-H hostname (--hostname)
+-p port (--port)
+-u url (--url)
+-v verbose (--verbose)
+-w warning threshold (--warning)
+-c critical threshold (--critical)
+-u username (--username)
+-p password (--password)</code>
+* Maximum output size for test/plugin output is 16KB. Above that limit the output will be truncated.</p>
+</li>
 </ul>
 <h2 id="actual-data">Actual Data</h2>
 <p>Actual data is additional information about service behaviour that can be used in combination with threshold mechanisms to generate new metrics. Probes can report actual data by following the <a href="https://nagios-plugins.org/doc/guidelines.html#AEN200">Nagios guidelines for performance data</a>.</p>
 <p>Some other conditions:
-* This is the expected format of actual data:
-    <code>buildoutcfg
-    'label'=value[UOM];[warn];[crit];[min];[max]</code></p>
+* This is the expected format of actual data:</p>
+<pre><code>```buildoutcfg
+'label'=value[UOM];[warn];[crit];[min];[max]
+```
+</code></pre>
 <h1 id="packaging">Packaging</h1>
 <p>Probes must be provided in the form of RPM packages, where a single package may contain multiple probes. Please refer to the official EPEL documentation for packaging:</p>
 <ul>
@@ -202,25 +206,35 @@
 </ul>
 </li>
 </ul>
-<p>Some considerations about dependencies management:
-* Each probe is responsible for handling its dependencies.
-* The environment needed to execute each probe must be defined by the probe.</p>
+<p>Some considerations about dependencies management:</p>
+<ul>
+<li>Each probe is responsible for handling its dependencies.</li>
+<li>The environment needed to execute each probe must be defined by the probe.</li>
+</ul>
 <h1 id="integration-testing-and-deployment">Integration, Testing and Deployment</h1>
-<p>Each <code>&lt;tenant|project|product team&gt;</code> develops and tests its own probes in their development environments. Pre-requirements for the integration and testing of probes are:
-1. Each <code>&lt;tenant|project|product team&gt;</code> publishes probe(s) on an accessible:
-    * Git repository with a valid RPM spec file;
-    * Yum repository with RPM packages.
-2. Each probe provides an accessible web page with the relevant documentation.</p>
+<p>Each <code>&lt;tenant|project|product team&gt;</code> develops and tests its own probes in their development environments. Pre-requirements for the integration and testing of probes are:</p>
+<ul>
+<li>Each <code>&lt;tenant|project|product team&gt;</code> publishes probe(s) on an accessible:<ul>
+<li>Git repository with a valid RPM spec file;</li>
+<li>Yum repository with RPM packages.</li>
+</ul>
+</li>
+<li>Each probe provides an accessible web page with the relevant documentation.</li>
+</ul>
 <p>Integration of new probes starts with adding above information into <a href="http://argoeu.github.io/poem/v1/">POEM</a>.</p>
 <h2 id="testing">Testing</h2>
-<p>Testing consists of the following steps:
-1. If the probe is provided in Git repository ARGO will clone it and attempt to build the package. 
-2. ARGO will deploy the RPM package, test and validate the new probe.</p>
+<p>Testing consists of the following steps:</p>
+<ul>
+<li>If the probe is provided in Git repository ARGO will clone it and attempt to build the package. </li>
+<li>ARGO will deploy the RPM package, test and validate the new probe.</li>
+</ul>
 <h2 id="deployment">Deployment</h2>
-<p>Deployment consists of the following steps:
-1. ARGO in cooperation with the Service owner defines metric templates performed by the new probe in the POEM.
-2. Service owner adds mappings between service flavours and metrics in the POEM.
-3. ARGO in cooperation with the Service owner follows project’s procedures for deployment to production.</p>
+<p>Deployment consists of the following steps:</p>
+<ul>
+<li>ARGO in cooperation with the Service owner defines metric templates performed by the new probe in the POEM.</li>
+<li>Service owner adds mappings between service flavours and metrics in the POEM.</li>
+<li>ARGO in cooperation with the Service owner follows project’s procedures for deployment to production.</li>
+</ul>
               
             </div>
           </div>

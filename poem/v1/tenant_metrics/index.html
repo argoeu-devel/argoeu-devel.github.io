@@ -127,9 +127,9 @@
     
         <ul>
         
-            <li><a class="toctree-l4" href="#list-of-metrics">List of Metrics</a></li>
+            <li><a class="toctree-l4" href="#list-of-metrics">List of metrics</a></li>
         
-            <li><a class="toctree-l4" href="#metric-details">Metric Details</a></li>
+            <li><a class="toctree-l4" href="#metric-details">Metric details</a></li>
         
         </ul>
     
@@ -147,6 +147,21 @@
                 <li class="">
                     
     <a class="" href="../tenant_thresholds_profiles/">Thresholds Profiles</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Guides</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../superadmin_guide/">SuperAdmin POEM guide</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../tenant_guide/">Tenant POEM guide</a>
                 </li>
     </ul>
 	    </li>
@@ -191,21 +206,23 @@
             <div class="section">
               
                 <h1 id="metrics">Metrics</h1>
-<p>Metric is a procedure which checks specific functionality of a given service, i.e. single measurement (e.g. <code>org.nagios.WebCheck</code>, <code>hr.srce.CertLifetime</code>). Since tenant users are not allowed to create metrics themselves, metric templates are created on SuperAdmin POEM which can be imported by tenant super admins as metrics through <a href="../tenant_metric_templates/">Metric Template Page</a>.</p>
-<h2 id="list-of-metrics">List of Metrics</h2>
+<p>Metric is a procedure which checks specific functionality of a given service, i.e. single measurement (e.g. <code>org.nagios.WebCheck</code>, <code>hr.srce.CertLifetime</code>). </p>
+<p>Since tenant users are not allowed to create metrics themselves, metric templates are created on SuperAdmin POEM which can be imported by tenant super admins as metrics through <a href="../tenant_metric_templates/">Metric Template Page</a>.</p>
+<h2 id="list-of-metrics">List of metrics</h2>
 <p>Metrics page is accessible through menu on the left side. It is shown in the image below.</p>
 <p><img alt="Tenant Metrics" src="../figures/tenant_metrics.png" /></p>
 <p>Metrics can be filtered by name, probe, group and type (active or passive). Any particular metric can be accessed by clicking its name. Also one may see probes associated to metrics by clicking probe's name.</p>
-<h2 id="metric-details">Metric Details</h2>
+<h2 id="metric-details">Metric details</h2>
 <p>Particular metric's page is shown in the image below.</p>
 <p><img alt="Tenant Metric Detail" src="../figures/tenant_metrics_details.png" /></p>
 <p>Most of the fields is disabled. Tenant users are only allowed to modify four of the configuration values, group and probe version. User may only choose among groups that are associated to him. Exception to this rule is user with superuser permission, (s)he can pick any existing group. In case of probes, users can only choose among versions of the same probe in a drop down menu. Metric configuration is then going to automatically be updated, if necessary.</p>
-<h3 id="metric-history">Metric History</h3>
-<p>By clicking <strong>History</strong> button, user can see all the changes made to the metric, when they were made and by whom.</p>
+<p>Fields descriptions are given in <a href="../superadmin_metric_templates/#field-descriptions">metric template documentation</a>.</p>
 <p>In case user has no permission to modify the metric, there is going to appear a warning message on top of page, as shown in image below.</p>
 <p><img alt="Tenant Metric Readonly" src="../figures/tenant_metric_readonly.png" /></p>
+<h3 id="metric-history">Metric history</h3>
+<p>By clicking <strong>History</strong> button, user can see all the changes made to the metric, when they were made, and by whom.</p>
 <h3 id="adding-new-metrics">Adding new metrics</h3>
-<p>Tenant users cannot add new metrics by themselves. Metrics can be imported from available metric templates by superuser on <a href="../tenant_metric_templates/">Metric Template Page</a>. If none of the metric templates is satisfying, the user will have to ask a super admin to add new metric template to SuperAdmin POEM.</p>
+<p>Tenant users cannot add new metrics by themselves. Metrics can be imported from available metric templates by superuser on <a href="../tenant_metric_templates/">metric template page</a>. If none of the metric templates is satisfying, the user will have to ask a super admin to add new metric template to SuperAdmin POEM.</p>
               
             </div>
           </div>

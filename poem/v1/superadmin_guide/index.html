@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Packages - POEM documentation [V1]</title>
+  <title>SuperAdmin POEM guide - POEM documentation [V1]</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Packages";
-    var mkdocs_page_input_path = "superadmin_packages.md";
-    var mkdocs_page_url = "/superadmin_packages/";
+    var mkdocs_page_name = "SuperAdmin POEM guide";
+    var mkdocs_page_input_path = "superadmin_guide.md";
+    var mkdocs_page_url = "/superadmin_guide/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
@@ -75,23 +75,9 @@
                     
     <a class="" href="../superadmin_repos/">YUM repos</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Packages</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#packages">Packages</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#list-of-packages">List of packages</a></li>
-        
-            <li><a class="toctree-l4" href="#package-details">Package details</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../superadmin_packages/">Packages</a>
                 </li>
                 <li class="">
                     
@@ -155,9 +141,29 @@
 		
     <span class="caption-text">Guides</span>
     <ul class="subnav">
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../superadmin_guide/">SuperAdmin POEM guide</a>
+    <a class="current" href="./">SuperAdmin POEM guide</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#superadmin-poem-guide">SuperAdmin POEM guide</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#adding-users">Adding users</a></li>
+        
+            <li><a class="toctree-l4" href="#adding-yum-repo">Adding YUM repo</a></li>
+        
+            <li><a class="toctree-l4" href="#adding-package">Adding package</a></li>
+        
+            <li><a class="toctree-l4" href="#adding-probe">Adding probe</a></li>
+        
+            <li><a class="toctree-l4" href="#adding-metric-template">Adding metric template</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -188,14 +194,14 @@
     
       
         
-          <li>SuperAdmin POEM &raquo;</li>
+          <li>Guides &raquo;</li>
         
       
     
-    <li>Packages</li>
+    <li>SuperAdmin POEM guide</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/ARGOeu/poem-2/edit/master/docs/superadmin_packages.md"
+        <a href="https://github.com/ARGOeu/poem-2/edit/master/docs/superadmin_guide.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -205,25 +211,43 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="packages">Packages</h1>
-<p>Packages are <code>.rpm</code> packages which provide probes. </p>
-<h2 id="list-of-packages">List of packages</h2>
-<p>The page is accessible from the menu on the left side. It is shown in the image below.</p>
-<p><img alt="SuperAdmin packages" src="../figures/superadmin_packages.png" /></p>
-<p>Packages can be filtered by choosing repo name from the drop down menu in <strong>Repo</strong> column, and by name by typing values in search bar on top of <strong>Name and version</strong> column. </p>
-<h2 id="package-details">Package details</h2>
-<p>Page of each individual package is accessible by clicking name of package. The example page is shown in the image below.</p>
-<p><img alt="SuperAdmin Package Detail" src="../figures/superadmin_package_details.png" /></p>
-<h3 id="fields">Fields</h3>
-<p>Mandatory fields:
-* <strong>Name</strong> - name of package (as defined in <code>.rpm</code> file);
-* <strong>Version</strong> - version of package (as defined in <code>.rpm</code> file);
-* <strong>YUM repo</strong> - <strong>at least one</strong> YUM repo must be defined; YUM repo which provides the given package:
-    * <strong>CentOS 6 repo</strong> - repo tagged with CentOS 6 tag,
-    * <strong>CentOS 7 repo</strong> - repo tagged with CentOS 7 tag.</p>
-<p>If <strong>Use version which is present in repo</strong> is checked, package version is going to be tagged as present, and the version which exists in the repo is going to be installed on the monitoring box.</p>
-<h3 id="list-of-probes-provided-by-the-package">List of probes provided by the package</h3>
-<p>At the bottom of the page is shown the list of probes which are provided by the package and are defined in POEM.    </p>
+                <h1 id="superadmin-poem-guide">SuperAdmin POEM guide</h1>
+<h2 id="adding-users">Adding users</h2>
+<p><strong>Step 1:</strong> Go to <a href="../superadmin_administration/">Administration page</a>.</p>
+<p><strong>Step 2:</strong> Click <strong>Users</strong> in <strong>Authentication and Authorization</strong> section.</p>
+<p><strong>Step 3:</strong> Click the <strong>Add</strong> button in <a href="../superadmin_users/#list-of-users">users page</a>.</p>
+<p><strong>Step 4:</strong> Fill in the necessary fields before hitting <strong>Save</strong> button. The fields are described in <a href="../superadmin_users/#user-details">users documentation</a>.</p>
+<h2 id="adding-yum-repo">Adding YUM repo</h2>
+<p><strong>Step 1:</strong> Go to <a href="../superadmin_repos/">YUM repos page</a>.</p>
+<p><strong>Step 2:</strong> Click the <strong>Add</strong> button.</p>
+<p><strong>Step 3:</strong> Fill in the necessary data. The fields are described in <a href="../superadmin_repos/#fields">YUM repo documentation</a>.</p>
+<h2 id="adding-package">Adding package</h2>
+<p><strong>Step 1:</strong> Make sure the YUM repo containing the package you wish to enter already exists in POEM (it should be listed in <a href="../superadmin_repos/#list-of-yum-repos">YUM repo page</a>). </p>
+<ul>
+<li>YUM repo exists: continue to <strong>Step 2</strong>;</li>
+<li>YUM repo does not exist: follow the steps described in <a href="#adding-yum-repo">Adding YUM Repo section</a>.</li>
+</ul>
+<p><strong>Step 2:</strong> Go to <a href="../superadmin_packages/#list-of-packages">package page</a>.</p>
+<p><strong>Step 3:</strong> Click the <strong>Add</strong> button.</p>
+<p><strong>Step 4:</strong> Fill in the form with appropriate data. Fields are described in <a href="../superadmin_packages/#fields">package documentation page</a>.</p>
+<h2 id="adding-probe">Adding probe</h2>
+<p><strong>Step 1:</strong> Make sure the package containing the probe you wish to enter already exists in POEM (it should be listed in <a href="../superadmin_packages/#list-of-packages">package page</a>).</p>
+<ul>
+<li>Package exists: continue to <strong>Step 2</strong>,</li>
+<li>package does not exist: follow the steps described in <a href="#adding-package">Adding package section</a>.</li>
+</ul>
+<p><strong>Step 2:</strong> Go to <a href="../superadmin_probe/#list-of-probes">probe page</a>.</p>
+<p><strong>Step 3:</strong> Click the <strong>Add</strong> button.</p>
+<p><strong>Step 4:</strong> Fill in the form with appropriate data. Fields are described in <a href="../superadmin_probe/#fields">probe documentation</a>.</p>
+<h2 id="adding-metric-template">Adding metric template</h2>
+<p><strong>Step 1:</strong> If it is an active metric template, make sure the probe it uses already exists in POEM (it should be listed in <a href="../superadmin_probe/#list-of-probes">probe page</a>).</p>
+<ul>
+<li>Probe exists: continue to <strong>Step 2</strong>,</li>
+<li>probe does not exist: follow the steps described in <a href="#adding-probe">Adding probe section</a>.</li>
+</ul>
+<p><strong>Step 2:</strong> Go to <a href="../superadmin_metric_templates/#list-of-metric-templates">metric templates page</a>.</p>
+<p><strong>Step 3:</strong> Click the <strong>Add</strong> button.</p>
+<p><strong>Step 4:</strong> Fill in the form with appropriate data. Fields are described in <a href="../superadmin_metric_templates/#field-descriptions">metric template documentation</a>.</p>
               
             </div>
           </div>
@@ -231,10 +255,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../superadmin_probe/" class="btn btn-neutral float-right" title="Probes">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../tenant_guide/" class="btn btn-neutral float-right" title="Tenant POEM guide">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../superadmin_repos/" class="btn btn-neutral" title="YUM repos"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../tenant_thresholds_profiles/" class="btn btn-neutral" title="Thresholds Profiles"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -264,10 +288,10 @@
           <a href="https://github.com/ARGOeu/poem-2/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../superadmin_repos/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../tenant_thresholds_profiles/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../superadmin_probe/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../tenant_guide/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
