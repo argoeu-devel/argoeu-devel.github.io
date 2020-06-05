@@ -167,7 +167,3 @@ cursor: pointer;
   margin-left:10px;
   position: relative;
 }
-
-.white-link a, a:hover, a:active, a:visited{
-  color: white;
-}
