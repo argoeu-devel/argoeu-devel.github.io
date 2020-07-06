@@ -108,6 +108,19 @@
         </ul>
     
 
+    <li class="toctree-l2"><a href="#get-flat-list-availabilities-and-reliabilities-for-all-service-endpoints">[GET]: Flat List Availabilities and Reliabilities for all service Endpoints</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#get-endpoints-ar_1">[GET] Endpoints A/R</a></li>
+        
+            <li><a class="toctree-l3" href="#request-endpoint-ar-under-service-service_a_1">Request endpoint a/r under service: service_a</a></li>
+        
+            <li><a class="toctree-l3" href="#request-to-see-next-page-of-results">Request to see next page of results</a></li>
+        
+        </ul>
+    
+
     </ul>
 	    </li>
           
@@ -245,6 +258,11 @@
 <td>GET: List Availability and Reliability results for an Endpoint</td>
 <td>This method retrieves the results of a specified service endpoint that where computed based on a given report. Results can be retrieved on daily or monthly granularity.</td>
 <td><a href="#4">Description</a></td>
+</tr>
+<tr>
+<td>GET: Flat List of all endpoints Availability and Reliability results</td>
+<td>This method retrieves the results in a flat list of all service endpoints that where computed based on a given report. Results can be retrieved on daily or monthly granularity. Pagination is supported.</td>
+<td><a href="#5">Description</a></td>
 </tr>
 </tbody>
 </table>
@@ -911,6 +929,147 @@ Accept: &quot;application/xml&quot; or &quot;application/json&quot;
       ]
     }
   ]
+}
+</code></pre>
+
+<p><a id="5"></a></p>
+<h1 id="get-flat-list-availabilities-and-reliabilities-for-all-service-endpoints">[GET]: Flat List Availabilities and Reliabilities for all service Endpoints</h1>
+<p>The following methods can be used to obtain a tenant's flat list of all service endpoints Availability and Reliability result. The api authenticates the tenant using the api-key within the x-api-key header. The user can specify time granularity (<code>monthly</code> or <code>daily</code>) for retrieved results and also format using the <code>Accept</code> header. Pagination is also supported by using the optional parameters <code>pageSize</code> to define the size of each result page and <code>nextPageToken</code> to proceed to the next available page of results.</p>
+<h2 id="get-endpoints-ar_1">[GET] Endpoints A/R</h2>
+<h3 id="input_4">Input</h3>
+<p>Request a flat list of all endpoint a/r </p>
+<pre><code>/results/{report_name}/endpoints?[start_time]&amp;[end_time]&amp;[granularity]&amp;[pageSize]&amp;[nextPageToken]
+</code></pre>
+
+<h4 id="query-parameters_4">Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[start_time]</code></td>
+<td>UTC time in W3C format</td>
+<td>YES</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[end_time]</code></td>
+<td>UTC time in W3C format</td>
+<td>YES</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[granularity]</code></td>
+<td>Granularity of time that will be used to present data. Possible values are <code>monthly</code> or <code>daily</code></td>
+<td>NO</td>
+<td><code>daily</code></td>
+</tr>
+<tr>
+<td><code>[pageSize]</code></td>
+<td>How many results to return per request (-1 means return all results)</td>
+<td>NO</td>
+<td>-1</td>
+</tr>
+<tr>
+<td><code>[nextPageToken]</code></td>
+<td>token to proceed to the next page</td>
+<td>NO</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="path-parameters_4">Path Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Required</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{report_name}</code></td>
+<td>Name of the report that contains all the information about the profile, filter tags, group types etc.</td>
+<td>YES</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="headers_4">Headers</h4>
+<pre><code>x-api-key: &quot;tenant_key_value&quot;
+Accept: &quot;application/xml&quot; or &quot;application/json&quot;
+</code></pre>
+
+<h5 id="response_4">Response</h5>
+<pre><code>Status: 200 OK
+</code></pre>
+
+<h2 id="request-endpoint-ar-under-service-service_a_1">Request endpoint a/r under service: <code>service_a</code></h2>
+<h4 id="url_6">URL</h4>
+<p><code>/api/v2/results/{report_name}/endpoints?start_time=2015-06-22T00:00:00Z&amp;end_time=2015-06-23T23:23:59Z&amp;granularity=daily&amp;pageSize=2</code></p>
+<h4 id="response-body_6">Response Body</h4>
+<pre><code>{
+ &quot;endpoints&quot;: [
+  {
+   &quot;name&quot;: &quot;host01.example.foo&quot;,
+   &quot;service&quot;: &quot;SERV-A&quot;,
+   &quot;supergroup&quot;: &quot;SITE-A&quot;,
+   &quot;statuses&quot;: [
+    {
+     &quot;timestamp&quot;: &quot;2015-05-01T00:00:00Z&quot;,
+     &quot;value&quot;: &quot;OK&quot;
+    },
+    {
+     &quot;timestamp&quot;: &quot;2015-05-01T08:47:00Z&quot;,
+     &quot;value&quot;: &quot;WARNING&quot;
+    },
+    {
+     &quot;timestamp&quot;: &quot;2015-05-01T23:59:59Z&quot;,
+     &quot;value&quot;: &quot;OK&quot;
+    }
+   ]
+  }
+ ],
+ &quot;nextPageToken&quot;: &quot;Mg==&quot;,
+ &quot;pageSize&quot;: 2
+}
+</code></pre>
+
+<h2 id="request-to-see-next-page-of-results">Request to see next page of results</h2>
+<h4 id="url_7">URL</h4>
+<p><code>/api/v2/results/{report_name}/endpoints?start_time=2015-06-22T00:00:00Z&amp;end_time=2015-06-23T23:23:59Z&amp;granularity=daily&amp;pageSize=2&amp;nextPageToken=Mg==</code></p>
+<h4 id="response-body_7">Response Body</h4>
+<pre><code>{
+ &quot;endpoints&quot;: [
+  {
+   &quot;name&quot;: &quot;host02.example.foo&quot;,
+   &quot;service&quot;: &quot;SERV-B&quot;,
+   &quot;supergroup&quot;: &quot;SITE-A&quot;,
+   &quot;statuses&quot;: [
+    {
+     &quot;timestamp&quot;: &quot;2015-05-01T00:00:00Z&quot;,
+     &quot;value&quot;: &quot;OK&quot;
+    },
+    {
+     &quot;timestamp&quot;: &quot;2015-05-01T12:56:00Z&quot;,
+     &quot;value&quot;: &quot;CRITICAL&quot;
+    },
+    {
+     &quot;timestamp&quot;: &quot;2015-05-01T23:59:59Z&quot;,
+     &quot;value&quot;: &quot;OK&quot;
+    }
+   ]
+  }
+ ],
+ &quot;pageSize&quot;: 2
 }
 </code></pre>
               

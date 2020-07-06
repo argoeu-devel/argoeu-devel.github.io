@@ -267,7 +267,7 @@ calls that are wrapped in series of methods.</p>
 
 <dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.ack_sub">
-<code class="descname">ack_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>ids</em>, <em>retry=0</em>, <em>retrysleep=60</em>, <em>retrybackoff=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.ack_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.ack_sub" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ack_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>ids</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.ack_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.ack_sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acknownledgment of received messages</p>
 <p>Messages retrieved from a pull subscription can be acknowledged by
 sending message with an array of ackIDs. The service will retrieve
@@ -653,6 +653,30 @@ reqkwargs: keyword argument that will be passed to underlying</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.pullack_sub">
+<code class="descname">pullack_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>num=1</em>, <em>return_immediately=False</em>, <em>retry=0</em>, <em>retrysleep=60</em>, <em>retrybackoff=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.pullack_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.pullack_sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pull messages from subscription and acknownledge them in one call.</p>
+<p>If enabled (retry &gt; 0), multiple subscription pulls will be tried in
+case of problems/glitches with the AMS service. retry* options are
+eventually passed to _retry_make_request().</p>
+<p>If succesfull subscription pull immediately follows with failed
+acknownledgment (e.g. network hiccup just before acknowledgement of
+received messages), consume cycle will reset and start from
+beginning with new subscription pull. This ensures that ack deadline
+time window is moved to new start period, that is the time when the
+second pull was initiated.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">sub: str. The subscription name.
+num: int. The number of messages to pull.
+reqkwargs: keyword argument that will be passed to underlying</p>
+<blockquote class="last">
+<div>python-requests library call.</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.pushconfig_sub">
 <code class="descname">pushconfig_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>push_endpoint=None</em>, <em>retry_policy_type='linear'</em>, <em>retry_policy_period=300</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.pushconfig_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.pushconfig_sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>Modify push configuration of given subscription</p>
@@ -1006,6 +1030,40 @@ messages</dd>
 <dt>Return:</dt>
 <dd>[(ackId, AmsMessage)]: List of tuples with ackId and AmsMessage instance</dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.amssubscription.AmsSubscription.pullack">
+<code class="descname">pullack</code><span class="sig-paren">(</span><em>num=1</em>, <em>retry=0</em>, <em>retrysleep=60</em>, <em>retrybackoff=None</em>, <em>return_immediately=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amssubscription.html#AmsSubscription.pullack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amssubscription.AmsSubscription.pullack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pull messages from subscription and acknownledge them in one call.</p>
+<p>If succesfull subscription pull immediately follows with failed
+acknownledgment (e.g. network hiccup just before acknowledgement of
+received messages), consume cycle will reset and start from
+begginning with new subscription pull.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><p class="first">num (int): Number of messages to pull
+retry: int. Number of request retries before giving up. Default</p>
+<blockquote>
+<div>is 0 meaning no further request retry will be made
+after first unsuccesfull request.</div></blockquote>
+<dl class="last docutils">
+<dt>retrysleep: int. Static number of seconds to sleep before next</dt>
+<dd>request attempt</dd>
+<dt>retrybackoff: int. Backoff factor to apply between each request</dt>
+<dd>attempts</dd>
+<dt>return_immediately (boolean): If True and if stream of messages is empty,</dt>
+<dd>subscriber call will not block and wait for
+messages</dd>
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+<dt>Return:</dt>
+<dd>[AmsMessage1, AmsMessage2]: List of AmsMessage instances</dd>
+</dl>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">

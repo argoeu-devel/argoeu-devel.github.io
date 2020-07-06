@@ -213,13 +213,28 @@
 <p>By clicking the profile name, user can see the particular profile's details (shown in the image below).</p>
 <p><img alt="Tenant Metric Profile Details" src="../figures/tenant_metric_profiles_details.png" /></p>
 <h3 id="sections">Sections</h3>
-<p>In the upper part of the page, there are <strong>Name</strong> and <strong>Group</strong> fields. Every profile must be assigned to a group, which means the group should be created beforehand.</p>
+<p>In the upper part of the page, there are <strong>Name</strong>, <strong>Description</strong> and <strong>Group</strong> fields. Every profile must be assigned to a group, which means the group should be created beforehand. <strong>Name</strong> and <strong>Group</strong> fields are mandatory while <strong>Description</strong> field is arbitrary.</p>
 <h4 id="metric-instances">Metric instances</h4>
 <p>In the <strong>Metric instances</strong> section, user may add new, or delete the existing service type - metric pairs. New empty fields are created by clicking the button with "+" sign, and by clicking "x" next to the service type - metric pair, that pair is removed from the metric profile. All the fields are autocomplete, so when the user starts typing, existing service types/metrics are suggested.</p>
 <p>Same as for other resources, only users with appropriate permission may modify metric profile. That is, users that have metric group the profile belongs to assigned to them, or users with superuser permission.</p>
+<h5 id="validation-of-pairs">Validation of pairs</h5>
+<p>Service type - metric pairs should be filled with some values and neither of them can be left empty:</p>
+<p><img alt="Tenant Metric Profile Tuples Required" src="../figures/tenant_metric_profiles_tuple_required.png" /></p>
+<p>Duplicated pairs are not allowed and validation of form will forbid them:</p>
+<p><img alt="Tenant Metric Profile Tuples Duplicated" src="../figures/tenant_metric_profiles_tuple_duplicate.png" /></p>
+<p>For easy tracking of changes that have been made in existing profile, borders of service type - metric pairs are colored differently. Newly added pairs are always in green border while changed part (either service type or metric or both) of pair is in red border:</p>
+<p><img alt="Tenant Metric Profile Tuples Changed" src="../figures/tenant_metric_profiles_tuple_changed.png" /></p>
+<h5 id="filtered-and-full-pairs-view">Filtered and full pairs view</h5>
+<p>Also, search fields are introduced for pleasant editing or adding new pairs in metric profile so that tracking of how many pairs of particular metric or service type is easily handled:</p>
+<p><img alt="Tenant Metric Profile Tuples Search" src="../figures/tenant_metric_profiles_tuple_search.png" /></p>
+<p>Adding or editing of pairs in <em>filtered view</em> is also allowed, but what should be noted is that <em>return to full view</em> will <strong>automatically sort</strong> all pairs, including the ones added in <em>filtered view</em>:</p>
+<p><img alt="Tenant Metric Profile Tuples Search Edit" src="../figures/tenant_metric_profiles_tuple_search_edit.png" />
+<img alt="Tenant Metric Profile Tuples Search Sorted" src="../figures/tenant_metric_profiles_tuple_sorted.png" /></p>
 <h3 id="metric-profile-history">Metric profile history</h3>
 <p>By clicking the <strong>History</strong> button, the user can see all the changes made to the profile, when they were made and by whom (image below).</p>
 <p><img alt="Tenant Metric Profile History" src="../figures/tenant_metric_profiles_history.png" /></p>
+<h3 id="metric-profile-clone">Metric profile clone</h3>
+<p>By clicking the <strong>Clone</strong> button, the user can easily derive new profile from existing one meaning that description and metric instances tuples will be copied, while profile name will be changed to <code>Cloned &lt;original_profile_name&gt;</code>. User is free to change the name of profile to his/her needs.</p>
               
             </div>
           </div>

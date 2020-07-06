@@ -217,7 +217,40 @@
 <span class="sd">               [(ackId, AmsMessage)]: List of tuples with ackId and AmsMessage instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">pull_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">,</span> <span class="n">return_immediately</span><span class="o">=</span><span class="n">return_immediately</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">pull_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">,</span>
+                                  <span class="n">return_immediately</span><span class="o">=</span><span class="n">return_immediately</span><span class="p">,</span>
+                                  <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AmsSubscription.pullack"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.pullack">[docs]</a>    <span class="k">def</span> <span class="nf">pullack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">retrysleep</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">retrybackoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">return_immediately</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Pull messages from subscription and acknownledge them in one call.</span>
+
+<span class="sd">          If succesfull subscription pull immediately follows with failed</span>
+<span class="sd">          acknownledgment (e.g. network hiccup just before acknowledgement of</span>
+<span class="sd">          received messages), consume cycle will reset and start from</span>
+<span class="sd">          begginning with new subscription pull.</span>
+
+<span class="sd">           Kwargs:</span>
+<span class="sd">               num (int): Number of messages to pull</span>
+<span class="sd">               retry: int. Number of request retries before giving up. Default</span>
+<span class="sd">                           is 0 meaning no further request retry will be made</span>
+<span class="sd">                           after first unsuccesfull request.</span>
+<span class="sd">               retrysleep: int. Static number of seconds to sleep before next</span>
+<span class="sd">                           request attempt</span>
+<span class="sd">               retrybackoff: int. Backoff factor to apply between each request</span>
+<span class="sd">                             attempts</span>
+<span class="sd">               return_immediately (boolean): If True and if stream of messages is empty,</span>
+<span class="sd">                                             subscriber call will not block and wait for</span>
+<span class="sd">                                             messages</span>
+<span class="sd">               reqkwargs: keyword argument that will be passed to underlying</span>
+<span class="sd">                          python-requests library call.</span>
+<span class="sd">           Return:</span>
+<span class="sd">               [AmsMessage1, AmsMessage2]: List of AmsMessage instances</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">pullack_sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">,</span>
+                                     <span class="n">return_immediately</span><span class="o">=</span><span class="n">return_immediately</span><span class="p">,</span>
+                                     <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AmsSubscription.time_to_offset"><a class="viewcode-back" href="../../pymod.html#pymod.amssubscription.AmsSubscription.time_to_offset">[docs]</a>    <span class="k">def</span> <span class="nf">time_to_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
