@@ -273,9 +273,7 @@ calls that are wrapped in series of methods.</p>
 sending message with an array of ackIDs. The service will retrieve
 the ackID corresponding to the highest message offset and will
 consider that message and all previous messages as acknowledged by
-the consumer. If enabled (retry &gt; 0), multiple acknowledgement
-will be tried in case of problems/glitches with the AMS service.
-retry* options are eventually passed to _retry_make_request()</p>
+the consumer.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd>sub: str. The subscription name.
