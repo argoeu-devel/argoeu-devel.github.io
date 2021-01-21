@@ -167,7 +167,7 @@
 <span id="pymod-ams-module"></span><h2>pymod.ams module<a class="headerlink" href="#module-pymod.ams" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pymod.ams.AmsHttpRequests">
-<em class="property">class </em><code class="descclassname">pymod.ams.</code><code class="descname">AmsHttpRequests</code><span class="sig-paren">(</span><em>endpoint</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pymod.ams.</code><code class="descname">AmsHttpRequests</code><span class="sig-paren">(</span><em>endpoint</em>, <em>authn_port</em>, <em>token=''</em>, <em>cert=''</em>, <em>key=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class encapsulates methods used by ArgoMessagingService.</p>
 <p>Each method represent HTTP request made to AMS with the help of requests
@@ -175,8 +175,41 @@ library. service error handling is implemented according to HTTP
 status codes returned by service and the balancer.</p>
 <dl class="method">
 <dt id="pymod.ams.AmsHttpRequests.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>endpoint</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>endpoint</em>, <em>authn_port</em>, <em>token=''</em>, <em>cert=''</em>, <em>key=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>x.__init__(…) initializes x; see help(type(x)) for signature</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.AmsHttpRequests.assign_token">
+<code class="descname">assign_token</code><span class="sig-paren">(</span><em>token</em>, <em>cert</em>, <em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.assign_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.assign_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a token to the ams object</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>token(str): a valid ams token
+cert(str): a path to a valid certificate file
+key(str): a path to the associated key file for the provided certificate</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.AmsHttpRequests.auth_via_cert">
+<code class="descname">auth_via_cert</code><span class="sig-paren">(</span><em>cert</em>, <em>key</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.auth_via_cert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.auth_via_cert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve an ams token based on the provided certificate</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Args:</dt>
+<dd>cert(str): a path to a valid certificate file
+key(str): a path to the associated key file for the provided certificate</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
+<dd>python-requests library call.</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -279,39 +312,6 @@ the consumer.</p>
 <dd>sub: str. The subscription name.
 ids: list(str). A list of ids of the messages to acknowledge.
 reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pymod.ams.ArgoMessagingService.assign_token">
-<code class="descname">assign_token</code><span class="sig-paren">(</span><em>token</em>, <em>cert</em>, <em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.assign_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.assign_token" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign a token to the ams object</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>token(str): a valid ams token
-cert(str): a path to a valid certificate file
-key(str): a path to the associated key file for the provided certificate</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pymod.ams.ArgoMessagingService.auth_via_cert">
-<code class="descname">auth_via_cert</code><span class="sig-paren">(</span><em>cert</em>, <em>key</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.auth_via_cert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.auth_via_cert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve an ams token based on the provided certificate</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>Args:</dt>
-<dd>cert(str): a path to a valid certificate file
-key(str): a path to the associated key file for the provided certificate</dd>
-</dl>
-</div></blockquote>
-<dl class="docutils">
-<dt>Kwargs:</dt>
-<dd><dl class="first last docutils">
-<dt>reqkwargs: keyword argument that will be passed to underlying</dt>
-<dd>python-requests library call.</dd>
-</dl>
-</dd>
 </dl>
 </dd></dl>
 
