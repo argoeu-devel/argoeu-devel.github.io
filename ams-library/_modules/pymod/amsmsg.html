@@ -149,7 +149,10 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Callable</span>
 <span class="kn">from</span> <span class="nn">.amsexceptions</span> <span class="kn">import</span> <span class="n">AmsMessageException</span>
 
 <div class="viewcode-block" id="AmsMessage"><a class="viewcode-back" href="../../pymod.html#pymod.amsmsg.AmsMessage">[docs]</a><span class="k">class</span> <span class="nc">AmsMessage</span><span class="p">(</span><span class="n">Callable</span><span class="p">):</span>
