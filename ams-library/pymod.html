@@ -358,6 +358,20 @@ reqkwargs: keyword argument that will be passed to underlying</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.create_user">
+<code class="descname">create_user</code><span class="sig-paren">(</span><em>user</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.create_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a new user with a POST request</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>user: AmsUser. The user to be created.
+reqkwargs: keyword argument that will be passed to underlying
+python-requests library call.</dd>
+<dt>Return:</dt>
+<dd>object (AmsUser)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.delete_sub">
 <code class="descname">delete_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.delete_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.delete_sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function deletes a selected subscription in a project</p>
@@ -1135,10 +1149,10 @@ class with preconfigured topic name.</p>
 <dl class="method">
 <dt id="pymod.amstopic.AmsTopic.delete">
 <code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/amstopic.html#AmsTopic.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.amstopic.AmsTopic.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete subscription</p>
+<dd><p>Delete topic</p>
 <dl class="docutils">
 <dt>Return:</dt>
-<dd>True: succesfull topic deletion</dd>
+<dd>True: successfull topic deletion</dd>
 </dl>
 </dd></dl>
 
