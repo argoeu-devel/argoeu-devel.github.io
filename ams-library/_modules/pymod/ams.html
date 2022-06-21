@@ -214,6 +214,7 @@
 
             <span class="c1"># project api calls</span>
             <span class="s2">&quot;project_add_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">/members/</span><span class="si">{2}</span><span class="s2">:add&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;project_get_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">/members/</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="p">],</span>
 
             <span class="s2">&quot;auth_x509&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2">/v1/service-types/ams/hosts/</span><span class="si">{0}</span><span class="s2">:authx509&quot;</span><span class="p">],</span>
         <span class="p">}</span>
@@ -240,6 +241,7 @@
             <span class="s2">&quot;user_get&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])],</span>
 
             <span class="s2">&quot;project_add_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">409</span><span class="p">])],</span>
+            <span class="s2">&quot;project_get_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])],</span>
 
             <span class="s2">&quot;auth_x509&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])]}</span>
 
@@ -1265,6 +1267,25 @@
             <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
             <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">body</span><span class="p">),</span> <span class="s2">&quot;project_add_member&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">AmsUser</span><span class="p">()</span><span class="o">.</span><span class="n">load_from_dict</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.get_project_member"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.get_project_member">[docs]</a>    <span class="k">def</span> <span class="nf">get_project_member</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the respective project member using the provided username with a GET request</span>
+
+<span class="sd">        :param username: (str) the username of the user to be retrieved</span>
+<span class="sd">        :param project: (str) the name of the project the user belongs to</span>
+<span class="sd">        :param reqkwargs:  keyword arguments that will be passed to underlying</span>
+<span class="sd">               python-requests library call.</span>
+<span class="sd">        :return: (AmsUser) the ams user</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;project_get_member&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;project_get_member&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">AmsUser</span><span class="p">()</span><span class="o">.</span><span class="n">load_from_dict</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">e</span></div>

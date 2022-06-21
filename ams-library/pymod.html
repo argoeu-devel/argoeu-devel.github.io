@@ -424,6 +424,29 @@ reqkwargs: keyword argument that will be passed to underlying</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.get_project_member">
+<code class="descname">get_project_member</code><span class="sig-paren">(</span><em>project</em>, <em>username</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.get_project_member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.get_project_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the respective project member using the provided username with a GET request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> – (str) the username of the user to be retrieved</li>
+<li><strong>project</strong> – (str) the name of the project the user belongs to</li>
+<li><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(AmsUser) the ams user</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.get_pullopt">
 <code class="descname">get_pullopt</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.get_pullopt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.get_pullopt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function for getting pull options</p>
