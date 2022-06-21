@@ -229,7 +229,7 @@ reqkwargs: keyword argument that will be passed to underlying python-requests li
 <dt id="pymod.ams.AmsHttpRequests.do_get">
 <code class="descname">do_get</code><span class="sig-paren">(</span><em>url</em>, <em>route_name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.do_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.do_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method supports all the GET requests.</p>
-<p>Used for (topics, subscriptions, messages).</p>
+<p>Used for (topics, subscriptions, users, messages).</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><p class="first">url: str. The final messaging service endpoint
@@ -245,7 +245,7 @@ reqkwargs: keyword argument that will be passed to underlying</p>
 <dt id="pymod.ams.AmsHttpRequests.do_post">
 <code class="descname">do_post</code><span class="sig-paren">(</span><em>url</em>, <em>body</em>, <em>route_name</em>, <em>retry=0</em>, <em>retrysleep=60</em>, <em>retrybackoff=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#AmsHttpRequests.do_post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.AmsHttpRequests.do_post" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method supports all the POST requests.</p>
-<p>Used for (topics, subscriptions, messages).</p>
+<p>Used for (topics, subscriptions, users, messages).</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><p class="first">url: str. The final messaging service endpoint
@@ -313,6 +313,30 @@ the consumer.</p>
 ids: list(str). A list of ids of the messages to acknowledge.
 reqkwargs: keyword argument that will be passed to underlying python-requests library call.</dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.add_project_member">
+<code class="descname">add_project_member</code><span class="sig-paren">(</span><em>project</em>, <em>username</em>, <em>roles=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.add_project_member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.add_project_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns an existing user to the provided project with a POST request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>project</strong> (<em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – the name of the project</li>
+<li><strong>username</strong> (<em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – the name of user</li>
+<li><strong>roles</strong> (<em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>[</em><em>]</em><em>)</em>) – project roles for the user</li>
+<li><strong>reqkwargs</strong> – keyword argument that will be passed to underlying
+python-requests library call.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(AmsUser) the assigned user object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -443,6 +467,28 @@ reqkwargs: keyword argument that will be passed to underlying</p>
 <div>python-requests library call.</div></blockquote>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.get_user">
+<code class="descname">get_user</code><span class="sig-paren">(</span><em>name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the respective user using the provided username with a GET request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> – (str) the username of the user to be retrieved</li>
+<li><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(AmsUser) the ams user</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
