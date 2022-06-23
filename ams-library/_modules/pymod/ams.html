@@ -629,7 +629,7 @@
 <span class="sd">                          python-requests library call.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">topicobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">topicobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_getacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
@@ -658,7 +658,7 @@
 <span class="sd">                          python-requests library call.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">topicobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">topicobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;topic_modifyacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
@@ -689,7 +689,7 @@
 <span class="sd">                          python-requests library call.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_getacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
@@ -801,7 +801,7 @@
 <span class="sd">                          python-requests library call.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sub</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
 
         <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;sub_modifyacl&quot;</span><span class="p">]</span>
         <span class="c1"># Compose url</span>
