@@ -558,7 +558,8 @@
         <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">e</span></div>
 
-<div class="viewcode-block" id="AmsHttpRequests.do_delete"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="AmsHttpRequests.do_delete"><a class="viewcode-back" href="../../pymod.html#pymod.ams.AmsHttpRequests.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">route_name</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">retrysleep</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                <span class="n">retrybackoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete method that is used to make the appropriate request.</span>
 
 <span class="sd">           Used for (topics, subscriptions).</span>
@@ -569,22 +570,15 @@
 <span class="sd">               reqkwargs: keyword argument that will be passed to underlying python-requests library call.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># try to send a delete request to the messaging service.</span>
-        <span class="c1"># if a connection problem araises a Connection error exception is raised.</span>
+
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># the delete request based on requests.</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
-
-            <span class="c1"># JSON error returned by AMS</span>
-            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-                <span class="n">errormsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_dict</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="n">AmsServiceException</span><span class="p">(</span><span class="n">json</span><span class="o">=</span><span class="n">errormsg</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span>
-                <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retry_make_request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                            <span class="n">route_name</span><span class="o">=</span><span class="n">route_name</span><span class="p">,</span> <span class="n">retry</span><span class="o">=</span><span class="n">retry</span><span class="p">,</span>
+                                            <span class="n">retrysleep</span><span class="o">=</span><span class="n">retrysleep</span><span class="p">,</span>
+                                            <span class="n">retrybackoff</span><span class="o">=</span><span class="n">retrybackoff</span><span class="p">,</span>
+                                            <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div></div>
 
 
 <div class="viewcode-block" id="ArgoMessagingService"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService">[docs]</a><span class="k">class</span> <span class="nc">ArgoMessagingService</span><span class="p">(</span><span class="n">AmsHttpRequests</span><span class="p">):</span>
