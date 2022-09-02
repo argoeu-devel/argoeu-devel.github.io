@@ -636,6 +636,21 @@ python-requests library call</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.metrics">
+<code class="descname">metrics</code><span class="sig-paren">(</span><em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.metrics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the operational metrics of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.modifyacl_sub">
 <code class="descname">modifyacl_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>users</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.modifyacl_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.modifyacl_sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>Modify access control lists for subscription</p>
@@ -799,6 +814,21 @@ reqkwargs: keyword argument that will be passed to underlying python-requests li
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.status">
+<code class="descname">status</code><span class="sig-paren">(</span><em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the status of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.time_to_offset_sub">
 <code class="descname">time_to_offset_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>timestamp</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.time_to_offset_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.time_to_offset_sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the closest(greater than) available offset to the given timestamp.</p>
@@ -834,6 +864,33 @@ one or creating a new one in case it doesn’t exist.</p>
 <dt>Return:</dt>
 <dd>object (AmsTopic)</dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.va_metrics">
+<code class="descname">va_metrics</code><span class="sig-paren">(</span><em>projects=None</em>, <em>start_date=None</em>, <em>end_date=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.va_metrics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.va_metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves va report metrics for the given projects and the given time period
+:param projects: (str[]) filter based on the given projects
+:param start_date: (datetime.datetime time period starting date
+:param end_date: (datetime.datetime) time period end date
+:param reqkwargs: keyword arguments that will be passed to underlying</p>
+<blockquote>
+<div>python-requests library call.</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.version">
+<code class="descname">version</code><span class="sig-paren">(</span><em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the version information about the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
