@@ -344,6 +344,26 @@ reqkwargs: keyword argument that will be passed to underlying python-requests li
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.create_project">
+<code class="descname">create_project</code><span class="sig-paren">(</span><em>name</em>, <em>description</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.create_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.create_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new project using the provided name and description with a POST request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> – (str) the name of the project</li>
+<li><strong>description</strong> – (str) the description of the project</li>
+<li><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.create_sub">
 <code class="descname">create_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>topic</em>, <em>ackdeadline=10</em>, <em>push_endpoint=None</em>, <em>retry_policy_type='linear'</em>, <em>retry_policy_period=300</em>, <em>retobj=False</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.create_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.create_sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function creates a new subscription in a project with a PUT request</p>
@@ -402,6 +422,25 @@ python-requests library call.</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.delete_project">
+<code class="descname">delete_project</code><span class="sig-paren">(</span><em>name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.delete_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.delete_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a project using the provided name with a DELETE request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> – (str) the name of the project</li>
+<li><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.delete_sub">
 <code class="descname">delete_sub</code><span class="sig-paren">(</span><em>sub</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.delete_sub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.delete_sub" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function deletes a selected subscription in a project</p>
@@ -439,6 +478,25 @@ reqkwargs: keyword argument that will be passed to underlying</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> – (str) the username of the user to be retrieved</li>
+<li><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.get_project">
+<code class="descname">get_project</code><span class="sig-paren">(</span><em>name</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.get_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.get_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a project using the provided name with a GET request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> – (str) the name of the project</li>
 <li><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
 python-requests library call.</li>
 </ul>
@@ -1017,6 +1075,27 @@ one or creating a new one in case it doesn’t exist.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.update_project">
+<code class="descname">update_project</code><span class="sig-paren">(</span><em>name</em>, <em>description=''</em>, <em>updated_name=''</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.update_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.update_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new project using the provided name and description with a POST request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> – (str) the name of the project</li>
+<li><strong>description</strong> – (str) the description of the project</li>
+<li><strong>updated_name</strong> – (str) updated name</li>
+<li><strong>reqkwargs</strong> – keyword arguments that will be passed to underlying
+python-requests library call.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pymod.ams.ArgoMessagingService.update_user">
 <code class="descname">update_user</code><span class="sig-paren">(</span><em>name</em>, <em>first_name=''</em>, <em>last_name=''</em>, <em>description=''</em>, <em>organization=''</em>, <em>username=''</em>, <em>email=''</em>, <em>service_roles=None</em>, <em>projects=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.update_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.update_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the respective user using the provided username with a PUT request</p>
@@ -1044,6 +1123,20 @@ python-requests library call.</li>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymod.ams.ArgoMessagingService.usage_report">
+<code class="descname">usage_report</code><span class="sig-paren">(</span><em>projects=None</em>, <em>start_date=None</em>, <em>end_date=None</em>, <em>**reqkwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymod/ams.html#ArgoMessagingService.usage_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymod.ams.ArgoMessagingService.usage_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves va report metrics for the given projects and the given time period
+alongside the service’s operational metrics.
+The api call will retrieve all projects that the requesting user is a project admin for.
+:param projects: (str[]) filter based on the given projects
+:param start_date: (datetime.datetime time period starting date
+:param end_date: (datetime.datetime) time period end date
+:param reqkwargs: keyword arguments that will be passed to underlying</p>
+<blockquote>
+<div>python-requests library call.</div></blockquote>
 </dd></dl>
 
 <dl class="method">

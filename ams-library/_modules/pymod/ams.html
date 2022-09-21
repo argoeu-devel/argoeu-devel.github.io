@@ -213,6 +213,7 @@
             <span class="s2">&quot;api_metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/metrics&quot;</span><span class="p">],</span>
             <span class="s2">&quot;api_va_metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/metrics/va_metrics&quot;</span><span class="p">],</span>
             <span class="s2">&quot;api_version&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/version&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;api_usage_report&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/users/usageReport&quot;</span><span class="p">],</span>
 
             <span class="c1"># user api calls</span>
             <span class="s2">&quot;user_create&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/users/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
@@ -229,6 +230,10 @@
             <span class="s2">&quot;project_add_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">/members/</span><span class="si">{2}</span><span class="s2">:add&quot;</span><span class="p">],</span>
             <span class="s2">&quot;project_get_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">/members/</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="p">],</span>
             <span class="s2">&quot;project_remove_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">/members/</span><span class="si">{2}</span><span class="s2">:remove&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;project_create&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;project_update&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;put&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;project_get&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;project_delete&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">/v1/projects/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="p">],</span>
 
             <span class="s2">&quot;auth_x509&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;https://</span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2">/v1/service-types/ams/hosts/</span><span class="si">{0}</span><span class="s2">:authx509&quot;</span><span class="p">],</span>
         <span class="p">}</span>
@@ -265,10 +270,15 @@
             <span class="s2">&quot;api_metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">])],</span>
             <span class="s2">&quot;api_va_metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])],</span>
             <span class="s2">&quot;api_version&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">])],</span>
+            <span class="s2">&quot;api_usage_report&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">])],</span>
 
             <span class="s2">&quot;project_add_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">409</span><span class="p">])],</span>
             <span class="s2">&quot;project_get_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])],</span>
             <span class="s2">&quot;project_remove_member&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])],</span>
+            <span class="s2">&quot;project_create&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">409</span><span class="p">])],</span>
+            <span class="s2">&quot;project_update&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;put&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">409</span><span class="p">])],</span>
+            <span class="s2">&quot;project_get&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])],</span>
+            <span class="s2">&quot;project_delete&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])],</span>
 
             <span class="s2">&quot;auth_x509&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="mi">400</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">])]}</span>
 
@@ -1518,6 +1528,87 @@
         <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">e</span></div>
 
+<div class="viewcode-block" id="ArgoMessagingService.create_project"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.create_project">[docs]</a>    <span class="k">def</span> <span class="nf">create_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new project using the provided name and description with a POST request</span>
+
+<span class="sd">        :param name: (str) the name of the project</span>
+<span class="sd">        :param description: (str) the description of the project</span>
+<span class="sd">        :param reqkwargs:  keyword arguments that will be passed to underlying</span>
+<span class="sd">               python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span>
+        <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;project_create&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">body</span><span class="p">),</span> <span class="s2">&quot;project_create&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.update_project"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.update_project">[docs]</a>    <span class="k">def</span> <span class="nf">update_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">updated_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new project using the provided name and description with a POST request</span>
+
+<span class="sd">        :param name: (str) the name of the project</span>
+<span class="sd">        :param description: (str) the description of the project</span>
+<span class="sd">        :param updated_name: (str) updated name</span>
+<span class="sd">        :param reqkwargs:  keyword arguments that will be passed to underlying</span>
+<span class="sd">               python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">description</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">body</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+
+        <span class="k">if</span> <span class="n">updated_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">body</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">updated_name</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;project_update&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">body</span><span class="p">),</span> <span class="s2">&quot;project_update&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.get_project"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.get_project">[docs]</a>    <span class="k">def</span> <span class="nf">get_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a project using the provided name with a GET request</span>
+
+<span class="sd">        :param name: (str) the name of the project</span>
+<span class="sd">        :param reqkwargs:  keyword arguments that will be passed to underlying</span>
+<span class="sd">               python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;project_get&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;project_get&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.delete_project"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.delete_project">[docs]</a>    <span class="k">def</span> <span class="nf">delete_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a project using the provided name with a DELETE request</span>
+
+<span class="sd">        :param name: (str) the name of the project</span>
+<span class="sd">        :param reqkwargs:  keyword arguments that will be passed to underlying</span>
+<span class="sd">               python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;project_delete&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;project_delete&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
 <div class="viewcode-block" id="ArgoMessagingService.create_sub"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.create_sub">[docs]</a>    <span class="k">def</span> <span class="nf">create_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">ackdeadline</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">push_endpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">retry_policy_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">retry_policy_period</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">retobj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;This function creates a new subscription in a project with a PUT request</span>
@@ -1732,6 +1823,42 @@
             <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
             <span class="n">reqkwargs</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">url_params</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;api_va_metrics&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="ArgoMessagingService.usage_report"><a class="viewcode-back" href="../../pymod.html#pymod.ams.ArgoMessagingService.usage_report">[docs]</a>    <span class="k">def</span> <span class="nf">usage_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projects</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves va report metrics for the given projects and the given time period</span>
+<span class="sd">        alongside the service&#39;s operational metrics.</span>
+<span class="sd">        The api call will retrieve all projects that the requesting user is a project admin for.</span>
+<span class="sd">        :param projects: (str[]) filter based on the given projects</span>
+<span class="sd">        :param start_date: (datetime.datetime time period starting date</span>
+<span class="sd">        :param end_date: (datetime.datetime) time period end date</span>
+<span class="sd">        :param reqkwargs: keyword arguments that will be passed to underlying</span>
+<span class="sd">               python-requests library call.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">url_params</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">projects</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projects</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">projects</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+            <span class="n">url_params</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">end_date</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+            <span class="n">url_params</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">projects</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">url_params</span><span class="p">[</span><span class="s2">&quot;projects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">projects</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">route</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s2">&quot;api_usage_report&quot;</span><span class="p">]</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;do_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">reqkwargs</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">url_params</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;api_usage_report&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">reqkwargs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">r</span>
         <span class="k">except</span> <span class="n">AmsException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">e</span></div></div>
