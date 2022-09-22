@@ -522,7 +522,9 @@
                                                                 <span class="n">status_code</span><span class="p">),</span>
                                           <span class="n">request</span><span class="o">=</span><span class="n">route_name</span><span class="p">)</span>
 
-        <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span>
+                <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ReadTimeout</span><span class="p">,</span>
+                <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">AmsConnectionException</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">route_name</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
